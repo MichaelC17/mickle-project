@@ -1,26 +1,29 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ThemeProvider } from "@/context/ThemeContext";
+import { BookingsProvider } from "@/context/BookingsContext";
+import SessionProvider from "@/components/SessionProvider";
 
 export const metadata: Metadata = {
   title: {
-    default: "CollabBook – The Marketplace for Creator Collaborations",
-    template: "%s | CollabBook",
+    default: "COLLAB. – The Marketplace for Creator Collaborations",
+    template: "%s | COLLAB.",
   },
-  description: "Book verified YouTube, TikTok, Instagram, and Twitch creators for paid collaborations. Browse creators, set pricing, coordinate logistics, and track results.",
-  keywords: ["creator collaborations", "youtube collaborations", "tiktok collaborations", "creator marketplace", "influencer collaborations"],
-  authors: [{ name: "CollabBook" }],
+  description: "Book verified YouTube and Twitch creators for paid collaborations. Browse creators, set pricing, coordinate logistics, and track results.",
+  keywords: ["creator collaborations", "youtube collaborations", "twitch collaborations", "creator marketplace", "gaming collaborations"],
+  authors: [{ name: "COLLAB." }],
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://collabbook.io",
-    siteName: "CollabBook",
-    title: "CollabBook – The Marketplace for Creator Collaborations",
-    description: "Book verified YouTube, TikTok, Instagram, and Twitch creators for paid collaborations.",
+    url: "https://collab.io",
+    siteName: "COLLAB.",
+    title: "COLLAB. – The Marketplace for Creator Collaborations",
+    description: "Book verified YouTube and Twitch creators for paid collaborations.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CollabBook – The Marketplace for Creator Collaborations",
-    description: "Book verified YouTube, TikTok, Instagram, and Twitch creators for paid collaborations.",
+    title: "COLLAB. – The Marketplace for Creator Collaborations",
+    description: "Book verified YouTube and Twitch creators for paid collaborations.",
   },
   robots: {
     index: true,
@@ -34,9 +37,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme') || 'dark';
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
-        {children}
+        <SessionProvider>
+          <ThemeProvider>
+            <BookingsProvider>
+              {children}
+            </BookingsProvider>
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

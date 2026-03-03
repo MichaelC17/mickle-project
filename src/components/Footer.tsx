@@ -6,8 +6,8 @@ export default function Footer() {
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between gap-8">
           <div>
-            <Link href="/" className="text-text-primary font-semibold">
-              CollabBook
+            <Link href="/" className="text-text-primary text-2xl font-bold tracking-tight">
+              COLLAB.
             </Link>
             <p className="mt-2 text-sm text-text-muted max-w-xs">
               The marketplace for paid creator collaborations.
@@ -34,8 +34,8 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row justify-between gap-4 text-sm text-text-muted">
-          <p>© {new Date().getFullYear()} CollabBook</p>
-          <p>hello@collabbook.io</p>
+          <p>© {new Date().getFullYear()} COLLAB.</p>
+          <p>hello@collab.io</p>
         </div>
       </div>
     </footer>

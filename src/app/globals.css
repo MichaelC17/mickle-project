@@ -4,7 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* Dark mode (default) */
+:root,
+[data-theme="dark"] {
   --background: #09090B;
   --surface: #0F0F12;
   --surface-raised: #18181B;
@@ -15,6 +17,20 @@
   --text-primary: #FAFAFA;
   --text-secondary: #A1A1AA;
   --text-muted: #71717A;
+}
+
+/* Light mode */
+[data-theme="light"] {
+  --background: #FFFFFF;
+  --surface: #F9FAFB;
+  --surface-raised: #F3F4F6;
+  --border: #E5E7EB;
+  --border-subtle: #F3F4F6;
+  --accent: #2563EB;
+  --accent-hover: #1D4ED8;
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-muted: #9CA3AF;
 }
 
 html {
@@ -37,6 +53,11 @@ body {
   background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   background-size: 64px 64px;
+}
+
+[data-theme="light"] .grid-bg {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
 }
 
 /* Animation */

@@ -10,6 +10,26 @@ export default function Home() {
       {/* Hero */}
       <section className="pt-32 pb-20 px-6">
         <div className="max-w-3xl mx-auto text-center">
+          {/* Platform Logos */}
+          <div className="flex items-center justify-center gap-4 mb-6 fade-in">
+            {/* YouTube */}
+            <svg className="w-8 h-8 text-red-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            {/* Twitch */}
+            <svg className="w-8 h-8 text-violet-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
+            </svg>
+            {/* TikTok */}
+            <svg className="w-8 h-8 text-pink-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+            </svg>
+            {/* Instagram */}
+            <svg className="w-8 h-8 text-purple-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+            </svg>
+          </div>
+          
           <p className="text-sm text-text-muted mb-4 fade-in">
             Currently in private beta
           </p>
@@ -19,59 +39,16 @@ export default function Home() {
             bigger creator channels
           </h1>
           <p className="mt-6 text-lg text-text-secondary max-w-xl mx-auto fade-in delay-2">
-            The fastest way to grow your channel. Book appearances on verified creators 
-            across platforms, get in front of their audience, and convert their viewers into your subscribers.
+            The fastest way to grow your channel. Book appearances on verified YouTube and Twitch creators, 
+            get in front of their audience, and convert their viewers into your subscribers.
           </p>
           
-          {/* Platform logos */}
-          <div className="mt-8 flex items-center justify-center gap-6 fade-in delay-3">
-            <div className="flex items-center gap-2 text-text-muted">
-              <svg className="w-6 h-6 text-red-500" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-              <span className="text-sm">YouTube</span>
-            </div>
-            <div className="flex items-center gap-2 text-text-muted">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <defs>
-                  <linearGradient id="tiktok-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#69C9D0"/>
-                    <stop offset="50%" stopColor="#EE1D52"/>
-                    <stop offset="100%" stopColor="#EE1D52"/>
-                  </linearGradient>
-                </defs>
-                <path fill="url(#tiktok-gradient)" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-              </svg>
-              <span className="text-sm">TikTok</span>
-            </div>
-            <div className="flex items-center gap-2 text-text-muted">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <defs>
-                  <linearGradient id="ig-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#FFDC80"/>
-                    <stop offset="25%" stopColor="#F77737"/>
-                    <stop offset="50%" stopColor="#E1306C"/>
-                    <stop offset="75%" stopColor="#C13584"/>
-                    <stop offset="100%" stopColor="#833AB4"/>
-                  </linearGradient>
-                </defs>
-                <path fill="url(#ig-gradient)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-              </svg>
-              <span className="text-sm">Instagram</span>
-            </div>
-            <div className="flex items-center gap-2 text-text-muted">
-              <svg className="w-5 h-5 text-purple-500" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
-              </svg>
-              <span className="text-sm">Twitch</span>
-            </div>
-          </div>
-          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3 fade-in delay-4">
+          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3 fade-in delay-3">
             <Link
-              href="#waitlist"
+              href="/browse"
               className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white text-sm font-medium px-5 py-2.5 rounded-md transition-colors"
             >
-              Request early access
+              Browse Hosts
             </Link>
             <Link
               href="#how-it-works"
@@ -117,7 +94,7 @@ export default function Home() {
             A marketplace where exposure has a price tag
           </h2>
           <p className="text-text-secondary leading-relaxed mb-6">
-            CollabBook lets you browse creators who are actively selling guest spots on their channels. 
+            COLLAB. lets you browse creators who are actively selling guest spots on their channels. 
             See their audience size, niche, and rates. Book instantly. Coordinate through our platform. 
             Get in front of thousands—or millions—of potential subscribers.
           </p>
@@ -485,7 +462,7 @@ export default function Home() {
             on channels that aren&apos;t real or creators who aren&apos;t committed to growth.
           </p>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          <div className="grid sm:grid-cols-2 gap-4 mb-10 max-w-lg mx-auto">
             <div className="bg-surface border border-border rounded-lg p-5">
               <div className="flex items-center gap-2 mb-3">
                 <svg className="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
@@ -495,41 +472,6 @@ export default function Home() {
               </div>
               <p className="text-2xl font-semibold text-text-primary">1K+</p>
               <p className="text-xs text-text-muted">minimum subscribers</p>
-            </div>
-
-            <div className="bg-surface border border-border rounded-lg p-5">
-              <div className="flex items-center gap-2 mb-3">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <defs>
-                    <linearGradient id="tiktok-gradient-2" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#69C9D0"/>
-                      <stop offset="100%" stopColor="#EE1D52"/>
-                    </linearGradient>
-                  </defs>
-                  <path fill="url(#tiktok-gradient-2)" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                </svg>
-                <span className="text-sm text-text-muted">TikTok</span>
-              </div>
-              <p className="text-2xl font-semibold text-text-primary">5K+</p>
-              <p className="text-xs text-text-muted">minimum followers</p>
-            </div>
-
-            <div className="bg-surface border border-border rounded-lg p-5">
-              <div className="flex items-center gap-2 mb-3">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <defs>
-                    <linearGradient id="ig-gradient-2" x1="0%" y1="100%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#FFDC80"/>
-                      <stop offset="50%" stopColor="#E1306C"/>
-                      <stop offset="100%" stopColor="#833AB4"/>
-                    </linearGradient>
-                  </defs>
-                  <path fill="url(#ig-gradient-2)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-                </svg>
-                <span className="text-sm text-text-muted">Instagram</span>
-              </div>
-              <p className="text-2xl font-semibold text-text-primary">1K+</p>
-              <p className="text-xs text-text-muted">minimum followers</p>
             </div>
 
             <div className="bg-surface border border-border rounded-lg p-5">
@@ -563,6 +505,58 @@ export default function Home() {
                 See who&apos;s requesting before you accept. Review their channel, content style, and audience fit.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Short Form */}
+      <section className="py-20 px-6 bg-surface">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">Short form</p>
+          <h2 className="text-2xl font-semibold text-text-primary mb-4">
+            TikTok & Instagram collaborations
+          </h2>
+          <p className="text-text-secondary mb-10 max-w-2xl">
+            Book verified short-form creators for quick, high-impact collaborations. 
+            Perfect for rapid exposure and reaching younger audiences.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            <div className="bg-surface border border-border rounded-lg p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <svg className="w-5 h-5 text-pink-500" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                </svg>
+                <svg className="w-5 h-5 text-purple-500" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                </svg>
+              </div>
+              <h3 className="font-medium text-text-primary mb-2">Quick turnaround</h3>
+              <p className="text-sm text-text-secondary leading-relaxed">
+                Short-form content ships fast. Get featured within days, not weeks.
+              </p>
+            </div>
+            <div className="bg-surface border border-border rounded-lg p-6">
+              <h3 className="font-medium text-text-primary mb-2">Viral potential</h3>
+              <p className="text-sm text-text-secondary leading-relaxed">
+                Short-form algorithms favor discovery. One collab can reach millions of new viewers.
+              </p>
+            </div>
+            <div className="bg-surface border border-border rounded-lg p-6">
+              <h3 className="font-medium text-text-primary mb-2">Lower price point</h3>
+              <p className="text-sm text-text-secondary leading-relaxed">
+                Shorter content means more affordable rates. Start testing collaborations for less.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <Link
+              href="/browse"
+              className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white text-sm font-medium px-5 py-2.5 rounded-md transition-colors"
+            >
+              Browse Short Form Creators
+            </Link>
           </div>
         </div>
       </section>
@@ -656,7 +650,7 @@ export default function Home() {
                 How do payments work?
               </h3>
               <p className="text-sm text-text-secondary leading-relaxed">
-                When you book, payment is held by CollabBook. The host sees the funds are 
+                When you book, payment is held by COLLAB.. The host sees the funds are 
                 secured and schedules your guest spot. Once it goes live and is confirmed, 
                 funds are released within 3 business days.
               </p>
@@ -675,8 +669,8 @@ export default function Home() {
                 What are the requirements to become a host?
               </h3>
               <p className="text-sm text-text-secondary leading-relaxed">
-                Currently, we require at least 50K subscribers on YouTube, 50K followers on TikTok or Instagram, 
-                or equivalent on Twitch. We also review content quality and engagement metrics.
+                Currently, we require at least 50K subscribers on YouTube or equivalent followers on Twitch. 
+                We also review content quality and engagement metrics.
               </p>
             </div>
             <div>
@@ -690,7 +684,7 @@ export default function Home() {
             </div>
             <div>
               <h3 className="font-medium text-text-primary mb-2">
-                When is CollabBook launching?
+                When is COLLAB. launching?
               </h3>
               <p className="text-sm text-text-secondary leading-relaxed">
                 We&apos;re in private beta. Join the waitlist to get early access—we&apos;re 
