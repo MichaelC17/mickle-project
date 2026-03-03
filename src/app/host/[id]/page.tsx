@@ -5,9 +5,6 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
-import { loadStripe } from "@stripe/stripe-js"
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "")
 
 interface Package {
   id: string
@@ -157,11 +154,6 @@ export default function HostProfilePage() {
 
       if (data.url) {
         window.location.href = data.url
-      } else if (data.sessionId) {
-        const stripe = await stripePromise
-        if (stripe) {
-          await stripe.redirectToCheckout({ sessionId: data.sessionId })
-        }
       } else {
         throw new Error("No checkout URL received")
       }
