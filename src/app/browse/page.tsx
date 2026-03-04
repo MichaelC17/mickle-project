@@ -145,7 +145,7 @@ export default function BrowsePage() {
     host.platform.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const niches = [...new Set(hosts.map(h => h.niche).filter(Boolean))]
+  const niches = Array.from(new Set(hosts.map(h => h.niche).filter((n): n is string => n !== null)))
 
   return (
     <>
