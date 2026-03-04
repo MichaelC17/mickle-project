@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
 
-const MIN_SUBSCRIBERS = 50000
+const MIN_SUBSCRIBERS = 0 // TODO: Change back to 50000 for production
 
 export async function POST(request: Request) {
   const session = await auth()

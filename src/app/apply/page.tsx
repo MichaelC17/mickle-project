@@ -36,7 +36,7 @@ const DEFAULT_PACKAGE: PackageInput = {
   includes: [""],
 }
 
-const MIN_SUBSCRIBERS = 50000
+const MIN_SUBSCRIBERS = 0 // TODO: Change back to 50000 for production
 
 export default function ApplyPage() {
   const { data: session, status } = useSession()
