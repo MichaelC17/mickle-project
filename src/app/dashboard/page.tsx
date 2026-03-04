@@ -331,13 +331,19 @@ export default function DashboardPage() {
                         href={`/host/${hostProfile.id}`}
                         className="text-sm text-text-secondary hover:text-text-primary font-medium px-3 py-1.5 rounded-md transition-colors"
                       >
-                        View Public Profile
+                        View Profile
+                      </Link>
+                      <Link
+                        href="/dashboard/host/bookings"
+                        className="bg-surface-raised hover:bg-border text-text-primary text-sm font-medium px-4 py-2 rounded-md transition-colors"
+                      >
+                        Bookings
                       </Link>
                       <Link
                         href="/dashboard/host"
                         className="bg-accent hover:bg-accent-hover text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
                       >
-                        Manage Profile
+                        Manage
                       </Link>
                     </div>
                   </div>

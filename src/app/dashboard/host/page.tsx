@@ -237,12 +237,20 @@ export default function HostDashboard() {
               <h1 className="text-2xl font-semibold text-text-primary">Manage Host Profile</h1>
             </div>
             {!editing && (
-              <button
-                onClick={() => setEditing(true)}
-                className="bg-accent hover:bg-accent-hover text-white font-medium px-4 py-2 rounded-md transition-colors"
-              >
-                Edit Profile
-              </button>
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/dashboard/host/bookings"
+                  className="bg-surface-raised hover:bg-border text-text-primary font-medium px-4 py-2 rounded-md transition-colors"
+                >
+                  View Bookings
+                </Link>
+                <button
+                  onClick={() => setEditing(true)}
+                  className="bg-accent hover:bg-accent-hover text-white font-medium px-4 py-2 rounded-md transition-colors"
+                >
+                  Edit Profile
+                </button>
+              </div>
             )}
           </div>
 
