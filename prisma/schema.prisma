@@ -121,9 +121,45 @@ model Booking {
   stripePaymentId String?
   
   notes           String?
+  scheduledDate   DateTime?
   
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+  
+  messages        Message[]
+  scheduleProposals ScheduleProposal[]
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  
+  senderId  String
+  content   String
+  
+  createdAt DateTime @default(now())
+}
+
+model ScheduleProposal {
+  id           String         @id @default(cuid())
+  
+  bookingId    String
+  booking      Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  
+  proposedById String
+  proposedDate DateTime
+  status       ProposalStatus @default(PENDING)
+  
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+enum ProposalStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
 }
 
 enum BookingStatus {

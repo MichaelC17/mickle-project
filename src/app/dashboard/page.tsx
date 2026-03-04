@@ -431,9 +431,10 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 bookings.map((booking) => (
-                  <div
+                  <Link
                     key={booking.id}
-                    className="bg-surface border border-border rounded-xl p-5 flex items-center justify-between"
+                    href={`/booking/${booking.id}`}
+                    className="bg-surface border border-border rounded-xl p-5 flex items-center justify-between hover:border-accent/50 transition-colors block"
                   >
                     <div className="flex items-center gap-4">
                       {booking.hostAvatar ? (
@@ -462,7 +463,7 @@ export default function DashboardPage() {
                       <p className="font-semibold text-text-primary">${booking.price.toLocaleString()}</p>
                       <p className="text-sm text-text-muted">{new Date(booking.date).toLocaleDateString()}</p>
                     </div>
-                  </div>
+                  </Link>
                 ))
               )}
 

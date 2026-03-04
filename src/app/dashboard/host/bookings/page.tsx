@@ -234,8 +234,18 @@ export default function HostBookingsPage() {
 
                   {/* Actions */}
                   <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
-                    <div className="text-sm text-text-muted">
-                      Platform fee: ${booking.platformFee} (10%)
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm text-text-muted">
+                        Platform fee: ${booking.platformFee} (10%)
+                      </span>
+                      {(booking.status === "confirmed" || booking.status === "in_progress") && (
+                        <Link
+                          href={`/booking/${booking.id}`}
+                          className="text-sm text-accent hover:underline"
+                        >
+                          Open Chat →
+                        </Link>
+                      )}
                     </div>
                     
                     <div className="flex items-center gap-2">

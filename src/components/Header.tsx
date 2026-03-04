@@ -31,9 +31,6 @@ export default function Header() {
           <Link href="/browse" className="text-text-secondary hover:text-text-primary transition-colors">
             Browse Hosts
           </Link>
-          <Link href="/apply" className="text-text-secondary hover:text-text-primary transition-colors">
-            Become a Host
-          </Link>
           <Link href="/dashboard" className="text-text-secondary hover:text-text-primary transition-colors">
             Dashboard
           </Link>
@@ -46,6 +43,17 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Become a Host - Prominent CTA */}
+          <Link
+            href="/apply"
+            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold bg-gradient-to-r from-accent to-purple-500 hover:from-accent-hover hover:to-purple-600 text-white px-4 py-2 rounded-full transition-all shadow-md hover:shadow-lg"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Become a Host
+          </Link>
+
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
