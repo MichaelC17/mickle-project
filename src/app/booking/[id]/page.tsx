@@ -350,30 +350,98 @@ export default function BookingDetailPage() {
               </div>
 
               {activeTab === "messages" ? (
-                <div className="bg-surface border border-border rounded-xl overflow-hidden">
+                <div className="bg-surface border border-border rounded-xl overflow-hidden flex flex-col" style={{ height: "480px" }}>
+                  {/* Chat Header */}
+                  <div className="px-4 py-3 border-b border-border bg-surface-raised/50 flex items-center gap-3">
+                    {booking.isHost ? (
+                      booking.buyer.image ? (
+                        <img src={booking.buyer.image} alt="" className="w-9 h-9 rounded-full" />
+                      ) : (
+                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center text-white text-sm font-medium">
+                          {(booking.buyer.name || booking.buyer.email)[0].toUpperCase()}
+                        </div>
+                      )
+                    ) : (
+                      booking.host.channelThumbnail ? (
+                        <img src={booking.host.channelThumbnail} alt="" className="w-9 h-9 rounded-full" />
+                      ) : (
+                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center text-white text-sm font-medium">
+                          {booking.host.channelName[0].toUpperCase()}
+                        </div>
+                      )
+                    )}
+                    <div>
+                      <p className="font-medium text-text-primary text-sm">
+                        {booking.isHost ? (booking.buyer.name || "Guest") : booking.host.channelName}
+                      </p>
+                      <p className="text-xs text-text-muted">{booking.package.name}</p>
+                    </div>
+                  </div>
+
                   {/* Messages List */}
-                  <div className="h-96 overflow-y-auto p-4 space-y-3">
+                  <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-surface to-surface-raised/30">
                     {messages.length === 0 ? (
-                      <div className="h-full flex items-center justify-center">
-                        <p className="text-text-muted text-sm">No messages yet. Start the conversation!</p>
+                      <div className="h-full flex flex-col items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-surface-raised flex items-center justify-center mb-3">
+                          <svg className="w-8 h-8 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                          </svg>
+                        </div>
+                        <p className="text-text-muted text-sm">No messages yet</p>
+                        <p className="text-text-muted/60 text-xs mt-1">Say hello to start the conversation!</p>
                       </div>
                     ) : (
-                      messages.map((msg) => {
+                      messages.map((msg, index) => {
                         const isMe = msg.senderId === session?.user?.id
+                        const showAvatar = index === 0 || messages[index - 1].senderId !== msg.senderId
+                        const isLast = index === messages.length - 1 || messages[index + 1].senderId !== msg.senderId
+                        
                         return (
                           <div
                             key={msg.id}
-                            className={`flex ${isMe ? "justify-end" : "justify-start"}`}
+                            className={`flex items-end gap-2 ${isMe ? "flex-row-reverse" : "flex-row"}`}
                           >
+                            {/* Avatar */}
+                            <div className={`w-7 h-7 flex-shrink-0 ${showAvatar ? "visible" : "invisible"}`}>
+                              {isMe ? (
+                                session?.user?.image ? (
+                                  <img src={session.user.image} alt="" className="w-7 h-7 rounded-full" />
+                                ) : (
+                                  <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center text-white text-xs font-medium">
+                                    {(session?.user?.name || session?.user?.email || "?")[0].toUpperCase()}
+                                  </div>
+                                )
+                              ) : (
+                                booking.isHost ? (
+                                  booking.buyer.image ? (
+                                    <img src={booking.buyer.image} alt="" className="w-7 h-7 rounded-full" />
+                                  ) : (
+                                    <div className="w-7 h-7 rounded-full bg-surface-raised flex items-center justify-center text-text-primary text-xs font-medium">
+                                      {(booking.buyer.name || "G")[0].toUpperCase()}
+                                    </div>
+                                  )
+                                ) : (
+                                  booking.host.channelThumbnail ? (
+                                    <img src={booking.host.channelThumbnail} alt="" className="w-7 h-7 rounded-full" />
+                                  ) : (
+                                    <div className="w-7 h-7 rounded-full bg-surface-raised flex items-center justify-center text-text-primary text-xs font-medium">
+                                      {booking.host.channelName[0].toUpperCase()}
+                                    </div>
+                                  )
+                                )
+                              )}
+                            </div>
+                            
+                            {/* Message Bubble */}
                             <div
-                              className={`max-w-[70%] px-4 py-2 rounded-2xl ${
+                              className={`max-w-[70%] px-4 py-2.5 ${
                                 isMe
-                                  ? "bg-accent text-white rounded-br-md"
-                                  : "bg-surface-raised text-text-primary rounded-bl-md"
+                                  ? `bg-gradient-to-br from-accent to-accent-hover text-white shadow-md ${isLast ? "rounded-2xl rounded-br-md" : "rounded-2xl"}`
+                                  : `bg-surface-raised text-text-primary shadow-sm border border-border/50 ${isLast ? "rounded-2xl rounded-bl-md" : "rounded-2xl"}`
                               }`}
                             >
-                              <p className="text-sm">{msg.content}</p>
-                              <p className={`text-xs mt-1 ${isMe ? "text-white/70" : "text-text-muted"}`}>
+                              <p className="text-sm leading-relaxed">{msg.content}</p>
+                              <p className={`text-[10px] mt-1.5 ${isMe ? "text-white/60" : "text-text-muted"}`}>
                                 {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                               </p>
                             </div>
@@ -385,21 +453,23 @@ export default function BookingDetailPage() {
                   </div>
 
                   {/* Message Input */}
-                  <form onSubmit={sendMessage} className="border-t border-border p-4">
-                    <div className="flex gap-2">
+                  <form onSubmit={sendMessage} className="p-3 border-t border-border bg-surface">
+                    <div className="flex items-center gap-2 bg-surface-raised rounded-full px-4 py-1 border border-border focus-within:border-accent transition-colors">
                       <input
                         type="text"
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         placeholder={`Message ${otherParty?.name || "..."}`}
-                        className="flex-1 bg-surface-raised border border-border rounded-lg px-4 py-2 text-text-primary placeholder-text-muted focus:outline-none focus:border-accent"
+                        className="flex-1 bg-transparent py-2 text-sm text-text-primary placeholder-text-muted focus:outline-none"
                       />
                       <button
                         type="submit"
                         disabled={!newMessage.trim() || sending}
-                        className="bg-accent hover:bg-accent-hover disabled:opacity-50 text-white px-4 py-2 rounded-lg transition-colors"
+                        className="w-9 h-9 flex items-center justify-center bg-accent hover:bg-accent-hover disabled:opacity-40 disabled:hover:bg-accent text-white rounded-full transition-all hover:scale-105 disabled:hover:scale-100"
                       >
-                        Send
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
                       </button>
                     </div>
                   </form>
