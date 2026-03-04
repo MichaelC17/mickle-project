@@ -46,19 +46,22 @@ export async function POST(request: Request) {
       }
 
       case "account.application.deauthorized": {
-        const account = event.data.object as Stripe.Account;
+        const application = event.data.object as { id: string; object: string };
+        const accountId = event.account;
         
-        await prisma.host.updateMany({
-          where: { stripeAccountId: account.id },
-          data: {
-            stripeAccountId: null,
-            stripeChargesEnabled: false,
-            stripePayoutsEnabled: false,
-            stripeOnboardingComplete: false,
-          },
-        });
-        
-        console.log(`Deauthorized Stripe account ${account.id}`);
+        if (accountId) {
+          await prisma.host.updateMany({
+            where: { stripeAccountId: accountId },
+            data: {
+              stripeAccountId: null,
+              stripeChargesEnabled: false,
+              stripePayoutsEnabled: false,
+              stripeOnboardingComplete: false,
+            },
+          });
+          
+          console.log(`Deauthorized Stripe account ${accountId}`);
+        }
         break;
       }
 
