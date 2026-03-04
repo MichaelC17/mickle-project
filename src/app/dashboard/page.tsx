@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -19,34 +19,6 @@ interface Booking {
   status: string;
   date: string;
 }
-
-interface Message {
-  id: string;
-  bookingId: string;
-  sender: "user" | "host";
-  text: string;
-  timestamp: string;
-}
-
-const generateMockMessages = (booking: Booking): Message[] => {
-  const now = new Date();
-  return [
-    {
-      id: `msg-${booking.id}-1`,
-      bookingId: booking.id,
-      sender: "host",
-      text: `Hey! Thanks for booking the ${booking.package}. I'm excited to collaborate with you!`,
-      timestamp: new Date(now.getTime() - 3600000).toISOString(),
-    },
-    {
-      id: `msg-${booking.id}-2`,
-      bookingId: booking.id,
-      sender: "host",
-      text: "What kind of content do you create? I'd love to make sure we align on the format.",
-      timestamp: new Date(now.getTime() - 3500000).toISOString(),
-    },
-  ];
-};
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
@@ -111,11 +83,6 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<"bookings" | "messages" | "analytics" | "settings">("bookings");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [bookingsLoading, setBookingsLoading] = useState(true);
-  const [selectedChat, setSelectedChat] = useState<string | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [mounted, setMounted] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const [hostProfile, setHostProfile] = useState<HostProfile | null>(null);
 
   const stats = {
@@ -130,19 +97,6 @@ export default function DashboardPage() {
       router.push("/login?callbackUrl=/dashboard");
     }
   }, [status, router]);
-
-  // Load messages from localStorage
-  useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem("collab-messages");
-    if (saved) {
-      try {
-        setMessages(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse messages:", e);
-      }
-    }
-  }, []);
 
   // Fetch bookings from API
   useEffect(() => {
@@ -185,91 +139,6 @@ export default function DashboardPage() {
     
     fetchHostProfile();
   }, [session?.user?.id]);
-
-  // Initialize mock messages for new bookings
-  useEffect(() => {
-    if (!mounted || bookings.length === 0) return;
-    
-    const existingBookingIds = new Set(messages.map(m => m.bookingId));
-    const newMessages: Message[] = [];
-    
-    bookings.forEach(booking => {
-      if (!existingBookingIds.has(booking.id)) {
-        newMessages.push(...generateMockMessages(booking));
-      }
-    });
-    
-    if (newMessages.length > 0) {
-      setMessages(prev => [...prev, ...newMessages]);
-    }
-  }, [bookings, mounted, messages]);
-
-  // Save messages to localStorage
-  useEffect(() => {
-    if (mounted && messages.length > 0) {
-      localStorage.setItem("collab-messages", JSON.stringify(messages));
-    }
-  }, [messages, mounted]);
-
-  // Scroll to bottom when messages change
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, selectedChat]);
-
-  const sendMessage = () => {
-    if (!newMessage.trim() || !selectedChat) return;
-    
-    const message: Message = {
-      id: `msg-${Date.now()}`,
-      bookingId: selectedChat,
-      sender: "user",
-      text: newMessage.trim(),
-      timestamp: new Date().toISOString(),
-    };
-    
-    setMessages(prev => [...prev, message]);
-    setNewMessage("");
-
-    // Simulate host response after a delay
-    setTimeout(() => {
-      const responses = [
-        "Sounds great! Let me know when works best for you.",
-        "Perfect, I'll send over some details soon.",
-        "Got it! Looking forward to working together.",
-        "Awesome! Let's make this collab happen.",
-        "Thanks for the info! I'll follow up shortly.",
-      ];
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      
-      const hostReply: Message = {
-        id: `msg-${Date.now()}-reply`,
-        bookingId: selectedChat,
-        sender: "host",
-        text: randomResponse,
-        timestamp: new Date().toISOString(),
-      };
-      setMessages(prev => [...prev, hostReply]);
-    }, 1500 + Math.random() * 2000);
-  };
-
-  const getBookingMessages = (bookingId: string) => {
-    return messages.filter(m => m.bookingId === bookingId).sort(
-      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-    );
-  };
-
-  const getLastMessage = (bookingId: string) => {
-    const bookingMessages = getBookingMessages(bookingId);
-    return bookingMessages[bookingMessages.length - 1];
-  };
-
-  const getUnreadCount = (bookingId: string) => {
-    // For demo, show unread if last message is from host
-    const last = getLastMessage(bookingId);
-    return last?.sender === "host" ? 1 : 0;
-  };
-
-  const selectedBooking = bookings.find(b => b.id === selectedChat);
 
   return (
     <>
@@ -389,9 +258,6 @@ export default function DashboardPage() {
                 }`}
               >
                 Messages
-                {bookings.some(b => getUnreadCount(b.id) > 0) && (
-                  <span className="w-2 h-2 bg-accent rounded-full"></span>
-                )}
               </button>
               <button
                 onClick={() => setActiveTab("analytics")}
@@ -479,172 +345,71 @@ export default function DashboardPage() {
           )}
 
           {activeTab === "messages" && (
-            <div className="bg-surface border border-border rounded-xl overflow-hidden" style={{ height: "500px" }}>
+            <div className="space-y-4">
               {bookings.length === 0 ? (
-                <div className="h-full flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg className="w-8 h-8 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                      </svg>
-                    </div>
-                    <p className="text-text-muted mb-4">No conversations yet</p>
-                    <Link
-                      href="/browse"
-                      className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
-                    >
-                      Book a Host to Start Chatting
-                    </Link>
+                <div className="text-center py-12 bg-surface border border-border rounded-xl">
+                  <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
                   </div>
+                  <p className="text-text-muted mb-4">No conversations yet</p>
+                  <Link
+                    href="/browse"
+                    className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
+                  >
+                    Book a Host to Start Chatting
+                  </Link>
                 </div>
               ) : (
-                <div className="flex h-full">
-                  {/* Conversation List */}
-                  <div className={`w-full md:w-80 border-r border-border overflow-y-auto ${selectedChat ? 'hidden md:block' : ''}`}>
-                    <div className="p-4 border-b border-border">
-                      <h3 className="font-medium text-text-primary">Conversations</h3>
-                    </div>
-                    {bookings.map((booking) => {
-                      const lastMsg = getLastMessage(booking.id);
-                      const unread = getUnreadCount(booking.id);
-                      return (
-                        <button
-                          key={booking.id}
-                          onClick={() => setSelectedChat(booking.id)}
-                          className={`w-full p-4 text-left hover:bg-surface-raised transition-colors border-b border-border-subtle ${
-                            selectedChat === booking.id ? "bg-surface-raised" : ""
-                          }`}
-                        >
-                          <div className="flex items-start gap-3">
-                            {booking.hostAvatar ? (
-                              <img 
-                                src={booking.hostAvatar} 
-                                alt={booking.hostName}
-                                className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-                              />
-                            ) : (
-                              <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-sm font-medium text-text-primary flex-shrink-0">
-                                {booking.hostName.slice(0, 2).toUpperCase()}
-                              </div>
-                            )}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                  <p className="font-medium text-text-primary text-sm">{booking.hostName}</p>
-                                  <PlatformIcon platform={booking.platform} />
-                                </div>
-                                {unread > 0 && (
-                                  <span className="w-2 h-2 bg-accent rounded-full"></span>
-                                )}
-                              </div>
-                              <p className="text-xs text-text-muted truncate mt-0.5">
-                                {lastMsg ? lastMsg.text : "Start the conversation..."}
-                              </p>
-                              <p className="text-xs text-text-muted mt-1">{booking.package}</p>
-                            </div>
+                <>
+                  <p className="text-sm text-text-muted mb-2">Click on a booking to open the chat</p>
+                  {bookings
+                    .filter(b => b.status === "confirmed" || b.status === "in_progress")
+                    .map((booking) => (
+                    <Link
+                      key={booking.id}
+                      href={`/booking/${booking.id}`}
+                      className="bg-surface border border-border rounded-xl p-5 flex items-center justify-between hover:border-accent/50 transition-colors block"
+                    >
+                      <div className="flex items-center gap-4">
+                        {booking.hostAvatar ? (
+                          <img 
+                            src={booking.hostAvatar} 
+                            alt={booking.hostName}
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-full bg-surface-raised flex items-center justify-center text-lg font-medium text-text-primary">
+                            {booking.hostName.slice(0, 2).toUpperCase()}
                           </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Chat Window */}
-                  <div className={`flex-1 flex flex-col ${!selectedChat ? 'hidden md:flex' : 'flex'}`}>
-                    {!selectedChat ? (
-                      <div className="flex-1 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg className="w-8 h-8 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
+                        )}
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium text-text-primary">{booking.hostName}</p>
+                            <PlatformIcon platform={booking.platform} />
+                            <StatusBadge status={booking.status} />
                           </div>
-                          <p className="text-text-muted">Select a conversation to start chatting</p>
+                          <p className="text-sm text-text-muted">
+                            {booking.package}
+                          </p>
                         </div>
                       </div>
-                    ) : (
-                      <>
-                        {/* Chat Header */}
-                        <div className="p-4 border-b border-border flex items-center gap-3">
-                          <button
-                            onClick={() => setSelectedChat(null)}
-                            className="md:hidden p-1 -ml-1 text-text-muted hover:text-text-primary"
-                          >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                          </button>
-                          {selectedBooking?.hostAvatar ? (
-                            <img 
-                              src={selectedBooking.hostAvatar} 
-                              alt={selectedBooking.hostName}
-                              className="w-10 h-10 rounded-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-sm font-medium text-text-primary">
-                              {selectedBooking?.hostName?.slice(0, 2).toUpperCase()}
-                            </div>
-                          )}
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <p className="font-medium text-text-primary">{selectedBooking?.hostName}</p>
-                              <PlatformIcon platform={selectedBooking?.platform || "youtube"} />
-                            </div>
-                            <p className="text-xs text-text-muted">{selectedBooking?.package}</p>
-                          </div>
-                        </div>
-
-                        {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                          {getBookingMessages(selectedChat).map((msg) => (
-                            <div
-                              key={msg.id}
-                              className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-                            >
-                              <div
-                                className={`max-w-[70%] rounded-2xl px-4 py-2 ${
-                                  msg.sender === "user"
-                                    ? "bg-accent text-white"
-                                    : "bg-surface-raised text-text-primary"
-                                }`}
-                              >
-                                <p className="text-sm">{msg.text}</p>
-                                <p className={`text-xs mt-1 ${
-                                  msg.sender === "user" ? "text-white/70" : "text-text-muted"
-                                }`}>
-                                  {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                </p>
-                              </div>
-                            </div>
-                          ))}
-                          <div ref={messagesEndRef} />
-                        </div>
-
-                        {/* Message Input */}
-                        <div className="p-4 border-t border-border">
-                          <div className="flex gap-2">
-                            <input
-                              type="text"
-                              value={newMessage}
-                              onChange={(e) => setNewMessage(e.target.value)}
-                              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                              placeholder="Type a message..."
-                              className="flex-1 bg-background border border-border rounded-full px-4 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
-                            />
-                            <button
-                              onClick={sendMessage}
-                              disabled={!newMessage.trim()}
-                              className="bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white p-2 rounded-full transition-colors"
-                            >
-                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                              </svg>
-                            </button>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
+                      <div className="flex items-center gap-2 text-accent">
+                        <span className="text-sm font-medium">Open Chat</span>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </Link>
+                  ))}
+                  {bookings.filter(b => b.status === "confirmed" || b.status === "in_progress").length === 0 && (
+                    <div className="text-center py-8 bg-surface border border-border rounded-xl">
+                      <p className="text-text-muted">No active conversations</p>
+                      <p className="text-sm text-text-secondary mt-1">Chat becomes available once you have a confirmed booking</p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
