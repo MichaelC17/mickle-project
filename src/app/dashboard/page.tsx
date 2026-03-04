@@ -250,7 +250,7 @@ export default function DashboardPage() {
                 My Bookings
               </button>
               <button
-                onClick={() => { setActiveTab("messages"); setSelectedChat(null); }}
+                onClick={() => setActiveTab("messages")}
                 className={`pb-3 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
                   activeTab === "messages"
                     ? "border-accent text-text-primary"
