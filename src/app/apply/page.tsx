@@ -36,6 +36,8 @@ const DEFAULT_PACKAGE: PackageInput = {
   includes: [""],
 }
 
+const MIN_SUBSCRIBERS = 50000
+
 export default function ApplyPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -46,6 +48,7 @@ export default function ApplyPage() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState("")
+  const [belowMinSubs, setBelowMinSubs] = useState(false)
   
   const [niche, setNiche] = useState("")
   const [bio, setBio] = useState("")
@@ -72,7 +75,11 @@ export default function ApplyPage() {
         if (channelRes.ok) {
           const data = await channelRes.json()
           setChannel(data)
-          setStep(2)
+          if (data.subscriberCount < MIN_SUBSCRIBERS) {
+            setBelowMinSubs(true)
+          } else {
+            setStep(2)
+          }
         }
       }
 
@@ -219,6 +226,47 @@ export default function ApplyPage() {
                 </button>
               </div>
             </div>
+          ) : belowMinSubs && channel ? (
+            <div className="bg-surface border border-border rounded-lg p-8">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  {channel.thumbnail && (
+                    <img
+                      src={channel.thumbnail}
+                      alt={channel.name}
+                      className="w-12 h-12 rounded-full"
+                    />
+                  )}
+                  <div className="text-left">
+                    <h3 className="font-semibold text-text-primary">{channel.name}</h3>
+                    <p className="text-sm text-text-muted">
+                      {formatNumber(channel.subscriberCount)} subscribers
+                    </p>
+                  </div>
+                </div>
+
+                <h2 className="text-xl font-semibold text-text-primary mb-2">Not Eligible Yet</h2>
+                <p className="text-text-secondary mb-4">
+                  To become a host on COLLAB, your channel needs at least <span className="font-semibold text-text-primary">50,000 subscribers</span>.
+                </p>
+                <p className="text-text-muted text-sm mb-6">
+                  You currently have {formatNumber(channel.subscriberCount)} subscribers. Keep growing your channel and come back when you hit 50K!
+                </p>
+                
+                <button
+                  onClick={() => router.push("/browse")}
+                  className="bg-accent hover:bg-accent-hover text-white font-medium px-6 py-3 rounded-md transition-colors"
+                >
+                  Browse Hosts Instead
+                </button>
+              </div>
+            </div>
           ) : step === 1 ? (
             <div className="bg-surface border border-border rounded-lg p-8">
               <div className="text-center mb-8">
@@ -228,8 +276,11 @@ export default function ApplyPage() {
                   </svg>
                 </div>
                 <h2 className="text-xl font-semibold text-text-primary mb-2">Step 1: Connect Your YouTube Channel</h2>
-                <p className="text-text-secondary mb-6">
+                <p className="text-text-secondary mb-2">
                   Sign in with YouTube to verify your channel ownership and import your channel info.
+                </p>
+                <p className="text-sm text-text-muted mb-6">
+                  Minimum requirement: 50,000 subscribers
                 </p>
               </div>
 

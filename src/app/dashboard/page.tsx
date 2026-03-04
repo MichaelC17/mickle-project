@@ -3,9 +3,22 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { useBookings, Booking } from "@/context/BookingsContext";
+
+interface Booking {
+  id: string;
+  hostId: string;
+  hostName: string;
+  hostHandle: string | null;
+  hostAvatar: string | null;
+  platform: string;
+  package: string;
+  price: number;
+  status: string;
+  date: string;
+}
 
 interface Message {
   id: string;
@@ -15,7 +28,6 @@ interface Message {
   timestamp: string;
 }
 
-// Mock initial messages for demo
 const generateMockMessages = (booking: Booking): Message[] => {
   const now = new Date();
   return [
@@ -37,16 +49,20 @@ const generateMockMessages = (booking: Booking): Message[] => {
 };
 
 function StatusBadge({ status }: { status: string }) {
-  const styles = {
+  const styles: Record<string, string> = {
     confirmed: "bg-blue-500/10 text-blue-500 border-blue-500/20",
     pending: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+    in_progress: "bg-purple-500/10 text-purple-500 border-purple-500/20",
     completed: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
     cancelled: "bg-red-500/10 text-red-500 border-red-500/20",
+    refunded: "bg-gray-500/10 text-gray-500 border-gray-500/20",
   };
 
+  const displayStatus = status.replace(/_/g, " ");
+
   return (
-    <span className={`text-xs px-2 py-1 rounded-full border ${styles[status as keyof typeof styles]}`}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+    <span className={`text-xs px-2 py-1 rounded-full border ${styles[status] || styles.pending}`}>
+      {displayStatus.charAt(0).toUpperCase() + displayStatus.slice(1)}
     </span>
   );
 }
@@ -90,15 +106,30 @@ interface HostProfile {
 }
 
 export default function DashboardPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"bookings" | "messages" | "analytics" | "settings">("bookings");
-  const { bookings, stats } = useBookings();
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookingsLoading, setBookingsLoading] = useState(true);
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [mounted, setMounted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [hostProfile, setHostProfile] = useState<HostProfile | null>(null);
+
+  const stats = {
+    totalSpent: bookings.reduce((sum, b) => sum + b.price, 0),
+    totalBookings: bookings.length,
+    completedCollabs: bookings.filter(b => b.status === "completed").length,
+  };
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login?callbackUrl=/dashboard");
+    }
+  }, [status, router]);
 
   // Load messages from localStorage
   useEffect(() => {
@@ -112,6 +143,27 @@ export default function DashboardPage() {
       }
     }
   }, []);
+
+  // Fetch bookings from API
+  useEffect(() => {
+    if (!session?.user?.id) return;
+    
+    const fetchBookings = async () => {
+      try {
+        const res = await fetch("/api/bookings");
+        if (res.ok) {
+          const data = await res.json();
+          setBookings(data.bookings || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch bookings:", error);
+      } finally {
+        setBookingsLoading(false);
+      }
+    };
+    
+    fetchBookings();
+  }, [session?.user?.id]);
 
   // Fetch host profile if logged in
   useEffect(() => {
@@ -378,9 +430,17 @@ export default function DashboardPage() {
                     className="bg-surface border border-border rounded-xl p-5 flex items-center justify-between"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-surface-raised flex items-center justify-center text-lg font-medium text-text-primary">
-                        {booking.hostAvatar}
-                      </div>
+                      {booking.hostAvatar ? (
+                        <img 
+                          src={booking.hostAvatar} 
+                          alt={booking.hostName}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-surface-raised flex items-center justify-center text-lg font-medium text-text-primary">
+                          {booking.hostName.slice(0, 2).toUpperCase()}
+                        </div>
+                      )}
                       <div>
                         <div className="flex items-center gap-2">
                           <p className="font-medium text-text-primary">{booking.hostName}</p>
@@ -449,9 +509,17 @@ export default function DashboardPage() {
                           }`}
                         >
                           <div className="flex items-start gap-3">
-                            <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-sm font-medium text-text-primary flex-shrink-0">
-                              {booking.hostAvatar}
-                            </div>
+                            {booking.hostAvatar ? (
+                              <img 
+                                src={booking.hostAvatar} 
+                                alt={booking.hostName}
+                                className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-sm font-medium text-text-primary flex-shrink-0">
+                                {booking.hostName.slice(0, 2).toUpperCase()}
+                              </div>
+                            )}
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
@@ -498,9 +566,17 @@ export default function DashboardPage() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                             </svg>
                           </button>
-                          <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-sm font-medium text-text-primary">
-                            {selectedBooking?.hostAvatar}
-                          </div>
+                          {selectedBooking?.hostAvatar ? (
+                            <img 
+                              src={selectedBooking.hostAvatar} 
+                              alt={selectedBooking.hostName}
+                              className="w-10 h-10 rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-sm font-medium text-text-primary">
+                              {selectedBooking?.hostName?.slice(0, 2).toUpperCase()}
+                            </div>
+                          )}
                           <div>
                             <div className="flex items-center gap-2">
                               <p className="font-medium text-text-primary">{selectedBooking?.hostName}</p>

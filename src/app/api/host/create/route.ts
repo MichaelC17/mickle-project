@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
 
+const MIN_SUBSCRIBERS = 50000
+
 export async function POST(request: Request) {
   const session = await auth()
   
@@ -31,6 +33,13 @@ export async function POST(request: Request) {
     if (!channelName) {
       return NextResponse.json(
         { error: "Channel name is required" },
+        { status: 400 }
+      )
+    }
+
+    if (!subscriberCount || subscriberCount < MIN_SUBSCRIBERS) {
+      return NextResponse.json(
+        { error: `You need at least ${MIN_SUBSCRIBERS.toLocaleString()} subscribers to become a host` },
         { status: 400 }
       )
     }

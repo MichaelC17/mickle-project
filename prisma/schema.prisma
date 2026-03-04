@@ -20,6 +20,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   hostProfile   Host?
+  bookings      Booking[]
 }
 
 model Host {
@@ -42,6 +43,7 @@ model Host {
   updatedAt        DateTime  @updatedAt
   
   packages         Package[]
+  bookings         Booking[]
 }
 
 model Package {
@@ -56,6 +58,8 @@ model Package {
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  bookings    Booking[]
 }
 
 model Account {
@@ -95,6 +99,40 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  
+  buyerId         String
+  buyer           User          @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  
+  hostId          String
+  host            Host          @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  
+  packageId       String
+  package         Package       @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  
+  status          BookingStatus @default(PENDING)
+  amount          Int
+  platformFee     Int           @default(0)
+  
+  stripeSessionId String?       @unique
+  stripePaymentId String?
+  
+  notes           String?
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  REFUNDED
 }
 
 enum Role {

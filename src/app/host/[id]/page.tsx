@@ -141,6 +141,7 @@ export default function HostProfilePage() {
         body: JSON.stringify({
           hostId: host.id,
           hostName: host.channelName,
+          packageId: currentPackage.id,
           packageName: currentPackage.name,
           price: currentPackage.price,
         }),
