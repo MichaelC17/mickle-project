@@ -6,6 +6,7 @@ import { useRouter, useParams } from "next/navigation"
 import Link from "next/link"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
+import CalendarPicker from "@/components/CalendarPicker"
 
 interface Message {
   id: string
@@ -83,7 +84,7 @@ export default function BookingDetailPage() {
   const [loading, setLoading] = useState(true)
   const [newMessage, setNewMessage] = useState("")
   const [sending, setSending] = useState(false)
-  const [proposedDate, setProposedDate] = useState("")
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [proposing, setProposing] = useState(false)
   const [activeTab, setActiveTab] = useState<"messages" | "schedule">("messages")
   
@@ -176,19 +177,18 @@ export default function BookingDetailPage() {
     }
   }
 
-  const proposeDate = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!proposedDate || proposing) return
+  const proposeDate = async () => {
+    if (!selectedDate || proposing) return
 
     setProposing(true)
     try {
       const res = await fetch(`/api/bookings/${bookingId}/schedule`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ proposedDate }),
+        body: JSON.stringify({ proposedDate: selectedDate.toISOString() }),
       })
       if (res.ok) {
-        setProposedDate("")
+        setSelectedDate(null)
         fetchSchedule()
       }
     } catch (error) {
@@ -244,7 +244,7 @@ export default function BookingDetailPage() {
     )
   }
 
-  const canMessage = booking.status === "in_progress" || booking.status === "confirmed"
+  const canMessage = !["completed", "cancelled", "refunded", "pending"].includes(booking.status)
 
   return (
     <div className="min-h-screen bg-background">
@@ -401,25 +401,23 @@ export default function BookingDetailPage() {
               ) : (
                 <div className="bg-surface border border-border rounded-xl p-6">
                   {/* Propose Date */}
-                  <form onSubmit={proposeDate} className="mb-6">
+                  <div className="mb-6">
                     <h3 className="font-medium text-text-primary mb-3">Propose a Date</h3>
-                    <div className="flex gap-2">
-                      <input
-                        type="datetime-local"
-                        value={proposedDate}
-                        onChange={(e) => setProposedDate(e.target.value)}
-                        min={new Date().toISOString().slice(0, 16)}
-                        className="flex-1 bg-surface-raised border border-border rounded-lg px-4 py-2 text-text-primary focus:outline-none focus:border-accent"
-                      />
+                    <CalendarPicker
+                      selectedDate={selectedDate}
+                      onSelectDate={setSelectedDate}
+                      minDate={new Date()}
+                    />
+                    {selectedDate && (
                       <button
-                        type="submit"
-                        disabled={!proposedDate || proposing}
-                        className="bg-accent hover:bg-accent-hover disabled:opacity-50 text-white px-4 py-2 rounded-lg transition-colors"
+                        onClick={proposeDate}
+                        disabled={proposing}
+                        className="w-full mt-4 bg-accent hover:bg-accent-hover disabled:opacity-50 text-white py-3 rounded-lg font-medium transition-colors"
                       >
-                        Propose
+                        {proposing ? "Proposing..." : "Propose This Date"}
                       </button>
-                    </div>
-                  </form>
+                    )}
+                  </div>
 
                   {/* Proposals List */}
                   <div>
