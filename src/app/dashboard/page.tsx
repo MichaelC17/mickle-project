@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useBookings, Booking } from "@/context/BookingsContext";
@@ -81,7 +82,15 @@ function PlatformIcon({ platform }: { platform: string }) {
   }
 }
 
+interface HostProfile {
+  id: string;
+  channelName: string;
+  channelThumbnail: string | null;
+  subscriberCount: number;
+}
+
 export default function DashboardPage() {
+  const { data: session } = useSession();
   const [activeTab, setActiveTab] = useState<"bookings" | "messages" | "analytics" | "settings">("bookings");
   const { bookings, stats } = useBookings();
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
@@ -89,6 +98,7 @@ export default function DashboardPage() {
   const [newMessage, setNewMessage] = useState("");
   const [mounted, setMounted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [hostProfile, setHostProfile] = useState<HostProfile | null>(null);
 
   // Load messages from localStorage
   useEffect(() => {
@@ -102,6 +112,27 @@ export default function DashboardPage() {
       }
     }
   }, []);
+
+  // Fetch host profile if logged in
+  useEffect(() => {
+    if (!session?.user?.id) return;
+    
+    const fetchHostProfile = async () => {
+      try {
+        const res = await fetch("/api/host/create");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.host) {
+            setHostProfile(data.host);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch host profile:", error);
+      }
+    };
+    
+    fetchHostProfile();
+  }, [session?.user?.id]);
 
   // Initialize mock messages for new bookings
   useEffect(() => {
@@ -219,6 +250,64 @@ export default function DashboardPage() {
               <p className="text-2xl font-semibold text-emerald-500">{stats.completedCollabs}</p>
             </div>
           </div>
+
+          {/* Host Profile Section */}
+          {session && (
+            <div className="mb-8">
+              {hostProfile ? (
+                <div className="bg-surface border border-border rounded-xl p-5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      {hostProfile.channelThumbnail ? (
+                        <img 
+                          src={hostProfile.channelThumbnail} 
+                          alt={hostProfile.channelName}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-surface-raised flex items-center justify-center text-lg font-medium text-text-primary">
+                          {hostProfile.channelName.slice(0, 2).toUpperCase()}
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-medium text-text-primary">{hostProfile.channelName}</p>
+                        <p className="text-sm text-text-muted">Your Host Profile</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={`/host/${hostProfile.id}`}
+                        className="text-sm text-text-secondary hover:text-text-primary font-medium px-3 py-1.5 rounded-md transition-colors"
+                      >
+                        View Public Profile
+                      </Link>
+                      <Link
+                        href="/dashboard/host"
+                        className="bg-accent hover:bg-accent-hover text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
+                      >
+                        Manage Profile
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-gradient-to-r from-accent/10 to-purple-500/10 border border-accent/20 rounded-xl p-5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-text-primary">Become a Host</p>
+                      <p className="text-sm text-text-secondary mt-1">Start monetizing your audience by hosting other creators</p>
+                    </div>
+                    <Link
+                      href="/apply"
+                      className="bg-accent hover:bg-accent-hover text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
+                    >
+                      Get Started
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Tabs */}
           <div className="border-b border-border mb-6">

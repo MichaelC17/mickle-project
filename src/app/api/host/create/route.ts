@@ -126,3 +126,106 @@ export async function GET() {
     )
   }
 }
+
+export async function PUT(request: Request) {
+  const session = await auth()
+  
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { error: "You must be signed in" },
+      { status: 401 }
+    )
+  }
+
+  try {
+    const existingHost = await prisma.host.findUnique({
+      where: { userId: session.user.id },
+    })
+
+    if (!existingHost) {
+      return NextResponse.json(
+        { error: "You don't have a host profile" },
+        { status: 404 }
+      )
+    }
+
+    const body = await request.json()
+    const { niche, bio, packages } = body
+
+    await prisma.package.deleteMany({
+      where: { hostId: existingHost.id },
+    })
+
+    const host = await prisma.host.update({
+      where: { userId: session.user.id },
+      data: {
+        niche,
+        bio,
+        packages: {
+          create: packages.map((pkg: { name: string; price: number; description?: string; includes: string[] }) => ({
+            name: pkg.name,
+            price: pkg.price,
+            description: pkg.description || "",
+            includes: pkg.includes || [],
+          })),
+        },
+      },
+      include: { packages: true },
+    })
+
+    return NextResponse.json({
+      success: true,
+      host,
+    })
+  } catch (error) {
+    console.error("Error updating host profile:", error)
+    return NextResponse.json(
+      { error: "Failed to update host profile" },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE() {
+  const session = await auth()
+  
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { error: "You must be signed in" },
+      { status: 401 }
+    )
+  }
+
+  try {
+    const existingHost = await prisma.host.findUnique({
+      where: { userId: session.user.id },
+    })
+
+    if (!existingHost) {
+      return NextResponse.json(
+        { error: "You don't have a host profile" },
+        { status: 404 }
+      )
+    }
+
+    await prisma.host.delete({
+      where: { userId: session.user.id },
+    })
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { role: "CREATOR" },
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: "Host profile deleted",
+    })
+  } catch (error) {
+    console.error("Error deleting host profile:", error)
+    return NextResponse.json(
+      { error: "Failed to delete host profile" },
+      { status: 500 }
+    )
+  }
+}
