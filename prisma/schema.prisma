@@ -150,6 +150,7 @@ model ScheduleProposal {
   
   proposedById String
   proposedDate DateTime
+  purpose      String?
   status       ProposalStatus @default(PENDING)
   
   createdAt    DateTime       @default(now())

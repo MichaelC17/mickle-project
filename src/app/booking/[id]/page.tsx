@@ -19,6 +19,7 @@ interface ScheduleProposal {
   id: string
   proposedById: string
   proposedDate: string
+  purpose: string | null
   status: string
   createdAt: string
 }
@@ -85,6 +86,7 @@ export default function BookingDetailPage() {
   const [newMessage, setNewMessage] = useState("")
   const [sending, setSending] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedPurpose, setSelectedPurpose] = useState("")
   const [proposing, setProposing] = useState(false)
   const [activeTab, setActiveTab] = useState<"messages" | "schedule">("messages")
   
@@ -185,10 +187,14 @@ export default function BookingDetailPage() {
       const res = await fetch(`/api/bookings/${bookingId}/schedule`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ proposedDate: selectedDate.toISOString() }),
+        body: JSON.stringify({ 
+          proposedDate: selectedDate.toISOString(),
+          purpose: selectedPurpose || null,
+        }),
       })
       if (res.ok) {
         setSelectedDate(null)
+        setSelectedPurpose("")
         fetchSchedule()
       }
     } catch (error) {
@@ -409,13 +415,34 @@ export default function BookingDetailPage() {
                       minDate={new Date()}
                     />
                     {selectedDate && (
-                      <button
-                        onClick={proposeDate}
-                        disabled={proposing}
-                        className="w-full mt-4 bg-accent hover:bg-accent-hover disabled:opacity-50 text-white py-3 rounded-lg font-medium transition-colors"
-                      >
-                        {proposing ? "Proposing..." : "Propose This Date"}
-                      </button>
+                      <div className="mt-4 space-y-3">
+                        <div>
+                          <label className="block text-sm text-text-muted mb-2">Purpose (optional)</label>
+                          <div className="flex flex-wrap gap-2">
+                            {["Filming", "Call", "Meeting", "Interview", "Planning", "Other"].map((purpose) => (
+                              <button
+                                key={purpose}
+                                type="button"
+                                onClick={() => setSelectedPurpose(selectedPurpose === purpose ? "" : purpose)}
+                                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                                  selectedPurpose === purpose
+                                    ? "bg-accent text-white"
+                                    : "bg-surface-raised text-text-secondary hover:text-text-primary"
+                                }`}
+                              >
+                                {purpose}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        <button
+                          onClick={proposeDate}
+                          disabled={proposing}
+                          className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 text-white py-3 rounded-lg font-medium transition-colors"
+                        >
+                          {proposing ? "Proposing..." : "Propose This Date"}
+                        </button>
+                      </div>
                     )}
                   </div>
 
@@ -441,15 +468,22 @@ export default function BookingDetailPage() {
                               }`}
                             >
                               <div>
-                                <p className="font-medium text-text-primary">
-                                  {new Date(proposal.proposedDate).toLocaleDateString(undefined, {
-                                    weekday: "long",
-                                    month: "long",
-                                    day: "numeric",
-                                    hour: "numeric",
-                                    minute: "2-digit",
-                                  })}
-                                </p>
+                                <div className="flex items-center gap-2">
+                                  <p className="font-medium text-text-primary">
+                                    {new Date(proposal.proposedDate).toLocaleDateString(undefined, {
+                                      weekday: "long",
+                                      month: "long",
+                                      day: "numeric",
+                                      hour: "numeric",
+                                      minute: "2-digit",
+                                    })}
+                                  </p>
+                                  {proposal.purpose && (
+                                    <span className="px-2 py-0.5 bg-accent/10 text-accent text-xs font-medium rounded-full">
+                                      {proposal.purpose}
+                                    </span>
+                                  )}
+                                </div>
                                 <p className="text-sm text-text-muted">
                                   Proposed by {isMyProposal ? "you" : otherParty?.name || "them"}
                                 </p>

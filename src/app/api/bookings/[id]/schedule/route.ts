@@ -81,7 +81,7 @@ export async function POST(
     }
 
     const body = await request.json()
-    const { proposedDate } = body
+    const { proposedDate, purpose } = body
 
     if (!proposedDate) {
       return NextResponse.json({ error: "Proposed date required" }, { status: 400 })
@@ -92,6 +92,7 @@ export async function POST(
         bookingId: params.id,
         proposedById: session.user.id,
         proposedDate: new Date(proposedDate),
+        purpose: purpose || null,
       },
     })
 
