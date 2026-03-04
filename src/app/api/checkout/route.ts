@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder", {
   apiVersion: "2026-01-28.clover",
 });
+
+const PLATFORM_FEE_PERCENT = 10;
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -29,7 +32,23 @@ export async function POST(request: Request) {
       );
     }
 
-    const checkoutSession = await stripe.checkout.sessions.create({
+    const host = await prisma.host.findUnique({
+      where: { id: hostId },
+    });
+
+    if (!host) {
+      return NextResponse.json(
+        { error: "Host not found" },
+        { status: 404 }
+      );
+    }
+
+    const amountInCents = price * 100;
+    const platformFee = Math.round(amountInCents * (PLATFORM_FEE_PERCENT / 100));
+
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    const sessionParams: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ["card"],
       line_items: [
         {
@@ -39,22 +58,34 @@ export async function POST(request: Request) {
               name: `${packageName} with ${hostName}`,
               description: `Guest spot package on COLLAB.`,
             },
-            unit_amount: price * 100,
+            unit_amount: amountInCents,
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/booking/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/host/${hostId}`,
+      success_url: `${baseUrl}/booking/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/host/${hostId}`,
       metadata: {
         buyerId: session.user.id,
         hostId,
         packageId,
         packageName,
         amount: price.toString(),
+        platformFee: (platformFee / 100).toString(),
       },
-    });
+    };
+
+    if (host.stripeAccountId && host.stripeChargesEnabled) {
+      sessionParams.payment_intent_data = {
+        application_fee_amount: platformFee,
+        transfer_data: {
+          destination: host.stripeAccountId,
+        },
+      };
+    }
+
+    const checkoutSession = await stripe.checkout.sessions.create(sessionParams);
 
     return NextResponse.json({ 
       sessionId: checkoutSession.id,

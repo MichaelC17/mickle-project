@@ -8,54 +8,86 @@ export default function Home() {
       <Header />
 
       {/* Hero */}
-      <section className="pt-32 pb-20 px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          {/* Platform Logos */}
-          <div className="flex items-center justify-center gap-4 mb-6 fade-in">
-            {/* YouTube */}
-            <svg className="w-8 h-8 text-red-500" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-            </svg>
-            {/* Twitch */}
-            <svg className="w-8 h-8 text-violet-500" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
-            </svg>
-            {/* TikTok */}
-            <svg className="w-8 h-8 text-pink-500" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-            </svg>
-            {/* Instagram */}
-            <svg className="w-8 h-8 text-purple-500" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-            </svg>
+      <section className="pt-28 pb-20 px-6 bg-gradient-to-b from-surface via-background to-background">
+        <div className="max-w-5xl mx-auto">
+          {/* Main Content */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-accent/10 text-accent px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+              Now in Beta
+            </div>
+            
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-text-primary leading-[1.1] tracking-tight mb-6">
+              Grow your channel
+              <br />
+              <span className="bg-gradient-to-r from-accent via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                10x faster
+              </span>
+            </h1>
+            
+            <p className="text-xl text-text-secondary max-w-2xl mx-auto mb-10">
+              Book guest spots on bigger creator channels. Get in front of their audience. 
+              Convert their viewers into your subscribers.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+              <Link
+                href="/browse"
+                className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:shadow-accent/20"
+              >
+                Browse Creators
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+              <Link
+                href="#how-it-works"
+                className="inline-flex items-center justify-center gap-2 bg-surface border border-border text-text-primary font-semibold px-8 py-4 rounded-full text-lg transition-colors hover:border-accent/50"
+              >
+                How it works
+              </Link>
+            </div>
+
+            {/* Platform Badges */}
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <span className="text-sm text-text-muted">Works with:</span>
+              <div className="flex items-center gap-3">
+                <span className="inline-flex items-center gap-1.5 bg-red-500/10 text-red-500 px-3 py-1.5 rounded-full text-sm font-medium">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                  YouTube
+                </span>
+                <span className="inline-flex items-center gap-1.5 bg-violet-500/10 text-violet-500 px-3 py-1.5 rounded-full text-sm font-medium">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
+                  </svg>
+                  Twitch
+                </span>
+                <span className="inline-flex items-center gap-1.5 bg-pink-500/10 text-pink-500 px-3 py-1.5 rounded-full text-sm font-medium">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                  </svg>
+                  TikTok
+                </span>
+              </div>
+            </div>
           </div>
-          
-          <p className="text-sm text-text-muted mb-4 fade-in">
-            Currently in private beta
-          </p>
-          <h1 className="text-4xl sm:text-5xl font-semibold text-text-primary leading-tight tracking-tight fade-in delay-1">
-            Buy guest spots on
-            <br />
-            bigger creator channels
-          </h1>
-          <p className="mt-6 text-lg text-text-secondary max-w-xl mx-auto fade-in delay-2">
-            The fastest way to grow your channel. Book appearances on verified YouTube and Twitch creators, 
-            get in front of their audience, and convert their viewers into your subscribers.
-          </p>
-          
-          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3 fade-in delay-3">
-            <Link
-              href="/browse"
-              className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white text-sm font-medium px-5 py-2.5 rounded-md transition-colors"
-            >
-              Browse Hosts
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="inline-flex items-center justify-center bg-surface-raised hover:bg-surface border border-border text-text-primary text-sm font-medium px-5 py-2.5 rounded-md transition-colors"
-            >
-              See how it works
-            </Link>
+
+          {/* Trust Indicators */}
+          <div className="grid grid-cols-3 gap-6 max-w-2xl mx-auto">
+            <div className="text-center">
+              <p className="text-3xl font-bold text-text-primary mb-1">50K+</p>
+              <p className="text-sm text-text-muted">Min host subs</p>
+            </div>
+            <div className="text-center border-x border-border">
+              <p className="text-3xl font-bold text-text-primary mb-1">100%</p>
+              <p className="text-sm text-text-muted">Verified creators</p>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl font-bold text-text-primary mb-1">$0</p>
+              <p className="text-sm text-text-muted">Platform fee</p>
+            </div>
           </div>
         </div>
       </section>

@@ -24,6 +24,17 @@ interface Host {
   niche: string | null
   bio: string | null
   packages: Package[]
+  stripeAccountId: string | null
+  stripeOnboardingComplete: boolean
+  stripeChargesEnabled: boolean
+  stripePayoutsEnabled: boolean
+}
+
+interface StripeStatus {
+  connected: boolean
+  chargesEnabled: boolean
+  payoutsEnabled: boolean
+  onboardingComplete: boolean
 }
 
 interface PackageInput {
@@ -48,6 +59,9 @@ export default function HostDashboard() {
   const [niche, setNiche] = useState("")
   const [bio, setBio] = useState("")
   const [packages, setPackages] = useState<PackageInput[]>([])
+  
+  const [stripeStatus, setStripeStatus] = useState<StripeStatus | null>(null)
+  const [stripeLoading, setStripeLoading] = useState(false)
 
   useEffect(() => {
     if (status === "loading") return
@@ -82,6 +96,58 @@ export default function HostDashboard() {
 
     fetchHost()
   }, [session, status, router])
+
+  useEffect(() => {
+    const fetchStripeStatus = async () => {
+      try {
+        const res = await fetch("/api/stripe/connect/status")
+        if (res.ok) {
+          const data = await res.json()
+          setStripeStatus(data)
+        }
+      } catch (error) {
+        console.error("Failed to fetch Stripe status:", error)
+      }
+    }
+
+    if (host) {
+      fetchStripeStatus()
+    }
+  }, [host])
+
+  const handleStripeConnect = async () => {
+    setStripeLoading(true)
+    try {
+      const res = await fetch("/api/stripe/connect/onboard", { method: "POST" })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setError(data.error || "Failed to start Stripe onboarding")
+      }
+    } catch (error) {
+      setError("Failed to connect to Stripe")
+    } finally {
+      setStripeLoading(false)
+    }
+  }
+
+  const handleStripeDashboard = async () => {
+    setStripeLoading(true)
+    try {
+      const res = await fetch("/api/stripe/connect/dashboard", { method: "POST" })
+      const data = await res.json()
+      if (data.url) {
+        window.open(data.url, "_blank")
+      } else {
+        setError(data.error || "Failed to open Stripe dashboard")
+      }
+    } catch (error) {
+      setError("Failed to open Stripe dashboard")
+    } finally {
+      setStripeLoading(false)
+    }
+  }
 
   const addPackage = () => {
     setPackages([...packages, { name: "", price: "", description: "", includes: [""] }])
@@ -471,6 +537,160 @@ export default function HostDashboard() {
               </button>
             </div>
           )}
+
+          {/* Stripe Connect Section */}
+          <div className="bg-surface border border-border rounded-lg p-6 mb-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-[#635BFF]/10 flex items-center justify-center">
+                <svg className="w-6 h-6 text-[#635BFF]" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold text-text-primary">Stripe Connect</h3>
+                <p className="text-sm text-text-muted">Receive payments directly to your bank account</p>
+              </div>
+            </div>
+
+            {stripeStatus === null ? (
+              <div className="flex items-center justify-center py-6">
+                <div className="animate-spin w-6 h-6 border-2 border-accent border-t-transparent rounded-full" />
+              </div>
+            ) : stripeStatus.connected && stripeStatus.chargesEnabled ? (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-medium text-emerald-600 dark:text-emerald-400">Connected</p>
+                    <p className="text-sm text-emerald-600/80 dark:text-emerald-400/80">
+                      Your account is ready to receive payments
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-background rounded-lg">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={`w-2 h-2 rounded-full ${stripeStatus.chargesEnabled ? 'bg-emerald-500' : 'bg-yellow-500'}`} />
+                      <span className="text-sm text-text-muted">Charges</span>
+                    </div>
+                    <p className="font-medium text-text-primary">{stripeStatus.chargesEnabled ? 'Enabled' : 'Pending'}</p>
+                  </div>
+                  <div className="p-4 bg-background rounded-lg">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={`w-2 h-2 rounded-full ${stripeStatus.payoutsEnabled ? 'bg-emerald-500' : 'bg-yellow-500'}`} />
+                      <span className="text-sm text-text-muted">Payouts</span>
+                    </div>
+                    <p className="font-medium text-text-primary">{stripeStatus.payoutsEnabled ? 'Enabled' : 'Pending'}</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleStripeDashboard}
+                  disabled={stripeLoading}
+                  className="w-full bg-[#635BFF] hover:bg-[#5851e6] text-white font-medium py-3 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {stripeLoading ? (
+                    <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                      Open Stripe Dashboard
+                    </>
+                  )}
+                </button>
+              </div>
+            ) : stripeStatus.connected && !stripeStatus.onboardingComplete ? (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                  <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-medium text-yellow-600 dark:text-yellow-400">Onboarding Incomplete</p>
+                    <p className="text-sm text-yellow-600/80 dark:text-yellow-400/80">
+                      Please complete your Stripe account setup to receive payments
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleStripeConnect}
+                  disabled={stripeLoading}
+                  className="w-full bg-[#635BFF] hover:bg-[#5851e6] text-white font-medium py-3 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {stripeLoading ? (
+                    <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
+                  ) : (
+                    <>
+                      Complete Setup
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </>
+                  )}
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <p className="text-text-secondary">
+                  Connect your Stripe account to receive direct payments from bookings. We charge a 10% platform fee on each transaction.
+                </p>
+
+                <div className="grid grid-cols-3 gap-4 py-4">
+                  <div className="text-center">
+                    <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-2">
+                      <svg className="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    </div>
+                    <p className="text-xs text-text-muted">Secure</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-2">
+                      <svg className="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <p className="text-xs text-text-muted">Fast Payouts</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-2">
+                      <svg className="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    </div>
+                    <p className="text-xs text-text-muted">Protected</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleStripeConnect}
+                  disabled={stripeLoading}
+                  className="w-full bg-[#635BFF] hover:bg-[#5851e6] text-white font-medium py-3 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {stripeLoading ? (
+                    <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/>
+                      </svg>
+                      Connect with Stripe
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+          </div>
 
           <div className="mt-12 pt-8 border-t border-border">
             <h3 className="text-lg font-semibold text-text-primary mb-4">Danger Zone</h3>

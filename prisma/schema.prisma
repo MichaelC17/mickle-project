@@ -38,6 +38,12 @@ model Host {
   niche            String?
   bio              String?
   
+  // Stripe Connect
+  stripeAccountId        String?   @unique
+  stripeOnboardingComplete Boolean @default(false)
+  stripeChargesEnabled   Boolean   @default(false)
+  stripePayoutsEnabled   Boolean   @default(false)
+  
   isActive         Boolean   @default(true)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
