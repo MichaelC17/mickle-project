@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder"
   apiVersion: "2026-01-28.clover",
 });
 
-const PLATFORM_FEE_PERCENT = 10;
+const PLATFORM_FEE_PERCENT = 15;
 
 export async function POST(request: Request) {
   const session = await auth();

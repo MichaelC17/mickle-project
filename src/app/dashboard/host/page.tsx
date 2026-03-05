@@ -942,7 +942,7 @@ export default function HostDashboard() {
                 <div className="space-y-4">
                   <p className="text-sm text-text-secondary">
                     Connect your Stripe account to receive direct payments from bookings. We charge a
-                    20% platform fee on each transaction.
+                    15% platform fee on each transaction.
                   </p>
 
                   <div className="grid grid-cols-3 gap-4 py-2">

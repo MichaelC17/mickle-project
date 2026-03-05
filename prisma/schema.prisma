@@ -241,6 +241,13 @@ enum BookingStatus {
   REFUNDED
 }
 
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  interest  String   @default("buyer")
+  createdAt DateTime @default(now())
+}
+
 enum Role {
   CREATOR
   HOST

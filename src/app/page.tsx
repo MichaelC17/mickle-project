@@ -39,9 +39,20 @@ export default function Home() {
     e.preventDefault();
     if (!email || submitting) return;
     setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-    setSubmitted(true);
-    setSubmitting(false);
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, interest }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      }
+    } catch {
+      // Silently handle -- user can retry
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -113,7 +124,7 @@ export default function Home() {
                 <p className="text-sm text-text-muted">Verified creators</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-bold text-text-primary mb-1">50K+</p>
+                <p className="text-3xl font-bold text-text-primary mb-1">10K+</p>
                 <p className="text-sm text-text-muted">Min host subscribers</p>
               </div>
             </div>
@@ -150,7 +161,7 @@ export default function Home() {
                   <div className="glass rounded-xl p-5">
                     <Zap className="w-5 h-5 text-accent mb-3" />
                     <p className="font-medium text-text-primary text-sm mb-1">Instant exposure</p>
-                    <p className="text-xs text-text-muted">Get in front of 50K–2M+ viewers</p>
+                    <p className="text-xs text-text-muted">Get in front of 10K–2M+ viewers</p>
                   </div>
                 </AnimatedItem>
                 <AnimatedItem>
@@ -387,7 +398,7 @@ export default function Home() {
                         Start growing
                       </h3>
                       <span className="text-xs text-text-muted bg-surface-raised px-2.5 py-1 rounded-full">
-                        1K – 50K subs
+                        1K – 10K subs
                       </span>
                     </div>
                     <p className="text-text-secondary mb-6 leading-relaxed max-w-xl">
@@ -402,7 +413,7 @@ export default function Home() {
                           <p className="text-xs text-text-muted">per guest spot</p>
                         </div>
                         <div>
-                          <p className="text-lg font-semibold text-text-primary">50K–200K</p>
+                          <p className="text-lg font-semibold text-text-primary">10K–200K</p>
                           <p className="text-xs text-text-muted">host audience</p>
                         </div>
                         <div>
@@ -424,7 +435,7 @@ export default function Home() {
                     <div className="flex items-center gap-3 mb-2 flex-wrap">
                       <h3 className="text-xl font-semibold text-text-primary">Level up</h3>
                       <span className="text-xs text-text-muted bg-surface-raised px-2.5 py-1 rounded-full">
-                        50K – 500K subs
+                        10K – 500K subs
                       </span>
                     </div>
                     <p className="text-text-secondary mb-6 leading-relaxed max-w-xl">
@@ -687,7 +698,7 @@ export default function Home() {
                 <p className="text-xs text-accent font-medium uppercase tracking-wide mb-4">
                   For established hosts
                 </p>
-                <p className="text-3xl font-bold text-text-primary mb-2">20%</p>
+                <p className="text-3xl font-bold text-text-primary mb-2">15%</p>
                 <p className="text-lg text-text-secondary mb-6">platform commission</p>
                 <div className="h-px bg-border mb-6" />
                 <ul className="space-y-3">
@@ -901,7 +912,7 @@ export default function Home() {
                   What are the requirements to become a host?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-secondary leading-relaxed">
-                  Currently, we require at least 50K subscribers on YouTube or equivalent
+                  Currently, we require at least 10K subscribers on YouTube or equivalent
                   followers on Twitch. We also review content quality and engagement
                   metrics.
                 </AccordionContent>

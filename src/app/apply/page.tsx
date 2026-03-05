@@ -88,7 +88,7 @@ const PACKAGE_TEMPLATES: PackageInput[] = [
   },
 ]
 
-const MIN_SUBSCRIBERS = 0 // TODO: Change back to 50000 for production
+const MIN_SUBSCRIBERS = 10000
 
 const STEPS = [
   { label: "Connect YouTube", icon: Youtube },
@@ -420,7 +420,7 @@ export default function ApplyPage() {
                   </h2>
                   <p className="text-text-secondary mb-2">
                     Your channel needs at least{" "}
-                    <span className="font-semibold text-text-primary">50,000 subscribers</span>{" "}
+                    <span className="font-semibold text-text-primary">10,000 subscribers</span>{" "}
                     to become a host.
                   </p>
                   <p className="text-text-muted text-sm mb-8">
@@ -494,7 +494,7 @@ export default function ApplyPage() {
                         <p className="text-text-secondary text-sm leading-relaxed">
                           To become a host, you need at least{" "}
                           <span className="font-bold text-indigo-400">
-                            50,000 YouTube subscribers
+                            10,000 YouTube subscribers
                           </span>{" "}
                           on your channel.
                         </p>

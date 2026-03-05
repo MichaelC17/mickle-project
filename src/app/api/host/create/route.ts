@@ -5,7 +5,7 @@ import { upgradeYouTubeThumbnail } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
-const MIN_SUBSCRIBERS = 0 // TODO: Change back to 50000 for production
+const MIN_SUBSCRIBERS = 10000
 
 export async function POST(request: Request) {
   const session = await auth()
