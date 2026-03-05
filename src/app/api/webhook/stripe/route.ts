@@ -84,7 +84,7 @@ export async function POST(request: Request) {
 
       console.log("Booking created successfully:", booking.id);
 
-      notifyBookingConfirmed(booking.id);
+      await notifyBookingConfirmed(booking.id);
     } catch (error) {
       console.error("Error creating booking:", error);
       return NextResponse.json(

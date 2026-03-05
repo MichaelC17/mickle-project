@@ -122,7 +122,7 @@ export async function PATCH(request: Request) {
     })
 
     if (status === "IN_PROGRESS") {
-      notifyBookingStarted(bookingId)
+      await notifyBookingStarted(bookingId)
     }
 
     return NextResponse.json({ booking: updatedBooking })

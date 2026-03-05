@@ -136,7 +136,7 @@ export async function POST(request: Request) {
       select: { name: true },
     })
 
-    notifyRefundRequested(bookingId, user?.name || "A buyer", reason)
+    await notifyRefundRequested(bookingId, user?.name || "A buyer", reason)
 
     return NextResponse.json({ refundRequest })
   } catch (error) {

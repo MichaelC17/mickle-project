@@ -95,7 +95,7 @@ export async function PATCH(
         }),
       ])
 
-      notifyRefundResponse(refundRequest.bookingId, true)
+      await notifyRefundResponse(refundRequest.bookingId, true)
 
       return NextResponse.json({
         success: true,
@@ -112,7 +112,7 @@ export async function PATCH(
         },
       })
 
-      notifyRefundResponse(refundRequest.bookingId, false, responseNote)
+      await notifyRefundResponse(refundRequest.bookingId, false, responseNote)
 
       return NextResponse.json({
         success: true,

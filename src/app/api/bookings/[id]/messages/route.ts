@@ -98,7 +98,7 @@ export async function POST(
       select: { name: true },
     })
 
-    notifyNewMessage(params.id, session.user.id, sender?.name || "Someone")
+    await notifyNewMessage(params.id, session.user.id, sender?.name || "Someone")
 
     return NextResponse.json({ message })
   } catch (error) {

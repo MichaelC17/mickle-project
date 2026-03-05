@@ -99,37 +99,17 @@ function LoginContent() {
               variants={fadeUp}
               className="font-display text-5xl xl:text-[3.5rem] 2xl:text-6xl text-text-primary leading-[1.08] tracking-tight"
             >
-              Where teams
+              Grow your channel
               <br />
-              build together.
+              through collabs.
             </motion.h1>
             <motion.p
               variants={fadeUp}
               className="text-text-secondary text-lg max-w-sm leading-relaxed"
             >
-              Ship faster with real-time collaboration, async workflows, and
-              tools that actually get out of your way.
+              The marketplace for paid creator collaborations. Book guest spots
+              on bigger channels and get in front of new audiences.
             </motion.p>
-            <motion.div variants={fadeUp} className="flex items-center gap-3 pt-2">
-              <div className="flex -space-x-2">
-                {[
-                  "bg-indigo-500",
-                  "bg-violet-500",
-                  "bg-purple-500",
-                  "bg-fuchsia-500",
-                ].map((color, i) => (
-                  <div
-                    key={i}
-                    className={`w-8 h-8 rounded-full ${color} border-2 border-background flex items-center justify-center text-[10px] font-semibold text-white`}
-                  >
-                    {String.fromCharCode(65 + i)}
-                  </div>
-                ))}
-              </div>
-              <span className="text-sm text-text-muted">
-                2,400+ teams already collaborating
-              </span>
-            </motion.div>
           </motion.div>
 
           <motion.p
@@ -138,7 +118,7 @@ function LoginContent() {
             transition={{ delay: 0.8 }}
             className="text-text-muted text-sm"
           >
-            &copy; {new Date().getFullYear()} Collab. All rights reserved.
+            &copy; {new Date().getFullYear()} COLLAB. All rights reserved.
           </motion.p>
         </div>
       </div>
@@ -169,7 +149,7 @@ function LoginContent() {
             </h2>
             <p className="mt-2 text-text-secondary text-[0.94rem]">
               {mode === "signin"
-                ? "Sign in to continue to your workspace"
+                ? "Sign in to continue to your dashboard"
                 : "Get started — it takes less than a minute"}
             </p>
           </motion.div>

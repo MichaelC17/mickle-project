@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { NotificationType } from "@prisma/client"
+import { Resend } from "resend"
 
 interface CreateNotificationParams {
   userId: string
@@ -36,6 +37,11 @@ async function sendEmailNotification(
   link?: string
 ) {
   try {
+    if (!process.env.RESEND_API_KEY) {
+      console.log("Email skipped — RESEND_API_KEY not configured")
+      return
+    }
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { email: true, name: true },
@@ -46,25 +52,26 @@ async function sendEmailNotification(
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
     const fullLink = link ? `${baseUrl}${link}` : baseUrl
 
-    const response = await fetch(`${baseUrl}/api/email/send`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: user.email,
-        subject: title,
-        html: generateEmailHtml(user.name || "there", title, message, fullLink),
-      }),
+    const resend = new Resend(process.env.RESEND_API_KEY)
+    const { error } = await resend.emails.send({
+      from: process.env.EMAIL_FROM || "COLLAB. <notifications@collab.com>",
+      to: user.email,
+      subject: title,
+      html: generateEmailHtml(user.name || "there", title, message, fullLink),
     })
 
-    if (response.ok) {
-      await prisma.notification.updateMany({
-        where: {
-          userId,
-          emailSent: false,
-        },
-        data: { emailSent: true },
-      })
+    if (error) {
+      console.error("Resend email error:", error)
+      return
     }
+
+    await prisma.notification.updateMany({
+      where: {
+        userId,
+        emailSent: false,
+      },
+      data: { emailSent: true },
+    })
   } catch (error) {
     console.error("Failed to send email notification:", error)
   }

@@ -102,7 +102,7 @@ export async function POST(
       select: { name: true },
     })
 
-    notifyScheduleProposal(
+    await notifyScheduleProposal(
       params.id,
       session.user.id,
       proposer?.name || "Someone",
@@ -191,7 +191,7 @@ export async function PATCH(
       select: { name: true },
     })
 
-    notifyScheduleResponse(
+    await notifyScheduleResponse(
       params.id,
       session.user.id,
       responder?.name || "Someone",
