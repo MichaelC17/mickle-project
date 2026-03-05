@@ -53,6 +53,9 @@ enum NotificationType {
   BOOKING_CONFIRMED
   BOOKING_STARTED
   BOOKING_COMPLETED
+  REFUND_REQUESTED
+  REFUND_APPROVED
+  REFUND_DENIED
 }
 
 model Host {
@@ -166,6 +169,7 @@ model Booking {
   
   messages        Message[]
   scheduleProposals ScheduleProposal[]
+  refundRequest   RefundRequest?
 }
 
 model Message {
@@ -193,6 +197,33 @@ model ScheduleProposal {
   
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+}
+
+model RefundRequest {
+  id            String       @id @default(cuid())
+  
+  bookingId     String       @unique
+  booking       Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  
+  requestedById String
+  reason        String
+  status        RefundStatus @default(PENDING)
+  
+  respondedById String?
+  responseNote  String?
+  
+  refundAmount  Int
+  stripeRefundId String?
+  
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+enum RefundStatus {
+  PENDING
+  APPROVED
+  DENIED
+  PROCESSED
 }
 
 enum ProposalStatus {

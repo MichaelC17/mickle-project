@@ -270,3 +270,55 @@ export async function notifyBookingStarted(bookingId: string) {
     bookingId,
   })
 }
+
+export async function notifyRefundRequested(
+  bookingId: string,
+  buyerName: string,
+  reason: string
+) {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: {
+      host: { include: { user: true } },
+      package: true,
+    },
+  })
+
+  if (!booking) return
+
+  await createNotification({
+    userId: booking.host.userId,
+    type: "REFUND_REQUESTED",
+    title: "Refund Requested",
+    message: `${buyerName} requested a refund for ${booking.package.name}: "${reason.substring(0, 50)}${reason.length > 50 ? "..." : ""}"`,
+    link: `/dashboard/host?tab=refunds`,
+    bookingId,
+  })
+}
+
+export async function notifyRefundResponse(
+  bookingId: string,
+  approved: boolean,
+  responseNote?: string
+) {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: {
+      host: { include: { user: true } },
+      package: true,
+    },
+  })
+
+  if (!booking) return
+
+  await createNotification({
+    userId: booking.buyerId,
+    type: approved ? "REFUND_APPROVED" : "REFUND_DENIED",
+    title: approved ? "Refund Approved" : "Refund Denied",
+    message: approved
+      ? `Your refund for ${booking.package.name} has been approved. The funds will be returned shortly.`
+      : `Your refund request for ${booking.package.name} was denied.${responseNote ? ` Reason: ${responseNote}` : ""}`,
+    link: `/dashboard?booking=${bookingId}`,
+    bookingId,
+  })
+}

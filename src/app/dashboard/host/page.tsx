@@ -37,6 +37,27 @@ interface StripeStatus {
   onboardingComplete: boolean
 }
 
+interface RefundRequest {
+  id: string
+  reason: string
+  status: string
+  refundAmount: number
+  responseNote: string | null
+  createdAt: string
+  booking: {
+    id: string
+    buyer: {
+      id: string
+      name: string | null
+      email: string
+      image: string | null
+    }
+    package: {
+      name: string
+    }
+  }
+}
+
 interface PackageInput {
   name: string
   price: string
@@ -62,6 +83,10 @@ export default function HostDashboard() {
   
   const [stripeStatus, setStripeStatus] = useState<StripeStatus | null>(null)
   const [stripeLoading, setStripeLoading] = useState(false)
+  const [refundRequests, setRefundRequests] = useState<RefundRequest[]>([])
+  const [processingRefund, setProcessingRefund] = useState<string | null>(null)
+  const [refundResponseNote, setRefundResponseNote] = useState("")
+  const [showRefundModal, setShowRefundModal] = useState<RefundRequest | null>(null)
 
   useEffect(() => {
     if (status === "loading") return
@@ -110,8 +135,21 @@ export default function HostDashboard() {
       }
     }
 
+    const fetchRefundRequests = async () => {
+      try {
+        const res = await fetch("/api/refunds?role=host")
+        if (res.ok) {
+          const data = await res.json()
+          setRefundRequests(data.refundRequests || [])
+        }
+      } catch (error) {
+        console.error("Failed to fetch refund requests:", error)
+      }
+    }
+
     if (host) {
       fetchStripeStatus()
+      fetchRefundRequests()
     }
   }, [host])
 
@@ -146,6 +184,35 @@ export default function HostDashboard() {
       setError("Failed to open Stripe dashboard")
     } finally {
       setStripeLoading(false)
+    }
+  }
+
+  const handleRefundResponse = async (refundId: string, action: "approve" | "deny") => {
+    setProcessingRefund(refundId)
+    try {
+      const res = await fetch(`/api/refunds/${refundId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, responseNote: refundResponseNote }),
+      })
+      if (res.ok) {
+        setRefundRequests(prev =>
+          prev.map(r =>
+            r.id === refundId
+              ? { ...r, status: action === "approve" ? "PROCESSED" : "DENIED" }
+              : r
+          )
+        )
+        setShowRefundModal(null)
+        setRefundResponseNote("")
+      } else {
+        const data = await res.json()
+        setError(data.error || "Failed to process refund")
+      }
+    } catch (error) {
+      setError("Failed to process refund request")
+    } finally {
+      setProcessingRefund(null)
     }
   }
 
@@ -691,6 +758,168 @@ export default function HostDashboard() {
               </div>
             )}
           </div>
+
+          {/* Refund Requests Section */}
+          {refundRequests.length > 0 && (
+            <div className="bg-surface border border-border rounded-lg p-6 mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-text-primary">Refund Requests</h3>
+                  <p className="text-sm text-text-muted">
+                    {refundRequests.filter(r => r.status === "PENDING").length} pending request(s)
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {refundRequests.map((request) => (
+                  <div
+                    key={request.id}
+                    className={`p-4 rounded-lg border ${
+                      request.status === "PENDING"
+                        ? "bg-yellow-500/5 border-yellow-500/20"
+                        : request.status === "PROCESSED" || request.status === "APPROVED"
+                        ? "bg-emerald-500/5 border-emerald-500/20"
+                        : "bg-red-500/5 border-red-500/20"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-3">
+                        {request.booking.buyer.image ? (
+                          <img
+                            src={request.booking.buyer.image}
+                            alt=""
+                            className="w-10 h-10 rounded-full"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-surface-raised flex items-center justify-center text-text-primary font-medium">
+                            {(request.booking.buyer.name || request.booking.buyer.email)[0].toUpperCase()}
+                          </div>
+                        )}
+                        <div>
+                          <p className="font-medium text-text-primary">
+                            {request.booking.buyer.name || request.booking.buyer.email}
+                          </p>
+                          <p className="text-sm text-text-muted">
+                            {request.booking.package.name} · ${request.refundAmount}
+                          </p>
+                          <p className="text-sm text-text-secondary mt-2">
+                            &quot;{request.reason}&quot;
+                          </p>
+                          <p className="text-xs text-text-muted mt-1">
+                            {new Date(request.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {request.status === "PENDING" ? (
+                          <>
+                            <button
+                              onClick={() => setShowRefundModal(request)}
+                              className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-md transition-colors"
+                            >
+                              Review
+                            </button>
+                          </>
+                        ) : (
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                              request.status === "PROCESSED" || request.status === "APPROVED"
+                                ? "bg-emerald-500/20 text-emerald-500"
+                                : "bg-red-500/20 text-red-500"
+                            }`}
+                          >
+                            {request.status === "PROCESSED" || request.status === "APPROVED"
+                              ? "Refunded"
+                              : "Denied"}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Refund Review Modal */}
+          {showRefundModal && (
+            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+              <div className="bg-surface border border-border rounded-2xl max-w-md w-full p-6">
+                <h3 className="text-lg font-semibold text-text-primary mb-2">Review Refund Request</h3>
+                
+                <div className="bg-background rounded-lg p-4 mb-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    {showRefundModal.booking.buyer.image ? (
+                      <img
+                        src={showRefundModal.booking.buyer.image}
+                        alt=""
+                        className="w-10 h-10 rounded-full"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-surface-raised flex items-center justify-center text-text-primary font-medium">
+                        {(showRefundModal.booking.buyer.name || showRefundModal.booking.buyer.email)[0].toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-medium text-text-primary">
+                        {showRefundModal.booking.buyer.name || showRefundModal.booking.buyer.email}
+                      </p>
+                      <p className="text-sm text-text-muted">{showRefundModal.booking.package.name}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-text-secondary">&quot;{showRefundModal.reason}&quot;</p>
+                </div>
+
+                <div className="flex items-center justify-between text-sm mb-4">
+                  <span className="text-text-muted">Refund amount:</span>
+                  <span className="font-semibold text-text-primary">${showRefundModal.refundAmount}</span>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm text-text-muted mb-2">Response note (optional)</label>
+                  <textarea
+                    value={refundResponseNote}
+                    onChange={(e) => setRefundResponseNote(e.target.value)}
+                    placeholder="Add a note to the buyer..."
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent resize-none h-20"
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => {
+                      setShowRefundModal(null)
+                      setRefundResponseNote("")
+                    }}
+                    className="flex-1 py-3 rounded-lg border border-border text-text-secondary hover:text-text-primary hover:bg-surface-raised transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => handleRefundResponse(showRefundModal.id, "deny")}
+                    disabled={processingRefund === showRefundModal.id}
+                    className="flex-1 py-3 rounded-lg border border-red-500/30 text-red-500 hover:bg-red-500/10 transition-colors font-medium disabled:opacity-50"
+                  >
+                    Deny
+                  </button>
+                  <button
+                    onClick={() => handleRefundResponse(showRefundModal.id, "approve")}
+                    disabled={processingRefund === showRefundModal.id}
+                    className="flex-1 py-3 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-medium transition-colors disabled:opacity-50"
+                  >
+                    {processingRefund === showRefundModal.id ? "..." : "Approve"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="mt-12 pt-8 border-t border-border">
             <h3 className="text-lg font-semibold text-text-primary mb-4">Danger Zone</h3>

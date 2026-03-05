@@ -24,6 +24,15 @@ interface ScheduleProposal {
   createdAt: string
 }
 
+interface RefundRequest {
+  id: string
+  reason: string
+  status: string
+  refundAmount: number
+  responseNote: string | null
+  createdAt: string
+}
+
 interface Booking {
   id: string
   status: string
@@ -89,6 +98,10 @@ export default function BookingDetailPage() {
   const [selectedPurpose, setSelectedPurpose] = useState("")
   const [proposing, setProposing] = useState(false)
   const [activeTab, setActiveTab] = useState<"messages" | "schedule">("messages")
+  const [showRefundModal, setShowRefundModal] = useState(false)
+  const [refundReason, setRefundReason] = useState("")
+  const [refundRequest, setRefundRequest] = useState<RefundRequest | null>(null)
+  const [requestingRefund, setRequestingRefund] = useState(false)
   
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -109,6 +122,12 @@ export default function BookingDetailPage() {
       return () => clearInterval(interval)
     }
   }, [booking?.id, booking?.status])
+
+  useEffect(() => {
+    if (booking && !booking.isHost) {
+      fetchRefundRequest()
+    }
+  }, [booking?.id, booking?.isHost])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -220,6 +239,46 @@ export default function BookingDetailPage() {
     }
   }
 
+  const fetchRefundRequest = async () => {
+    try {
+      const res = await fetch("/api/refunds")
+      if (res.ok) {
+        const data = await res.json()
+        const existingRequest = data.refundRequests?.find(
+          (r: RefundRequest & { booking: { id: string } }) => r.booking?.id === bookingId
+        )
+        if (existingRequest) {
+          setRefundRequest(existingRequest)
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch refund request:", error)
+    }
+  }
+
+  const requestRefund = async () => {
+    if (!refundReason.trim() || requestingRefund) return
+    
+    setRequestingRefund(true)
+    try {
+      const res = await fetch("/api/refunds", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookingId, reason: refundReason }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setRefundRequest(data.refundRequest)
+        setShowRefundModal(false)
+        setRefundReason("")
+      }
+    } catch (error) {
+      console.error("Failed to request refund:", error)
+    } finally {
+      setRequestingRefund(false)
+    }
+  }
+
   const otherParty = booking?.isHost ? booking.buyer : booking?.host.user
 
   if (authStatus === "loading" || loading) {
@@ -311,7 +370,99 @@ export default function BookingDetailPage() {
                 </div>
               )}
             </div>
+
+            {/* Refund Section - Only for buyers */}
+            {!booking.isHost && booking.status !== "refunded" && booking.status !== "cancelled" && booking.status !== "completed" && (
+              <div className="mt-4 pt-4 border-t border-border">
+                {refundRequest ? (
+                  <div className={`flex items-center justify-between p-3 rounded-lg ${
+                    refundRequest.status === "PENDING" ? "bg-yellow-500/10" :
+                    refundRequest.status === "APPROVED" || refundRequest.status === "PROCESSED" ? "bg-emerald-500/10" :
+                    "bg-red-500/10"
+                  }`}>
+                    <div>
+                      <p className={`text-sm font-medium ${
+                        refundRequest.status === "PENDING" ? "text-yellow-500" :
+                        refundRequest.status === "APPROVED" || refundRequest.status === "PROCESSED" ? "text-emerald-500" :
+                        "text-red-500"
+                      }`}>
+                        Refund {refundRequest.status.toLowerCase()}
+                      </p>
+                      <p className="text-xs text-text-muted mt-0.5">
+                        {refundRequest.status === "PENDING" 
+                          ? "Waiting for host response" 
+                          : refundRequest.status === "DENIED" && refundRequest.responseNote
+                          ? `Reason: ${refundRequest.responseNote}`
+                          : refundRequest.status === "APPROVED" || refundRequest.status === "PROCESSED"
+                          ? "Your refund is being processed"
+                          : ""}
+                      </p>
+                    </div>
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                      refundRequest.status === "PENDING" ? "bg-yellow-500/20 text-yellow-500" :
+                      refundRequest.status === "APPROVED" || refundRequest.status === "PROCESSED" ? "bg-emerald-500/20 text-emerald-500" :
+                      "bg-red-500/20 text-red-500"
+                    }`}>
+                      ${refundRequest.refundAmount}
+                    </span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowRefundModal(true)}
+                    className="text-sm text-red-500 hover:text-red-400 font-medium"
+                  >
+                    Request Refund
+                  </button>
+                )}
+              </div>
+            )}
           </div>
+
+          {/* Refund Modal */}
+          {showRefundModal && (
+            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+              <div className="bg-surface border border-border rounded-2xl max-w-md w-full p-6">
+                <h3 className="text-lg font-semibold text-text-primary mb-2">Request Refund</h3>
+                <p className="text-sm text-text-muted mb-4">
+                  Please explain why you&apos;re requesting a refund. The host will review your request.
+                </p>
+                
+                <div className="mb-4">
+                  <label className="block text-sm text-text-muted mb-2">Reason for refund</label>
+                  <textarea
+                    value={refundReason}
+                    onChange={(e) => setRefundReason(e.target.value)}
+                    placeholder="Explain why you're requesting a refund..."
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent resize-none h-32"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between text-sm text-text-muted mb-6">
+                  <span>Refund amount:</span>
+                  <span className="font-semibold text-text-primary">${booking.amount}</span>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => {
+                      setShowRefundModal(false)
+                      setRefundReason("")
+                    }}
+                    className="flex-1 py-3 rounded-lg border border-border text-text-secondary hover:text-text-primary hover:bg-surface-raised transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={requestRefund}
+                    disabled={!refundReason.trim() || requestingRefund}
+                    className="flex-1 py-3 rounded-lg bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white font-medium transition-colors"
+                  >
+                    {requestingRefund ? "Submitting..." : "Submit Request"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {!canMessage ? (
             <div className="bg-surface border border-border rounded-xl p-8 text-center">
