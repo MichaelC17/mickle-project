@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { upgradeYouTubeThumbnail } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
@@ -19,7 +20,12 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     })
 
-    return NextResponse.json({ hosts })
+    const upgraded = hosts.map((host) => ({
+      ...host,
+      channelThumbnail: upgradeYouTubeThumbnail(host.channelThumbnail),
+    }))
+
+    return NextResponse.json({ hosts: upgraded })
   } catch (error) {
     console.error("Error fetching hosts:", error)
     return NextResponse.json(

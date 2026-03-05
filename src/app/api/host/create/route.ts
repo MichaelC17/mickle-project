@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { upgradeYouTubeThumbnail } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
@@ -126,7 +127,11 @@ export async function GET() {
       include: { packages: true },
     })
 
-    return NextResponse.json({ host })
+    return NextResponse.json({
+      host: host
+        ? { ...host, channelThumbnail: upgradeYouTubeThumbnail(host.channelThumbnail) }
+        : null,
+    })
   } catch (error) {
     console.error("Error fetching host profile:", error)
     return NextResponse.json(

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { upgradeYouTubeThumbnail } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
@@ -43,7 +44,7 @@ export async function GET(request: Request) {
       booking: {
         id: booking.id,
         hostName: booking.host.channelName,
-        hostThumbnail: booking.host.channelThumbnail,
+        hostThumbnail: upgradeYouTubeThumbnail(booking.host.channelThumbnail),
         packageName: booking.package.name,
         amount: booking.amount,
         status: booking.status,

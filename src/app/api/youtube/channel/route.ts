@@ -48,7 +48,7 @@ export async function GET() {
       name: channel.snippet.title,
       description: channel.snippet.description,
       customUrl: channel.snippet.customUrl,
-      thumbnail: channel.snippet.thumbnails?.default?.url,
+      thumbnail: channel.snippet.thumbnails?.high?.url || channel.snippet.thumbnails?.medium?.url || channel.snippet.thumbnails?.default?.url,
       subscriberCount: parseInt(channel.statistics.subscriberCount, 10),
       videoCount: parseInt(channel.statistics.videoCount, 10),
       viewCount: parseInt(channel.statistics.viewCount, 10),
