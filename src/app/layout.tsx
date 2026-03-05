@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { BookingsProvider } from "@/context/BookingsContext";
+import { ToastProvider } from "@/context/ToastContext";
 import SessionProvider from "@/components/SessionProvider";
 
 export const metadata: Metadata = {
@@ -55,9 +56,11 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <SessionProvider>
           <ThemeProvider>
-            <BookingsProvider>
-              {children}
-            </BookingsProvider>
+            <ToastProvider>
+              <BookingsProvider>
+                {children}
+              </BookingsProvider>
+            </ToastProvider>
           </ThemeProvider>
         </SessionProvider>
       </body>

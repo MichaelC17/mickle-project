@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { notifyNewMessage } from "@/lib/notifications"
 
 export const dynamic = "force-dynamic"
 
@@ -91,6 +92,13 @@ export async function POST(
         content: content.trim(),
       },
     })
+
+    const sender = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { name: true },
+    })
+
+    notifyNewMessage(params.id, session.user.id, sender?.name || "Someone")
 
     return NextResponse.json({ message })
   } catch (error) {

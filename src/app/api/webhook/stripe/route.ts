@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
+import { notifyBookingConfirmed } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -82,6 +83,8 @@ export async function POST(request: Request) {
       });
 
       console.log("Booking created successfully:", booking.id);
+
+      notifyBookingConfirmed(booking.id);
     } catch (error) {
       console.error("Error creating booking:", error);
       return NextResponse.json(

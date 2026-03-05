@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { notifyBookingStarted } from "@/lib/notifications"
 
 export const dynamic = "force-dynamic"
 
@@ -119,6 +120,10 @@ export async function PATCH(request: Request) {
       where: { id: bookingId },
       data: { status },
     })
+
+    if (status === "IN_PROGRESS") {
+      notifyBookingStarted(bookingId)
+    }
 
     return NextResponse.json({ booking: updatedBooking })
   } catch (error) {

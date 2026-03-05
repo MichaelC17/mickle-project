@@ -21,6 +21,38 @@ model User {
   sessions      Session[]
   hostProfile   Host?
   bookings      Booking[]
+  notifications Notification[]
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type      NotificationType
+  title     String
+  message   String
+  link      String?
+  
+  bookingId String?
+  
+  read      Boolean          @default(false)
+  emailSent Boolean          @default(false)
+  
+  createdAt DateTime         @default(now())
+  
+  @@index([userId, read])
+}
+
+enum NotificationType {
+  NEW_MESSAGE
+  SCHEDULE_PROPOSAL
+  SCHEDULE_ACCEPTED
+  SCHEDULE_DECLINED
+  BOOKING_CONFIRMED
+  BOOKING_STARTED
+  BOOKING_COMPLETED
 }
 
 model Host {

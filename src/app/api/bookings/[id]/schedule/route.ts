@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { notifyScheduleProposal, notifyScheduleResponse } from "@/lib/notifications"
 
 export const dynamic = "force-dynamic"
 
@@ -96,6 +97,19 @@ export async function POST(
       },
     })
 
+    const proposer = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { name: true },
+    })
+
+    notifyScheduleProposal(
+      params.id,
+      session.user.id,
+      proposer?.name || "Someone",
+      new Date(proposedDate),
+      purpose
+    )
+
     return NextResponse.json({ proposal })
   } catch (error) {
     console.error("Error creating proposal:", error)
@@ -171,6 +185,19 @@ export async function PATCH(
         data: { status: "DECLINED" },
       })
     }
+
+    const responder = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { name: true },
+    })
+
+    notifyScheduleResponse(
+      params.id,
+      session.user.id,
+      responder?.name || "Someone",
+      action === "accept",
+      proposal.proposedDate
+    )
 
     return NextResponse.json({ proposal: updatedProposal })
   } catch (error) {
