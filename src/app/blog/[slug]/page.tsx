@@ -63,10 +63,9 @@ export default async function BlogPost({ params }: PageProps) {
 
       <article className="min-h-screen pt-32 pb-20">
         <div className="max-w-3xl mx-auto px-6">
-          {/* Back Link */}
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-charcoal/60 hover:text-rust transition-colors mb-12"
+            className="inline-flex items-center gap-2 text-text-muted hover:text-accent transition-colors mb-12"
           >
             <svg
               className="w-4 h-4"
@@ -84,30 +83,28 @@ export default async function BlogPost({ params }: PageProps) {
             Back to all posts
           </Link>
 
-          {/* Post Header */}
           <header className="mb-12">
-            <span className="text-sm font-medium text-sepia uppercase tracking-widest">
+            <span className="text-sm font-medium text-accent uppercase tracking-widest">
               {post.category}
             </span>
-            <h1 className="font-serif text-4xl md:text-5xl font-semibold text-ink mt-4 leading-tight">
+            <h1 className="font-display text-4xl md:text-5xl font-semibold text-text-primary mt-4 leading-tight">
               {post.title}
             </h1>
-            <p className="mt-4 text-lg text-charcoal/70 leading-relaxed">
+            <p className="mt-4 text-lg text-text-secondary leading-relaxed">
               {post.description}
             </p>
-            <div className="mt-6 flex items-center gap-4 text-sm text-charcoal/50">
+            <div className="mt-6 flex items-center gap-4 text-sm text-text-muted">
               <span>{formattedDate}</span>
               <span>·</span>
               <span>{post.readingTime}</span>
             </div>
 
-            {/* Tags */}
             {post.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-6">
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs px-3 py-1 bg-charcoal/5 rounded-full text-charcoal/70"
+                    className="text-xs px-3 py-1 bg-surface-raised rounded-full text-text-secondary"
                   >
                     {tag}
                   </span>
@@ -116,24 +113,21 @@ export default async function BlogPost({ params }: PageProps) {
             )}
           </header>
 
-          {/* Divider */}
-          <div className="w-16 h-px bg-sepia/30 mb-12" />
+          <div className="w-16 h-px bg-accent/30 mb-12" />
 
-          {/* Post Content */}
           <div className="prose prose-lg max-w-none">
             <MDXRemote source={post.content} />
           </div>
 
-          {/* Post Footer */}
-          <footer className="mt-16 pt-8 border-t border-charcoal/10">
+          <footer className="mt-16 pt-8 border-t border-border">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <p className="text-sm text-charcoal/50">Written by</p>
-                <p className="font-serif font-semibold text-ink">Michael Cai</p>
+                <p className="text-sm text-text-muted">Written by</p>
+                <p className="font-display font-semibold text-text-primary">Michael Cai</p>
               </div>
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 text-sm font-medium text-ink hover:text-rust transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-medium text-text-primary hover:text-accent transition-colors"
               >
                 More posts
                 <svg

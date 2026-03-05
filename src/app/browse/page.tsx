@@ -1,9 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
+import { Skeleton } from "@/components/ui/skeleton"
+import { PlatformBadgeSmall } from "@/components/shared/PlatformBadge"
+import { AnimatedSection } from "@/components/shared/AnimatedSection"
+import { formatNumber } from "@/lib/utils"
+import { Search, SlidersHorizontal, Users, ArrowRight, ChevronDown } from "lucide-react"
 
 interface Package {
   id: string
@@ -29,90 +34,193 @@ interface Host {
   }
 }
 
-function formatNumber(num: number) {
-  if (num >= 1000000) return (num / 1000000).toFixed(1) + "M"
-  if (num >= 1000) return (num / 1000).toFixed(0) + "K"
-  return num.toString()
+type SortOption = "relevance" | "price-asc" | "price-desc" | "subscribers"
+
+const sortLabels: Record<SortOption, string> = {
+  relevance: "Relevance",
+  "price-asc": "Price (low → high)",
+  "price-desc": "Price (high → low)",
+  subscribers: "Subscribers",
 }
 
-function PlatformBadge({ platform }: { platform: string }) {
-  const colors: Record<string, string> = {
-    youtube: "bg-red-500",
-    twitch: "bg-violet-500",
-    tiktok: "bg-pink-500",
-    instagram: "bg-gradient-to-r from-purple-500 to-pink-500",
+function sortHosts(hosts: Host[], sort: SortOption): Host[] {
+  const copy = [...hosts]
+  switch (sort) {
+    case "price-asc":
+      return copy.sort((a, b) => {
+        const aMin = a.packages.length ? Math.min(...a.packages.map(p => p.price)) : Infinity
+        const bMin = b.packages.length ? Math.min(...b.packages.map(p => p.price)) : Infinity
+        return aMin - bMin
+      })
+    case "price-desc":
+      return copy.sort((a, b) => {
+        const aMin = a.packages.length ? Math.min(...a.packages.map(p => p.price)) : 0
+        const bMin = b.packages.length ? Math.min(...b.packages.map(p => p.price)) : 0
+        return bMin - aMin
+      })
+    case "subscribers":
+      return copy.sort((a, b) => b.subscriberCount - a.subscriberCount)
+    default:
+      return copy
   }
-  
+}
+
+function SkeletonCard({ index }: { index: number }) {
   return (
-    <span className={`px-2 py-0.5 rounded text-[10px] font-bold text-white uppercase tracking-wide ${colors[platform] || "bg-gray-500"}`}>
-      {platform}
-    </span>
+    <div
+      className="rounded-xl overflow-hidden fade-in"
+      style={{ animationDelay: `${index * 60}ms` }}
+    >
+      <div className="relative aspect-[3/4] rounded-xl overflow-hidden glass">
+        <Skeleton className="absolute inset-0 rounded-xl" />
+        <div className="absolute top-3 left-3">
+          <Skeleton className="h-5 w-16 rounded" />
+        </div>
+        <div className="absolute top-3 right-3">
+          <Skeleton className="h-5 w-14 rounded-full" />
+        </div>
+        <div className="absolute bottom-4 left-4 right-4 space-y-2">
+          <Skeleton className="h-5 w-3/4 rounded" />
+          <Skeleton className="h-3 w-1/2 rounded" />
+        </div>
+      </div>
+      <div className="pt-3 px-1 space-y-2">
+        <Skeleton className="h-4 w-3/4 rounded" />
+        <Skeleton className="h-4 w-1/3 rounded" />
+      </div>
+    </div>
   )
 }
 
 function HostCard({ host }: { host: Host }) {
-  const lowestPrice = Math.min(...host.packages.map(p => p.price))
-  const initials = host.channelName.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()
-  
+  const lowestPrice = host.packages.length
+    ? Math.min(...host.packages.map(p => p.price))
+    : null
+
+  const initials = host.channelName
+    .split(" ")
+    .map(w => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase()
+
   return (
-    <Link
-      href={`/host/${host.id}`}
-      className="group block"
-    >
-      {/* Image Container - Portrait ratio like Cameo */}
-      <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-surface-raised mb-3">
+    <Link href={`/host/${host.id}`} className="group block">
+      <div className="relative aspect-[3/4] rounded-xl overflow-hidden glass hover:shadow-float hover:-translate-y-1 transition-all duration-300">
         {host.channelThumbnail ? (
-          <img 
-            src={host.channelThumbnail} 
+          <img
+            src={host.channelThumbnail}
             alt={host.channelName}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent/20 to-purple-500/20">
-            <span className="text-5xl font-bold text-text-primary/30">{initials}</span>
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent/20 via-purple-500/10 to-pink-500/10">
+            <span className="text-5xl font-bold text-text-primary/20 select-none">
+              {initials}
+            </span>
           </div>
         )}
-        
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        
-        {/* Platform Badge */}
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
+
         <div className="absolute top-3 left-3">
-          <PlatformBadge platform={host.platform} />
+          <PlatformBadgeSmall platform={host.platform} />
         </div>
-        
-        {/* Subscriber Count Badge */}
-        <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm px-2 py-1 rounded-full">
-          <span className="text-xs font-semibold text-white">{formatNumber(host.subscriberCount)} subs</span>
+
+        <div className="absolute top-3 right-3 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1.5">
+          <Users className="w-3 h-3 text-white/80" />
+          <span className="text-[11px] font-semibold text-white">
+            {formatNumber(host.subscriberCount)}
+          </span>
         </div>
-        
-        {/* Bottom Info Overlay */}
+
         <div className="absolute bottom-0 left-0 right-0 p-4">
-          <p className="text-white font-semibold text-lg leading-tight mb-1">{host.channelName}</p>
+          <p className="text-white font-semibold text-lg leading-tight mb-1 drop-shadow-md">
+            {host.channelName}
+          </p>
           {host.niche && (
-            <p className="text-white/80 text-sm line-clamp-1">{host.niche}</p>
+            <p className="text-white/60 text-sm line-clamp-1">{host.niche}</p>
           )}
         </div>
       </div>
-      
-      {/* Info Below Image */}
-      <div className="px-1">
+
+      <div className="pt-3 px-1">
         <div className="flex items-center justify-between mb-1">
-          <p className="text-text-muted text-sm">
-            {host.channelHandle ? `@${host.channelHandle.replace("@", "")}` : `${host.packages.length} packages`}
+          <p className="text-text-muted text-sm truncate">
+            {host.channelHandle
+              ? `@${host.channelHandle.replace("@", "")}`
+              : `${host.packages.length} package${host.packages.length !== 1 ? "s" : ""}`}
           </p>
-          <div className="flex items-center gap-1">
-            <svg className="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <span className="text-sm font-medium text-text-primary">5.0</span>
-          </div>
+          <span className="text-[11px] font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full shrink-0">
+            New
+          </span>
         </div>
-        <p className="text-text-primary font-semibold">
-          From <span className="text-accent">${lowestPrice}</span>
-        </p>
+        {lowestPrice !== null ? (
+          <p className="text-text-primary font-semibold">
+            From <span className="text-accent">${lowestPrice}</span>
+          </p>
+        ) : (
+          <p className="text-text-muted text-sm">Packages coming soon</p>
+        )}
       </div>
     </Link>
+  )
+}
+
+function SortDropdown({
+  value,
+  onChange,
+}: {
+  value: SortOption
+  onChange: (v: SortOption) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClick)
+    return () => document.removeEventListener("mousedown", handleClick)
+  }, [])
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-text-secondary hover:text-text-primary transition-colors"
+      >
+        <SlidersHorizontal className="w-4 h-4" />
+        <span className="hidden sm:inline">{sortLabels[value]}</span>
+        <ChevronDown
+          className={`w-3.5 h-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {open && (
+        <div className="absolute right-0 mt-2 w-52 rounded-xl glass border border-glass-border shadow-float z-50 py-1 overflow-hidden">
+          {(Object.keys(sortLabels) as SortOption[]).map(key => (
+            <button
+              key={key}
+              onClick={() => {
+                onChange(key)
+                setOpen(false)
+              }}
+              className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                value === key
+                  ? "text-accent bg-accent/10 font-medium"
+                  : "text-text-secondary hover:text-text-primary hover:bg-surface-raised/50"
+              }`}
+            >
+              {sortLabels[key]}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -120,9 +228,11 @@ export default function BrowsePage() {
   const [hosts, setHosts] = useState<Host[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
+  const [activeNiche, setActiveNiche] = useState<string | null>(null)
+  const [sort, setSort] = useState<SortOption>("relevance")
 
   useEffect(() => {
-    const fetchHosts = async () => {
+    async function fetchHosts() {
       try {
         const res = await fetch("/api/hosts")
         if (res.ok) {
@@ -135,137 +245,179 @@ export default function BrowsePage() {
         setLoading(false)
       }
     }
-
     fetchHosts()
   }, [])
 
-  const filteredHosts = hosts.filter(host => 
-    host.channelName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    host.niche?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    host.platform.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredHosts = sortHosts(
+    hosts.filter(host => {
+      const q = searchQuery.toLowerCase()
+      const matchesSearch =
+        !q ||
+        host.channelName.toLowerCase().includes(q) ||
+        host.niche?.toLowerCase().includes(q) ||
+        host.platform.toLowerCase().includes(q)
+      const matchesNiche =
+        !activeNiche || host.niche?.toLowerCase() === activeNiche.toLowerCase()
+      return matchesSearch && matchesNiche
+    }),
+    sort,
   )
 
-  const niches = Array.from(new Set(hosts.map(h => h.niche).filter((n): n is string => n !== null)))
+  const niches = Array.from(
+    new Set(hosts.map(h => h.niche).filter((n): n is string => n !== null)),
+  )
+
+  function clearFilters() {
+    setSearchQuery("")
+    setActiveNiche(null)
+  }
 
   return (
     <>
       <Header />
 
       <main className="min-h-screen pt-20 pb-20">
-        {/* Hero Section */}
-        <div className="bg-gradient-to-b from-surface to-background py-12 px-6 border-b border-border">
-          <div className="max-w-6xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold text-text-primary text-center mb-4">
-              Find Your Perfect Collab
-            </h1>
-            <p className="text-text-secondary text-center text-lg mb-8 max-w-2xl mx-auto">
-              Browse top creators ready to feature you on their channels
-            </p>
-            
-            {/* Search Bar */}
-            <div className="max-w-xl mx-auto">
-              <div className="relative">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input
-                  type="text"
-                  placeholder="Search by name, niche, or platform..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-surface border border-border rounded-full text-text-primary placeholder-text-muted focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
-                />
-              </div>
-            </div>
+        {/* Hero */}
+        <section className="relative overflow-hidden py-16 px-6 border-b border-border">
+          <div className="absolute inset-0 pointer-events-none" aria-hidden>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-accent/8 rounded-full blur-[140px]" />
+            <div className="absolute top-24 right-1/4 w-[350px] h-[300px] bg-purple-500/6 rounded-full blur-[120px]" />
+            <div className="absolute -top-10 left-1/4 w-[250px] h-[250px] bg-pink-500/4 rounded-full blur-[100px]" />
+          </div>
 
-            {/* Niche Tags */}
+          <div className="relative max-w-6xl mx-auto">
+            <AnimatedSection>
+              <h1 className="text-4xl md:text-5xl font-bold text-text-primary text-center mb-4 tracking-tight">
+                Find Your Perfect Collab
+              </h1>
+              <p className="text-text-secondary text-center text-lg mb-10 max-w-2xl mx-auto">
+                Browse top creators ready to feature you on their channels
+              </p>
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.1}>
+              <div className="max-w-xl mx-auto">
+                <div className="relative glass rounded-xl focus-within:shadow-glow focus-within:border-accent/30 transition-all duration-300">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
+                  <input
+                    type="text"
+                    placeholder="Search by name, niche, or platform..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="w-full pl-12 pr-4 py-4 bg-transparent text-text-primary placeholder-text-muted focus:outline-none rounded-xl"
+                  />
+                </div>
+              </div>
+            </AnimatedSection>
+
             {niches.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-2 mt-6">
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    searchQuery === "" 
-                      ? "bg-accent text-white" 
-                      : "bg-surface border border-border text-text-secondary hover:text-text-primary hover:border-accent/50"
-                  }`}
-                >
-                  All
-                </button>
-                {niches.slice(0, 5).map((niche) => (
+              <AnimatedSection delay={0.2}>
+                <div className="flex flex-wrap justify-center gap-2 mt-8">
                   <button
-                    key={niche}
-                    onClick={() => setSearchQuery(niche || "")}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                      searchQuery === niche 
-                        ? "bg-accent text-white" 
-                        : "bg-surface border border-border text-text-secondary hover:text-text-primary hover:border-accent/50"
+                    onClick={() => setActiveNiche(null)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      activeNiche === null
+                        ? "bg-accent text-white shadow-glow"
+                        : "glass text-text-secondary hover:text-text-primary"
                     }`}
                   >
-                    {niche}
+                    All
                   </button>
-                ))}
-              </div>
+                  {niches.map(niche => (
+                    <button
+                      key={niche}
+                      onClick={() =>
+                        setActiveNiche(activeNiche === niche ? null : niche)
+                      }
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                        activeNiche === niche
+                          ? "bg-accent text-white shadow-glow"
+                          : "glass text-text-secondary hover:text-text-primary"
+                      }`}
+                    >
+                      {niche}
+                    </button>
+                  ))}
+                </div>
+              </AnimatedSection>
             )}
           </div>
-        </div>
+        </section>
 
         {/* Results */}
-        <div className="max-w-6xl mx-auto px-6 py-10">
+        <section className="max-w-6xl mx-auto px-6 py-10">
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent rounded-full" />
+            <div>
+              <div className="flex items-center justify-between mb-8">
+                <Skeleton className="h-5 w-36 rounded" />
+                <Skeleton className="h-9 w-28 rounded-full" />
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <SkeletonCard key={i} index={i} />
+                ))}
+              </div>
             </div>
           ) : filteredHosts.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="w-20 h-20 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-10 h-10 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
+            <div className="text-center py-24">
+              <div className="w-20 h-20 glass rounded-full flex items-center justify-center mx-auto mb-6">
+                <Users className="w-9 h-9 text-text-muted" />
               </div>
+
               {hosts.length === 0 ? (
                 <>
-                  <h2 className="text-2xl font-bold text-text-primary mb-3">No hosts yet</h2>
-                  <p className="text-text-secondary mb-8 max-w-md mx-auto">Be the first to become a host and start accepting bookings from creators.</p>
+                  <h2 className="text-2xl font-bold text-text-primary mb-3">
+                    Creators are coming soon
+                  </h2>
+                  <p className="text-text-secondary mb-8 max-w-md mx-auto">
+                    We&apos;re onboarding creators now. Join the waitlist to get
+                    notified when new hosts are available.
+                  </p>
                   <Link
-                    href="/apply"
+                    href="/#waitlist"
                     className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-full transition-colors"
                   >
-                    Become a Host
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    Join the Waitlist
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </>
               ) : (
                 <>
-                  <h2 className="text-2xl font-bold text-text-primary mb-3">No results found</h2>
-                  <p className="text-text-secondary mb-6">Try adjusting your search or browse all hosts</p>
+                  <h2 className="text-2xl font-bold text-text-primary mb-3">
+                    No results found
+                  </h2>
+                  <p className="text-text-secondary mb-6">
+                    Try adjusting your search or browse all hosts
+                  </p>
                   <button
-                    onClick={() => setSearchQuery("")}
+                    onClick={clearFilters}
                     className="text-accent font-medium hover:underline"
                   >
-                    Clear search
+                    Clear filters
                   </button>
                 </>
               )}
             </div>
           ) : (
-            <>
+            <AnimatedSection>
               <div className="flex items-center justify-between mb-8">
-                <p className="text-text-secondary">
-                  <span className="font-semibold text-text-primary">{filteredHosts.length}</span> creator{filteredHosts.length !== 1 ? "s" : ""} available
+                <p className="text-text-secondary text-sm">
+                  <span className="font-semibold text-text-primary">
+                    {filteredHosts.length}
+                  </span>{" "}
+                  creator{filteredHosts.length !== 1 ? "s" : ""} available
                 </p>
+                <SortDropdown value={sort} onChange={setSort} />
               </div>
-              
-              {/* Grid - 4 columns on large screens like Cameo */}
+
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {filteredHosts.map((host) => (
+                {filteredHosts.map(host => (
                   <HostCard key={host.id} host={host} />
                 ))}
               </div>
-            </>
+            </AnimatedSection>
           )}
-        </div>
+        </section>
       </main>
 
       <Footer />

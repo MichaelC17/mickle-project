@@ -1,772 +1,1037 @@
+"use client";
+
+import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  AnimatedSection,
+  AnimatedStagger,
+  AnimatedItem,
+} from "@/components/shared/AnimatedSection";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  ArrowRight,
+  Shield,
+  CreditCard,
+  Users,
+  TrendingUp,
+  Star,
+  CheckCircle,
+  Zap,
+  MessageSquare,
+  Calendar,
+} from "lucide-react";
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [interest, setInterest] = useState<"buyer" | "host">("buyer");
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleWaitlistSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email || submitting) return;
+    setSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    setSubmitted(true);
+    setSubmitting(false);
+  }
+
   return (
     <>
       <Header />
 
-      {/* Hero */}
-      <section className="pt-28 pb-20 px-6 bg-gradient-to-b from-surface via-background to-background">
-        <div className="max-w-5xl mx-auto">
-          {/* Main Content */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-accent/10 text-accent px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              Now in Beta
+      {/* ───── HERO ───── */}
+      <section className="relative pt-36 pb-28 px-6 overflow-hidden">
+        <div
+          className="absolute top-[-10%] left-[15%] w-[600px] h-[600px] rounded-full pointer-events-none opacity-30 blur-[120px]"
+          style={{ background: "radial-gradient(circle, var(--accent) 0%, transparent 70%)" }}
+        />
+        <div
+          className="absolute top-[10%] right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none opacity-20 blur-[100px]"
+          style={{ background: "radial-gradient(circle, #a855f7 0%, transparent 70%)" }}
+        />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+
+        <div className="relative max-w-5xl mx-auto text-center">
+          <AnimatedSection>
+            <div className="inline-flex items-center gap-2 bg-accent/10 text-accent px-4 py-2 rounded-full text-sm font-medium mb-8">
+              <Shield className="w-3.5 h-3.5" />
+              Early Access · Payments secured by Stripe
             </div>
-            
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-text-primary leading-[1.1] tracking-tight mb-6">
-              Grow your channel
-              <br />
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.1}>
+            <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-text-primary leading-[1.05] tracking-tight mb-6">
+              Grow faster with{" "}
               <span className="bg-gradient-to-r from-accent via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                10x faster
+                collaborations
               </span>
             </h1>
-            
-            <p className="text-xl text-text-secondary max-w-2xl mx-auto mb-10">
-              Book guest spots on bigger creator channels. Get in front of their audience. 
-              Convert their viewers into your subscribers.
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.2}>
+            <p className="text-lg sm:text-xl text-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
+              Book a guest appearance on a bigger creator&apos;s channel&nbsp;— their
+              audience discovers you, and you gain subscribers.
             </p>
-            
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.3}>
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
               <Link
                 href="/browse"
-                className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:shadow-accent/20"
+                className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:shadow-accent/25"
               >
                 Browse Creators
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                <ArrowRight className="w-5 h-5" />
               </Link>
               <Link
                 href="#how-it-works"
-                className="inline-flex items-center justify-center gap-2 bg-surface border border-border text-text-primary font-semibold px-8 py-4 rounded-full text-lg transition-colors hover:border-accent/50"
+                className="inline-flex items-center justify-center gap-2 glass text-text-primary font-semibold px-8 py-4 rounded-full text-lg transition-colors hover:bg-surface-raised"
               >
                 How it works
               </Link>
             </div>
+          </AnimatedSection>
 
-            {/* Platform Badges */}
-            <div className="flex items-center justify-center gap-3 flex-wrap">
-              <span className="text-sm text-text-muted">Works with:</span>
-              <div className="flex items-center gap-3">
-                <span className="inline-flex items-center gap-1.5 bg-red-500/10 text-red-500 px-3 py-1.5 rounded-full text-sm font-medium">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                  </svg>
-                  YouTube
-                </span>
-                <span className="inline-flex items-center gap-1.5 bg-violet-500/10 text-violet-500 px-3 py-1.5 rounded-full text-sm font-medium">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
-                  </svg>
-                  Twitch
-                </span>
-                <span className="inline-flex items-center gap-1.5 bg-pink-500/10 text-pink-500 px-3 py-1.5 rounded-full text-sm font-medium">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                  </svg>
-                  TikTok
-                </span>
+          <AnimatedSection delay={0.4}>
+            <div className="grid grid-cols-3 gap-8 max-w-xl mx-auto">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-text-primary mb-1">$0</p>
+                <p className="text-sm text-text-muted">Buyer fees</p>
+              </div>
+              <div className="text-center border-x border-border">
+                <p className="text-3xl font-bold text-text-primary mb-1">100%</p>
+                <p className="text-sm text-text-muted">Verified creators</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-bold text-text-primary mb-1">50K+</p>
+                <p className="text-sm text-text-muted">Min host subscribers</p>
               </div>
             </div>
-          </div>
-
-          {/* Trust Indicators */}
-          <div className="grid grid-cols-3 gap-6 max-w-2xl mx-auto">
-            <div className="text-center">
-              <p className="text-3xl font-bold text-text-primary mb-1">50K+</p>
-              <p className="text-sm text-text-muted">Min host subs</p>
-            </div>
-            <div className="text-center border-x border-border">
-              <p className="text-3xl font-bold text-text-primary mb-1">100%</p>
-              <p className="text-sm text-text-muted">Verified creators</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl font-bold text-text-primary mb-1">$0</p>
-              <p className="text-sm text-text-muted">Platform fee</p>
-            </div>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 
-      {/* Problem */}
-      <section className="py-20 px-6 border-t border-border">
-        <div className="max-w-3xl mx-auto">
-          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">The problem</p>
-          <h2 className="text-2xl font-semibold text-text-primary mb-4">
-            Growing a channel from scratch is brutal
-          </h2>
-          <p className="text-text-secondary leading-relaxed mb-6">
-            You&apos;re making good content, but the algorithm doesn&apos;t care. Without an existing audience, 
-            your videos get buried. You post consistently, optimize thumbnails, study analytics—and still 
-            grow at a crawl. The math is simple: without distribution, quality doesn&apos;t matter.
-          </p>
-          <p className="text-text-secondary leading-relaxed mb-6">
-            The honest truth? There are only two ways out: grind for years and hope the algorithm 
-            eventually favors you, or get lucky with a viral moment. That&apos;s it. Most creators 
-            burn out before either happens.
-          </p>
-          <p className="text-text-secondary leading-relaxed">
-            <span className="text-text-primary font-medium">But there&apos;s one exception.</span> The creators 
-            who skip the line? They get featured on a bigger channel. One guest spot in front of the 
-            right audience can do more than a year of grinding. The problem is, those opportunities 
-            don&apos;t exist for most people. DMs go unanswered. There&apos;s no way in—until now.
-          </p>
-        </div>
-      </section>
-
-      {/* Solution */}
-      <section className="py-20 px-6 bg-surface">
-        <div className="max-w-3xl mx-auto">
-          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">The solution</p>
-          <h2 className="text-2xl font-semibold text-text-primary mb-4">
-            A marketplace where exposure has a price tag
-          </h2>
-          <p className="text-text-secondary leading-relaxed mb-6">
-            COLLAB. lets you browse creators who are actively selling guest spots on their channels. 
-            See their audience size, niche, and rates. Book instantly. Coordinate through our platform. 
-            Get in front of thousands—or millions—of potential subscribers.
-          </p>
-          <p className="text-text-secondary leading-relaxed">
-            For larger creators, it&apos;s a way to monetize the DMs you&apos;re already ignoring. 
-            Set your price, accept bookings on your schedule, and get paid to feature rising talent.
-          </p>
-        </div>
-      </section>
-
-      {/* How it Works */}
-      <section id="how-it-works" className="py-20 px-6 border-t border-border">
+      {/* ───── WHAT IS A GUEST SPOT? ───── */}
+      <section className="py-24 px-6 bg-surface">
         <div className="max-w-5xl mx-auto">
-          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">How it works</p>
-          <h2 className="text-2xl font-semibold text-text-primary mb-12">
-            Book a guest spot in three steps
-          </h2>
+          <AnimatedSection>
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <p className="text-sm text-accent font-medium uppercase tracking-wide mb-3">
+                  What is a guest spot?
+                </p>
+                <h2 className="font-display text-3xl sm:text-4xl text-text-primary leading-tight mb-6">
+                  Get featured on channels your audience already watches
+                </h2>
+                <p className="text-text-secondary leading-relaxed mb-4">
+                  A guest spot is when you appear on another creator&apos;s channel&nbsp;—
+                  whether that&apos;s a dedicated video featuring you, a segment in their
+                  content, or a collaboration format. The host promotes you to their audience.
+                </p>
+                <p className="text-text-secondary leading-relaxed">
+                  Think of it as buying distribution. Instead of waiting years for the
+                  algorithm, you get in front of tens or hundreds of thousands of potential
+                  subscribers&nbsp;— instantly.
+                </p>
+              </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <div className="text-sm font-medium text-accent mb-3">01</div>
-              <h3 className="text-lg font-medium text-text-primary mb-2">Find a creator</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Browse by niche, audience size, and price. Filter for creators 
-                whose audience matches the subscribers you want.
-              </p>
+              <AnimatedStagger className="grid grid-cols-2 gap-4">
+                <AnimatedItem>
+                  <div className="glass rounded-xl p-5">
+                    <Zap className="w-5 h-5 text-accent mb-3" />
+                    <p className="font-medium text-text-primary text-sm mb-1">Instant exposure</p>
+                    <p className="text-xs text-text-muted">Get in front of 50K–2M+ viewers</p>
+                  </div>
+                </AnimatedItem>
+                <AnimatedItem>
+                  <div className="glass rounded-xl p-5">
+                    <Users className="w-5 h-5 text-accent mb-3" />
+                    <p className="font-medium text-text-primary text-sm mb-1">Targeted audiences</p>
+                    <p className="text-xs text-text-muted">Match with creators in your niche</p>
+                  </div>
+                </AnimatedItem>
+                <AnimatedItem>
+                  <div className="glass rounded-xl p-5">
+                    <TrendingUp className="w-5 h-5 text-accent mb-3" />
+                    <p className="font-medium text-text-primary text-sm mb-1">Measurable growth</p>
+                    <p className="text-xs text-text-muted">Track new subs and ROI</p>
+                  </div>
+                </AnimatedItem>
+                <AnimatedItem>
+                  <div className="glass rounded-xl p-5">
+                    <CreditCard className="w-5 h-5 text-accent mb-3" />
+                    <p className="font-medium text-text-primary text-sm mb-1">Simple pricing</p>
+                    <p className="text-xs text-text-muted">Pay the listed price, nothing hidden</p>
+                  </div>
+                </AnimatedItem>
+              </AnimatedStagger>
             </div>
-            <div>
-              <div className="text-sm font-medium text-accent mb-3">02</div>
-              <h3 className="text-lg font-medium text-text-primary mb-2">Book and coordinate</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Pay the listed rate, then message through the platform to 
-                schedule and align on the content format.
-              </p>
-            </div>
-            <div>
-              <div className="text-sm font-medium text-accent mb-3">03</div>
-              <h3 className="text-lg font-medium text-text-primary mb-2">Get featured, grow</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Your guest spot goes live. Track views, click-throughs, and 
-                new subscribers directly in your dashboard.
-              </p>
-            </div>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 
-      {/* Your Journey */}
-      <section id="for-creators" className="py-20 px-6 bg-surface">
+      {/* ───── PROBLEM (softened) ───── */}
+      <div className="gradient-divider" />
+      <section className="py-24 px-6 bg-background">
         <div className="max-w-4xl mx-auto">
-          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">Your growth journey</p>
-          <h2 className="text-2xl font-semibold text-text-primary mb-4">
-            A platform that scales with your channel
-          </h2>
-          <p className="text-text-secondary mb-16 max-w-2xl">
-            Start by buying exposure. As you grow, unlock bigger opportunities. 
-            Eventually, become a host yourself.
-          </p>
+          <AnimatedSection>
+            <div className="max-w-3xl">
+              <p className="text-sm text-text-muted uppercase tracking-wide mb-4">The challenge</p>
+              <h2 className="font-display text-3xl sm:text-4xl text-text-primary leading-tight mb-8">
+                You&apos;re creating great content.{" "}
+                <span className="text-text-muted">
+                  But without distribution, growth is painfully slow.
+                </span>
+              </h2>
+            </div>
+          </AnimatedSection>
 
-          {/* Stage 1: Getting Started */}
+          <AnimatedStagger className="grid md:grid-cols-2 gap-8 mt-4">
+            <AnimatedItem>
+              <div className="glass rounded-xl p-6 h-full">
+                <p className="text-text-secondary leading-relaxed mb-4">
+                  You post consistently, optimize thumbnails, study analytics&nbsp;— and
+                  still grow at a crawl. Without an existing audience, even great videos
+                  get buried by the algorithm.
+                </p>
+                <p className="text-text-secondary leading-relaxed">
+                  Most creators spend years grinding before they hit critical mass. Many
+                  burn out before they ever get there.
+                </p>
+              </div>
+            </AnimatedItem>
+
+            <AnimatedItem>
+              <div className="glass rounded-xl p-6 h-full border-accent/20">
+                <p className="text-text-primary font-medium mb-4">
+                  But there&apos;s one exception.
+                </p>
+                <p className="text-text-secondary leading-relaxed mb-4">
+                  The creators who skip the line? They get featured on a bigger channel.
+                  One guest spot in front of the right audience can do more than a year of
+                  grinding.
+                </p>
+                <p className="text-text-secondary leading-relaxed">
+                  The problem was, those opportunities didn&apos;t exist for most people.
+                  DMs go unanswered. There was no way in&nbsp;—{" "}
+                  <span className="text-accent font-medium">until now.</span>
+                </p>
+              </div>
+            </AnimatedItem>
+          </AnimatedStagger>
+        </div>
+      </section>
+
+      {/* ───── SOLUTION ───── */}
+      <section className="py-24 px-6 bg-surface">
+        <div className="max-w-5xl mx-auto">
+          <AnimatedSection>
+            <div className="grid md:grid-cols-5 gap-12 items-start">
+              <div className="md:col-span-3">
+                <p className="text-sm text-accent font-medium uppercase tracking-wide mb-3">
+                  The solution
+                </p>
+                <h2 className="font-display text-3xl sm:text-4xl text-text-primary leading-tight mb-6">
+                  A marketplace where exposure has a price tag
+                </h2>
+                <p className="text-text-secondary leading-relaxed mb-6">
+                  COLLAB. lets you browse creators who are actively selling guest spots on
+                  their channels. See their audience size, niche, and rates. Book instantly.
+                  Coordinate through our platform. Get in front of thousands&nbsp;— or
+                  millions&nbsp;— of potential subscribers.
+                </p>
+                <p className="text-text-secondary leading-relaxed">
+                  For established creators, it&apos;s a way to monetize the collaboration
+                  requests you&apos;re already getting. Set your price, accept bookings on
+                  your schedule, and get paid to feature rising talent.
+                </p>
+              </div>
+
+              <div className="md:col-span-2 space-y-4">
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="glass rounded-xl p-5"
+                >
+                  <p className="text-xs text-accent font-medium uppercase tracking-wide mb-2">
+                    For growing creators
+                  </p>
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    Browse hosts, compare audience data, and book guest spots that fit your
+                    budget and niche.
+                  </p>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.35 }}
+                  className="glass rounded-xl p-5"
+                >
+                  <p className="text-xs text-accent font-medium uppercase tracking-wide mb-2">
+                    For established hosts
+                  </p>
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    Turn your audience into a monetization channel. Set your own rates and
+                    accept bookings on your terms.
+                  </p>
+                </motion.div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ───── HOW IT WORKS ───── */}
+      <div className="gradient-divider" />
+      <section id="how-it-works" className="py-24 px-6 bg-background">
+        <div className="max-w-5xl mx-auto">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <p className="text-sm text-accent font-medium uppercase tracking-wide mb-3">
+                How it works
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl text-text-primary leading-tight">
+                Book a guest spot in three steps
+              </h2>
+            </div>
+          </AnimatedSection>
+
+          <AnimatedStagger className="grid md:grid-cols-3 gap-6">
+            <AnimatedItem>
+              <div className="glass rounded-xl p-8 h-full">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mb-5">
+                  <span className="text-accent font-bold text-sm">01</span>
+                </div>
+                <h3 className="text-lg font-semibold text-text-primary mb-3">
+                  Find a creator
+                </h3>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  Browse by niche, audience size, and price. Filter for creators whose
+                  audience matches the subscribers you want.
+                </p>
+              </div>
+            </AnimatedItem>
+            <AnimatedItem>
+              <div className="glass rounded-xl p-8 h-full">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mb-5">
+                  <span className="text-accent font-bold text-sm">02</span>
+                </div>
+                <h3 className="text-lg font-semibold text-text-primary mb-3">
+                  Book &amp; coordinate
+                </h3>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  Pay the listed rate, then message through the platform to schedule and
+                  align on the content format.
+                </p>
+              </div>
+            </AnimatedItem>
+            <AnimatedItem>
+              <div className="glass rounded-xl p-8 h-full">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mb-5">
+                  <span className="text-accent font-bold text-sm">03</span>
+                </div>
+                <h3 className="text-lg font-semibold text-text-primary mb-3">
+                  Get featured, grow
+                </h3>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  Your guest spot goes live. Track views, click-throughs, and new
+                  subscribers directly in your dashboard.
+                </p>
+              </div>
+            </AnimatedItem>
+          </AnimatedStagger>
+        </div>
+      </section>
+
+      {/* ───── GROWTH JOURNEY ───── */}
+      <section id="for-creators" className="py-24 px-6 bg-surface">
+        <div className="max-w-4xl mx-auto">
+          <AnimatedSection>
+            <p className="text-sm text-accent font-medium uppercase tracking-wide mb-3">
+              Your growth journey
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl text-text-primary leading-tight mb-4">
+              A platform that scales with your channel
+            </h2>
+            <p className="text-text-secondary mb-16 max-w-2xl">
+              Start by buying exposure. As you grow, unlock bigger opportunities.
+              Eventually, become a host yourself.
+            </p>
+          </AnimatedSection>
+
           <div className="relative">
-            {/* Vertical line connector */}
             <div className="absolute left-6 top-12 bottom-0 w-px bg-border hidden md:block" />
 
-            {/* Stage 1 */}
-            <div className="relative mb-16">
-              <div className="flex items-start gap-6">
-                <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0 relative z-10">
-                  <span className="text-sm font-semibold text-emerald-500">1</span>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl font-semibold text-text-primary">Start growing</h3>
-                    <span className="text-xs text-text-muted bg-surface-raised px-2 py-1 rounded">1K – 50K subs</span>
+            <AnimatedStagger className="space-y-16">
+              <AnimatedItem>
+                <div className="relative flex items-start gap-6">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0 relative z-10">
+                    <span className="text-sm font-semibold text-emerald-500">1</span>
                   </div>
-                  <p className="text-text-secondary mb-6 leading-relaxed max-w-xl">
-                    You&apos;re making content but need more eyeballs. Buy affordable guest spots on 
-                    channels 5-10x your size to get in front of audiences who&apos;ll actually subscribe.
-                  </p>
-                  
-                  <div className="bg-background border border-border rounded-lg p-5 max-w-md">
-                    <div className="grid grid-cols-3 gap-4 text-center">
-                      <div>
-                        <p className="text-lg font-semibold text-text-primary">$50–300</p>
-                        <p className="text-xs text-text-muted">per guest spot</p>
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold text-text-primary">50K–200K</p>
-                        <p className="text-xs text-text-muted">host audience</p>
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold text-text-primary">100–1K</p>
-                        <p className="text-xs text-text-muted">new subs avg</p>
-                      </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2 flex-wrap">
+                      <h3 className="text-xl font-semibold text-text-primary">
+                        Start growing
+                      </h3>
+                      <span className="text-xs text-text-muted bg-surface-raised px-2.5 py-1 rounded-full">
+                        1K – 50K subs
+                      </span>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Stage 2 */}
-            <div className="relative mb-16">
-              <div className="flex items-start gap-6">
-                <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0 relative z-10">
-                  <span className="text-sm font-semibold text-accent">2</span>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl font-semibold text-text-primary">Level up</h3>
-                    <span className="text-xs text-text-muted bg-surface-raised px-2 py-1 rounded">50K – 500K subs</span>
-                  </div>
-                  <p className="text-text-secondary mb-6 leading-relaxed max-w-xl">
-                    Your content is proven. Now it&apos;s about reaching bigger audiences and building 
-                    relationships with creators at your level or above. Network with mid-tier and 
-                    top-tier creators who can accelerate your path to the next milestone.
-                  </p>
-                  
-                  <div className="bg-background border border-border rounded-lg p-5 max-w-md">
-                    <div className="grid grid-cols-3 gap-4 text-center">
-                      <div>
-                        <p className="text-lg font-semibold text-text-primary">$500–2.5K</p>
-                        <p className="text-xs text-text-muted">per guest spot</p>
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold text-text-primary">500K–2M+</p>
-                        <p className="text-xs text-text-muted">host audience</p>
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold text-text-primary">2K–20K</p>
-                        <p className="text-xs text-text-muted">new subs avg</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 p-4 bg-accent/5 border border-accent/10 rounded-lg max-w-md">
-                    <p className="text-sm text-text-secondary">
-                      <span className="text-accent font-medium">At this stage, you can also start hosting.</span> 
-                      {" "}Accept guest spot requests from smaller creators and earn while you grow.
+                    <p className="text-text-secondary mb-6 leading-relaxed max-w-xl">
+                      You&apos;re making content but need more eyeballs. Buy affordable
+                      guest spots on channels 5-10x your size to get in front of audiences
+                      who&apos;ll actually subscribe.
                     </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Stage 3 */}
-            <div className="relative">
-              <div className="flex items-start gap-6">
-                <div className="w-12 h-12 rounded-full bg-violet-500/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0 relative z-10">
-                  <span className="text-sm font-semibold text-violet-500">3</span>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl font-semibold text-text-primary">Become a destination</h3>
-                    <span className="text-xs text-text-muted bg-surface-raised px-2 py-1 rounded">500K+ subs</span>
-                  </div>
-                  <p className="text-text-secondary mb-6 leading-relaxed max-w-xl">
-                    You&apos;ve built an audience others want access to. Turn the collaboration requests 
-                    you&apos;re already getting into a revenue stream. Set your rates, accept bookings 
-                    on your schedule, and help the next generation grow.
-                  </p>
-                  
-                  <div className="bg-background border border-border rounded-lg p-5 max-w-md">
-                    <div className="grid grid-cols-3 gap-4 text-center">
-                      <div>
-                        <p className="text-lg font-semibold text-text-primary">$200–10K+</p>
-                        <p className="text-xs text-text-muted">your rates</p>
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold text-text-primary">20%</p>
-                        <p className="text-xs text-text-muted">platform fee</p>
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold text-text-primary">$2K–15K</p>
-                        <p className="text-xs text-text-muted">monthly avg</p>
+                    <div className="glass rounded-xl p-5 max-w-md">
+                      <div className="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                          <p className="text-lg font-semibold text-text-primary">$50–300</p>
+                          <p className="text-xs text-text-muted">per guest spot</p>
+                        </div>
+                        <div>
+                          <p className="text-lg font-semibold text-text-primary">50K–200K</p>
+                          <p className="text-xs text-text-muted">host audience</p>
+                        </div>
+                        <div>
+                          <p className="text-lg font-semibold text-text-primary">100–1K</p>
+                          <p className="text-xs text-text-muted">new subs avg</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-
-                  <ul className="mt-6 space-y-2 text-sm text-text-secondary max-w-md">
-                    <li className="flex items-start gap-2">
-                      <span className="text-violet-500 mt-0.5">→</span>
-                      No exclusivity or long-term contracts
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-violet-500 mt-0.5">→</span>
-                      Accept or decline any booking—you&apos;re in control
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-violet-500 mt-0.5">→</span>
-                      We only take a cut when you get paid
-                    </li>
-                  </ul>
                 </div>
-              </div>
-            </div>
+              </AnimatedItem>
+
+              <AnimatedItem>
+                <div className="relative flex items-start gap-6">
+                  <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0 relative z-10">
+                    <span className="text-sm font-semibold text-accent">2</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2 flex-wrap">
+                      <h3 className="text-xl font-semibold text-text-primary">Level up</h3>
+                      <span className="text-xs text-text-muted bg-surface-raised px-2.5 py-1 rounded-full">
+                        50K – 500K subs
+                      </span>
+                    </div>
+                    <p className="text-text-secondary mb-6 leading-relaxed max-w-xl">
+                      Your content is proven. Reach bigger audiences and start building
+                      relationships with creators at your level and above.
+                    </p>
+                    <div className="glass rounded-xl p-5 max-w-md">
+                      <div className="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                          <p className="text-lg font-semibold text-text-primary">
+                            $500–2.5K
+                          </p>
+                          <p className="text-xs text-text-muted">per guest spot</p>
+                        </div>
+                        <div>
+                          <p className="text-lg font-semibold text-text-primary">
+                            500K–2M+
+                          </p>
+                          <p className="text-xs text-text-muted">host audience</p>
+                        </div>
+                        <div>
+                          <p className="text-lg font-semibold text-text-primary">2K–20K</p>
+                          <p className="text-xs text-text-muted">new subs avg</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-6 glass rounded-xl p-4 max-w-md border-accent/20">
+                      <p className="text-sm text-text-secondary">
+                        <span className="text-accent font-medium">
+                          At this stage, you can also start hosting.
+                        </span>{" "}
+                        Accept guest spot requests from smaller creators and earn while you
+                        grow.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </AnimatedItem>
+
+              <AnimatedItem>
+                <div className="relative flex items-start gap-6">
+                  <div className="w-12 h-12 rounded-full bg-violet-500/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0 relative z-10">
+                    <span className="text-sm font-semibold text-violet-500">3</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2 flex-wrap">
+                      <h3 className="text-xl font-semibold text-text-primary">
+                        Become a destination
+                      </h3>
+                      <span className="text-xs text-text-muted bg-surface-raised px-2.5 py-1 rounded-full">
+                        500K+ subs
+                      </span>
+                    </div>
+                    <p className="text-text-secondary mb-6 leading-relaxed max-w-xl">
+                      You&apos;ve built an audience others want access to. Turn
+                      collaboration requests into a revenue stream. Set your rates and help
+                      the next generation grow.
+                    </p>
+                    <div className="glass rounded-xl p-5 max-w-md">
+                      <div className="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                          <p className="text-lg font-semibold text-text-primary">
+                            $200–10K+
+                          </p>
+                          <p className="text-xs text-text-muted">your rates</p>
+                        </div>
+                        <div>
+                          <p className="text-lg font-semibold text-text-primary">80%</p>
+                          <p className="text-xs text-text-muted">you keep</p>
+                        </div>
+                        <div>
+                          <p className="text-lg font-semibold text-text-primary">
+                            $2K–15K
+                          </p>
+                          <p className="text-xs text-text-muted">monthly avg</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </AnimatedItem>
+            </AnimatedStagger>
           </div>
         </div>
       </section>
 
-      {/* Transparency / Pre-booking Stats */}
-      <section className="py-20 px-6 border-t border-border">
+      {/* ───── TRANSPARENCY / STATS PREVIEW ───── */}
+      <div className="gradient-divider" />
+      <section className="py-24 px-6 bg-background">
         <div className="max-w-5xl mx-auto">
-          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">Full transparency</p>
-          <h2 className="text-2xl font-semibold text-text-primary mb-4">
-            See what other creators gained before you book
-          </h2>
-          <p className="text-text-secondary mb-12 max-w-2xl">
-            Every host profile shows real growth data from past guest spots—measured over 90 days 
-            and compared against each creator&apos;s baseline before the collab.
-          </p>
+          <AnimatedSection>
+            <p className="text-sm text-accent font-medium uppercase tracking-wide mb-3">
+              Full transparency
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl text-text-primary leading-tight mb-4">
+              See what other creators gained before you book
+            </h2>
+            <p className="text-text-secondary mb-16 max-w-2xl">
+              Every host profile shows real growth data from past guest spots&nbsp;—
+              measured over 90 days and compared against each creator&apos;s baseline
+              before the collab.
+            </p>
+          </AnimatedSection>
 
-          <div className="grid md:grid-cols-2 gap-8 items-start">
-            {/* What you see */}
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-lg bg-surface-raised border border-border flex items-center justify-center text-text-muted flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-medium text-text-primary mb-1">Growth over baseline</h3>
-                  <p className="text-sm text-text-secondary">See how much faster creators grew in the 90 days after their guest spot vs. the 90 days before.</p>
-                </div>
+          <AnimatedSection delay={0.15}>
+            <div className="grid md:grid-cols-2 gap-10 items-start">
+              <div className="space-y-5">
+                {[
+                  {
+                    icon: <TrendingUp className="w-5 h-5" />,
+                    title: "Growth over baseline",
+                    desc: "See how much faster creators grew in the 90 days after their guest spot vs. the 90 days before.",
+                  },
+                  {
+                    icon: <Users className="w-5 h-5" />,
+                    title: "Net new subscribers",
+                    desc: "The additional subscribers gained over 90 days, above what the creator was already averaging.",
+                  },
+                  {
+                    icon: <CreditCard className="w-5 h-5" />,
+                    title: "Cost per incremental sub",
+                    desc: "What you actually paid for each subscriber above baseline — the true ROI metric.",
+                  },
+                  {
+                    icon: <CheckCircle className="w-5 h-5" />,
+                    title: "Completion rate",
+                    desc: "See how reliably this host delivers on bookings. No surprises.",
+                  },
+                ].map((item) => (
+                  <div key={item.title} className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-xl glass flex items-center justify-center text-accent flex-shrink-0">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-text-primary mb-1">{item.title}</h3>
+                      <p className="text-sm text-text-secondary leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-lg bg-surface-raised border border-border flex items-center justify-center text-text-muted flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                  </svg>
+              <div className="glass rounded-xl overflow-hidden">
+                <div className="px-4 py-2 bg-accent/5 border-b border-glass-border">
+                  <p className="text-xs text-accent font-medium text-center">
+                    Example host profile
+                  </p>
                 </div>
-                <div>
-                  <h3 className="font-medium text-text-primary mb-1">Net new subscribers</h3>
-                  <p className="text-sm text-text-secondary">The additional subscribers gained over 90 days, above what the creator was already averaging.</p>
+                <div className="p-5 border-b border-glass-border">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center text-lg font-medium text-white">
+                      JM
+                    </div>
+                    <div>
+                      <p className="font-medium text-text-primary">Jake Martinez</p>
+                      <p className="text-sm text-text-muted">@jakemartinez · 842K subs</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-text-secondary">
+                    Tech reviews &amp; tutorials
+                  </p>
                 </div>
-              </div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-lg bg-surface-raised border border-border flex items-center justify-center text-text-muted flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                <div className="p-5">
+                  <p className="text-xs text-text-muted uppercase tracking-wide mb-3">
+                    Avg. growth over 90 days
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">
+                        Sub growth vs baseline
+                      </p>
+                      <p className="text-lg font-semibold text-emerald-500">+312%</p>
+                      <p className="text-xs text-text-muted">+2,847 incremental subs</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">
+                        View growth vs baseline
+                      </p>
+                      <p className="text-lg font-semibold text-emerald-500">+187%</p>
+                      <p className="text-xs text-text-muted">+94K incremental views</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">
+                        Cost per incremental sub
+                      </p>
+                      <p className="text-lg font-semibold text-text-primary">$0.25</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">Completion rate</p>
+                      <p className="text-lg font-semibold text-text-primary">100%</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-medium text-text-primary mb-1">Cost per incremental sub</h3>
-                  <p className="text-sm text-text-secondary">What you actually paid for each subscriber above baseline—the true ROI metric.</p>
-                </div>
-              </div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-lg bg-surface-raised border border-border flex items-center justify-center text-text-muted flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-medium text-text-primary mb-1">Completion rate</h3>
-                  <p className="text-sm text-text-secondary">See how reliably this host delivers on bookings. No surprises.</p>
+                <div className="p-5 border-t border-glass-border flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-text-muted">Guest spot rate</p>
+                    <p className="text-lg font-semibold text-text-primary">$700</p>
+                  </div>
+                  <p className="text-xs text-text-muted">Based on 23 guest spots</p>
                 </div>
               </div>
             </div>
-
-            {/* Mock host profile card */}
-            <div className="bg-surface-raised border border-border rounded-lg overflow-hidden">
-              <div className="p-5 border-b border-border">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center text-lg font-medium text-text-primary">
-                    JM
-                  </div>
-                  <div>
-                    <p className="font-medium text-text-primary">Jake Martinez</p>
-                    <p className="text-sm text-text-muted">@jakemartinez · 842K subs</p>
-                  </div>
-                </div>
-                <p className="text-sm text-text-secondary">Tech reviews & tutorials</p>
-              </div>
-              
-              <div className="p-5 bg-background/50">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-xs text-text-muted uppercase tracking-wide">Avg. growth over 90 days</p>
-                  <p className="text-xs text-text-muted">vs. pre-collab baseline</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-text-muted mb-1">Sub growth vs baseline</p>
-                    <p className="text-lg font-semibold text-emerald-500">+312%</p>
-                    <p className="text-xs text-text-muted">+2,847 incremental subs</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-text-muted mb-1">View growth vs baseline</p>
-                    <p className="text-lg font-semibold text-emerald-500">+187%</p>
-                    <p className="text-xs text-text-muted">+94K incremental views</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-text-muted mb-1">Cost per incremental sub</p>
-                    <p className="text-lg font-semibold text-text-primary">$0.25</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-text-muted mb-1">Completion rate</p>
-                    <p className="text-lg font-semibold text-text-primary">100%</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-5 border-t border-border flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-text-muted">Guest spot rate</p>
-                  <p className="text-lg font-semibold text-text-primary">$700</p>
-                </div>
-                <div className="text-xs text-text-muted">
-                  Based on 23 guest spots
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <p className="mt-10 text-sm text-text-muted">
-            All growth is measured over 90 days post-collab, compared against each creator&apos;s 90-day baseline before booking.
-          </p>
+          </AnimatedSection>
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="pricing" className="py-20 px-6 bg-surface">
+      {/* ───── PRICING ───── */}
+      <section id="pricing" className="py-24 px-6 bg-surface">
         <div className="max-w-5xl mx-auto">
-          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">Pricing</p>
-          <h2 className="text-2xl font-semibold text-text-primary mb-4">
-            Transparent, transaction-based
-          </h2>
-          <p className="text-text-secondary mb-12 max-w-xl">
-            No subscriptions. No monthly fees. We only make money when guest spots are booked.
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-6 max-w-3xl">
-            <div className="bg-surface border border-border rounded-lg p-6">
-              <p className="text-sm text-text-muted mb-1">Booking a guest spot</p>
-              <p className="text-2xl font-semibold text-text-primary mb-3">No platform fees</p>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Pay exactly the price listed by the host. Nothing extra at checkout. 
-                Guest spots start as low as $50.
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <p className="text-sm text-accent font-medium uppercase tracking-wide mb-3">
+                Pricing
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl text-text-primary leading-tight mb-4">
+                Transparent, transaction-based
+              </h2>
+              <p className="text-text-secondary max-w-xl mx-auto">
+                No subscriptions. No monthly fees. We only make money when guest spots are
+                completed.
               </p>
             </div>
-            <div className="bg-surface border border-border rounded-lg p-6">
-              <p className="text-sm text-text-muted mb-1">Hosting guest spots</p>
-              <p className="text-2xl font-semibold text-text-primary mb-3">20% platform fee</p>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Deducted from your payout after the guest spot is delivered and confirmed. 
-                Set your own prices.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+          </AnimatedSection>
 
-      {/* For Hosts: Quality Control */}
-      <section className="py-20 px-6 border-t border-border">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">For hosts</p>
-          <h2 className="text-2xl font-semibold text-text-primary mb-4">
-            Only serious creators can book you
-          </h2>
-          <p className="text-text-secondary mb-10 max-w-2xl">
-            We vet every creator before they can request a guest spot. You won&apos;t waste time 
-            on channels that aren&apos;t real or creators who aren&apos;t committed to growth.
-          </p>
-
-          <div className="grid sm:grid-cols-2 gap-4 mb-10 max-w-lg mx-auto">
-            <div className="bg-surface border border-border rounded-lg p-5">
-              <div className="flex items-center gap-2 mb-3">
-                <svg className="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-                <span className="text-sm text-text-muted">YouTube</span>
+          <AnimatedStagger className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <AnimatedItem>
+              <div className="glass rounded-xl p-8 h-full">
+                <p className="text-xs text-accent font-medium uppercase tracking-wide mb-4">
+                  For growing creators
+                </p>
+                <p className="text-3xl font-bold text-text-primary mb-2">$0</p>
+                <p className="text-lg text-text-secondary mb-6">buyer fees</p>
+                <div className="h-px bg-border mb-6" />
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 text-sm text-text-secondary">
+                    <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    Pay exactly the listed price
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-text-secondary">
+                    <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    No hidden fees at checkout
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-text-secondary">
+                    <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    Guest spots start as low as $50
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-text-secondary">
+                    <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    Full refund if host doesn&apos;t deliver
+                  </li>
+                </ul>
               </div>
-              <p className="text-2xl font-semibold text-text-primary">1K+</p>
-              <p className="text-xs text-text-muted">minimum subscribers</p>
-            </div>
+            </AnimatedItem>
 
-            <div className="bg-surface border border-border rounded-lg p-5">
-              <div className="flex items-center gap-2 mb-3">
-                <svg className="w-5 h-5 text-purple-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
-                </svg>
-                <span className="text-sm text-text-muted">Twitch</span>
+            <AnimatedItem>
+              <div className="glass rounded-xl p-8 h-full">
+                <p className="text-xs text-accent font-medium uppercase tracking-wide mb-4">
+                  For established hosts
+                </p>
+                <p className="text-3xl font-bold text-text-primary mb-2">20%</p>
+                <p className="text-lg text-text-secondary mb-6">platform commission</p>
+                <div className="h-px bg-border mb-6" />
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 text-sm text-text-secondary">
+                    <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    Deducted only on completed bookings
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-text-secondary">
+                    <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    Set your own prices
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-text-secondary">
+                    <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    Payouts within 3 business days
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-text-secondary">
+                    <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    No contracts or exclusivity
+                  </li>
+                </ul>
               </div>
-              <p className="text-2xl font-semibold text-text-primary">250+</p>
-              <p className="text-xs text-text-muted">minimum followers</p>
-            </div>
-          </div>
-
-          <div className="grid sm:grid-cols-3 gap-6">
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">Channel verification</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Every creator verifies ownership of their channel before they can book. No fake accounts, no impersonators.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">Content review</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                We check that bookers have active channels with real content—not empty profiles or spam accounts.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">You approve every booking</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                See who&apos;s requesting before you accept. Review their channel, content style, and audience fit.
-              </p>
-            </div>
-          </div>
+            </AnimatedItem>
+          </AnimatedStagger>
         </div>
       </section>
 
-      {/* Short Form */}
-      <section className="py-20 px-6 bg-surface">
+      {/* ───── FOR HOSTS: QUALITY CONTROL ───── */}
+      <div className="gradient-divider" />
+      <section className="py-24 px-6 bg-background">
         <div className="max-w-5xl mx-auto">
-          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">Short form</p>
-          <h2 className="text-2xl font-semibold text-text-primary mb-4">
-            TikTok & Instagram collaborations
-          </h2>
-          <p className="text-text-secondary mb-10 max-w-2xl">
-            Book verified short-form creators for quick, high-impact collaborations. 
-            Perfect for rapid exposure and reaching younger audiences.
-          </p>
+          <AnimatedSection>
+            <p className="text-xs text-accent font-medium uppercase tracking-wide mb-3">
+              For established hosts
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl text-text-primary leading-tight mb-4">
+              Only serious creators can book you
+            </h2>
+            <p className="text-text-secondary mb-12 max-w-2xl">
+              We vet every creator before they can request a guest spot. You won&apos;t
+              waste time on channels that aren&apos;t real or creators who aren&apos;t
+              committed to growth.
+            </p>
+          </AnimatedSection>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-10">
-            <div className="bg-surface border border-border rounded-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <svg className="w-5 h-5 text-pink-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                </svg>
-                <svg className="w-5 h-5 text-purple-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-                </svg>
+          <AnimatedStagger className="grid sm:grid-cols-3 gap-6">
+            <AnimatedItem>
+              <div className="glass rounded-xl p-6 h-full">
+                <Shield className="w-5 h-5 text-accent mb-4" />
+                <h3 className="font-medium text-text-primary mb-2">
+                  Channel verification
+                </h3>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  Every creator verifies ownership of their channel before they can book.
+                  No fake accounts, no impersonators.
+                </p>
               </div>
-              <h3 className="font-medium text-text-primary mb-2">Quick turnaround</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Short-form content ships fast. Get featured within days, not weeks.
-              </p>
-            </div>
-            <div className="bg-surface border border-border rounded-lg p-6">
-              <h3 className="font-medium text-text-primary mb-2">Viral potential</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Short-form algorithms favor discovery. One collab can reach millions of new viewers.
-              </p>
-            </div>
-            <div className="bg-surface border border-border rounded-lg p-6">
-              <h3 className="font-medium text-text-primary mb-2">Lower price point</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Shorter content means more affordable rates. Start testing collaborations for less.
-              </p>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <Link
-              href="/browse"
-              className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white text-sm font-medium px-5 py-2.5 rounded-md transition-colors"
-            >
-              Browse Short Form Creators
-            </Link>
-          </div>
+            </AnimatedItem>
+            <AnimatedItem>
+              <div className="glass rounded-xl p-6 h-full">
+                <Star className="w-5 h-5 text-accent mb-4" />
+                <h3 className="font-medium text-text-primary mb-2">Content review</h3>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  We check that bookers have active channels with real content&nbsp;— not
+                  empty profiles or spam accounts.
+                </p>
+              </div>
+            </AnimatedItem>
+            <AnimatedItem>
+              <div className="glass rounded-xl p-6 h-full">
+                <CheckCircle className="w-5 h-5 text-accent mb-4" />
+                <h3 className="font-medium text-text-primary mb-2">
+                  You approve every booking
+                </h3>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  See who&apos;s requesting before you accept. Review their channel,
+                  content style, and audience fit.
+                </p>
+              </div>
+            </AnimatedItem>
+          </AnimatedStagger>
         </div>
       </section>
 
-      {/* Trust */}
-      <section id="trust" className="py-20 px-6 bg-surface">
+      {/* ───── TRUST & SAFETY ───── */}
+      <section id="trust" className="py-24 px-6 bg-surface">
         <div className="max-w-5xl mx-auto">
-          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">Trust & safety</p>
-          <h2 className="text-2xl font-semibold text-text-primary mb-12">
-            How we protect both sides
-          </h2>
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <p className="text-sm text-accent font-medium uppercase tracking-wide mb-3">
+                Trust &amp; safety
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl text-text-primary leading-tight">
+                How we protect both sides
+              </h2>
+            </div>
+          </AnimatedSection>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">Verified hosts</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Every host creator verifies channel ownership. We check subscriber counts, 
-                engagement, and content quality before approval.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">Payment protection</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Funds are held until the guest spot goes live. Hosts see payment is secured 
-                before doing any work.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">Clear deliverables</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Each listing specifies format, duration, and timeline. You know exactly 
-                what you&apos;re paying for.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">Ratings</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Both parties leave feedback after each guest spot. Reputation is built 
-                through completed bookings.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">Dispute resolution</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                If something goes wrong, our team reviews the situation and mediates 
-                a fair outcome.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">Performance tracking</h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                See views, engagement, and subscriber impact after your guest spot 
-                goes live. Measure your ROI.
-              </p>
-            </div>
-          </div>
+          <AnimatedStagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {(
+              [
+                {
+                  icon: <Shield className="w-5 h-5" />,
+                  title: "Verified hosts",
+                  desc: "Every host verifies channel ownership. We check subscriber counts, engagement, and content quality.",
+                },
+                {
+                  icon: <CreditCard className="w-5 h-5" />,
+                  title: "Payment protection",
+                  desc: "Funds are held until the guest spot goes live. Hosts see payment is secured before doing any work.",
+                },
+                {
+                  icon: <MessageSquare className="w-5 h-5" />,
+                  title: "Clear deliverables",
+                  desc: "Each listing specifies format, duration, and timeline. You know exactly what you\u2019re paying for.",
+                },
+                {
+                  icon: <Star className="w-5 h-5" />,
+                  title: "Ratings",
+                  desc: "Both parties leave feedback after each guest spot. Reputation is built through completed bookings.",
+                },
+                {
+                  icon: <Calendar className="w-5 h-5" />,
+                  title: "Dispute resolution",
+                  desc: "If something goes wrong, our team reviews the situation and mediates a fair outcome.",
+                },
+                {
+                  icon: <TrendingUp className="w-5 h-5" />,
+                  title: "Performance tracking",
+                  desc: "See views, engagement, and subscriber impact after your guest spot goes live. Measure your ROI.",
+                },
+              ] as const
+            ).map((item) => (
+              <AnimatedItem key={item.title}>
+                <div className="glass rounded-xl p-6 h-full">
+                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent mb-4">
+                    {item.icon}
+                  </div>
+                  <h3 className="font-medium text-text-primary mb-2">{item.title}</h3>
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </AnimatedItem>
+            ))}
+          </AnimatedStagger>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section id="faq" className="py-20 px-6 border-t border-border">
+      {/* ───── FAQ ───── */}
+      <div className="gradient-divider" />
+      <section id="faq" className="py-24 px-6 bg-background">
         <div className="max-w-2xl mx-auto">
-          <p className="text-sm text-text-muted uppercase tracking-wide mb-3">FAQ</p>
-          <h2 className="text-2xl font-semibold text-text-primary mb-12">
-            Common questions
-          </h2>
+          <AnimatedSection>
+            <p className="text-sm text-accent font-medium uppercase tracking-wide mb-3">
+              FAQ
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl text-text-primary leading-tight mb-12">
+              Common questions
+            </h2>
+          </AnimatedSection>
 
-          <div className="space-y-8">
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">
-                What&apos;s a guest spot?
-              </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                A guest spot is when you appear on another creator&apos;s channel—whether that&apos;s 
-                a dedicated video featuring you, a segment in their content, a mention with a 
-                call-to-action, or a collaboration format. The host promotes you to their audience.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">
-                How is this different from a talent agency?
-              </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Agencies take 15-20% of all your earnings and require exclusivity. 
-                We only take a cut of guest spots booked through our platform. 
-                No contracts, no exclusivity, and we never touch your other income.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">
-                How do payments work?
-              </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                When you book, payment is held by COLLAB.. The host sees the funds are 
-                secured and schedules your guest spot. Once it goes live and is confirmed, 
-                funds are released within 3 business days.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">
-                Can I be both a buyer and a host?
-              </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Yes. Many mid-tier creators book guest spots on larger channels while also 
-                hosting smaller creators on their own channel. It&apos;s common to do both.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">
-                What are the requirements to become a host?
-              </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Currently, we require at least 50K subscribers on YouTube or equivalent followers on Twitch. 
-                We also review content quality and engagement metrics.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">
-                What if a host doesn&apos;t deliver?
-              </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                If a host fails to deliver the agreed guest spot, you get a full refund. 
-                Hosts who cancel or underdeliver repeatedly are removed from the platform.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-text-primary mb-2">
-                When is COLLAB. launching?
-              </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                We&apos;re in private beta. Join the waitlist to get early access—we&apos;re 
-                adding new users gradually.
-              </p>
-            </div>
-          </div>
+          <AnimatedSection delay={0.1}>
+            <Accordion type="single" collapsible>
+              <AccordionItem value="what" className="border-border">
+                <AccordionTrigger className="text-text-primary hover:no-underline text-base font-medium py-5">
+                  What&apos;s a guest spot?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-secondary leading-relaxed">
+                  A guest spot is when you appear on another creator&apos;s channel&nbsp;—
+                  whether that&apos;s a dedicated video featuring you, a segment in their
+                  content, a mention with a call-to-action, or a collaboration format. The
+                  host promotes you to their audience.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="agency" className="border-border">
+                <AccordionTrigger className="text-text-primary hover:no-underline text-base font-medium py-5">
+                  How is this different from a talent agency?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-secondary leading-relaxed">
+                  Agencies take 15-20% of all your earnings and require exclusivity. We
+                  only take a cut of guest spots booked through our platform. No contracts,
+                  no exclusivity, and we never touch your other income.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="payments" className="border-border">
+                <AccordionTrigger className="text-text-primary hover:no-underline text-base font-medium py-5">
+                  How do payments work?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-secondary leading-relaxed">
+                  When you book, payment is held by COLLAB. The host sees the funds are
+                  secured and schedules your guest spot. Once it goes live and is confirmed,
+                  funds are released within 3 business days.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="both" className="border-border">
+                <AccordionTrigger className="text-text-primary hover:no-underline text-base font-medium py-5">
+                  Can I be both a buyer and a host?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-secondary leading-relaxed">
+                  Yes. Many mid-tier creators book guest spots on larger channels while also
+                  hosting smaller creators on their own channel. It&apos;s common to do
+                  both.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="host-req" className="border-border">
+                <AccordionTrigger className="text-text-primary hover:no-underline text-base font-medium py-5">
+                  What are the requirements to become a host?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-secondary leading-relaxed">
+                  Currently, we require at least 50K subscribers on YouTube or equivalent
+                  followers on Twitch. We also review content quality and engagement
+                  metrics.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="refund" className="border-border">
+                <AccordionTrigger className="text-text-primary hover:no-underline text-base font-medium py-5">
+                  What if a host doesn&apos;t deliver?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-secondary leading-relaxed">
+                  If a host fails to deliver the agreed guest spot, you get a full refund.
+                  Hosts who cancel or underdeliver repeatedly are removed from the platform.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="launch" className="border-border">
+                <AccordionTrigger className="text-text-primary hover:no-underline text-base font-medium py-5">
+                  When is COLLAB. launching?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-secondary leading-relaxed">
+                  We&apos;re in early access. Join the waitlist to get priority
+                  access&nbsp;— we&apos;re adding new users gradually.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </AnimatedSection>
         </div>
       </section>
 
-      {/* CTA */}
-      <section id="waitlist" className="py-20 px-6 bg-surface">
-        <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-2xl font-semibold text-text-primary mb-4">
-            Ready to grow faster?
-          </h2>
-          <p className="text-text-secondary mb-8">
-            Join the waitlist to get early access. Whether you want to buy guest spots 
-            or sell them, we&apos;ll notify you when we&apos;re ready.
-          </p>
+      {/* ───── CTA / WAITLIST ───── */}
+      <section id="waitlist" className="relative py-28 px-6 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(168,85,247,0.04) 50%, var(--background) 100%)",
+          }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none opacity-25 blur-[120px]"
+          style={{ background: "radial-gradient(circle, var(--accent) 0%, transparent 70%)" }}
+        />
 
-          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="flex-1 bg-surface-raised border border-border rounded-md px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
-              required
-            />
-            <button
-              type="submit"
-              className="bg-accent hover:bg-accent-hover text-white text-sm font-medium px-5 py-2.5 rounded-md transition-colors whitespace-nowrap"
-            >
-              Join waitlist
-            </button>
-          </form>
+        <div className="relative max-w-xl mx-auto">
+          <AnimatedSection>
+            <div className="text-center mb-10">
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-text-primary leading-tight mb-4">
+                Ready to grow faster?
+              </h2>
+              <p className="text-text-secondary text-lg">
+                Join the waitlist for early access. Whether you want to buy guest spots or
+                sell them, we&apos;ll notify you when we&apos;re ready.
+              </p>
+            </div>
+          </AnimatedSection>
 
-          <div className="mt-6 flex justify-center gap-6 text-sm text-text-muted">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="interest" className="accent-accent" defaultChecked />
-              I want to buy guest spots
-            </label>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="interest" className="accent-accent" />
-              I want to host
-            </label>
-          </div>
+          <AnimatedSection delay={0.15}>
+            <div className="glass rounded-xl p-8">
+              {submitted ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-center py-4"
+                >
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="w-6 h-6 text-emerald-500" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-text-primary mb-2">
+                    You&apos;re on the list!
+                  </h3>
+                  <p className="text-sm text-text-secondary">
+                    We&apos;ll email you at{" "}
+                    <span className="text-text-primary font-medium">{email}</span> when
+                    it&apos;s your turn. No spam, ever.
+                  </p>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleWaitlistSubmit} className="space-y-6">
+                  <div>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="w-full bg-surface-raised border border-border rounded-xl px-4 py-3.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+                      required
+                    />
+                  </div>
 
-          <p className="mt-6 text-xs text-text-muted">
-            We&apos;ll email you when it&apos;s your turn. No spam.
-          </p>
+                  <div className="flex justify-center gap-6">
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-text-muted hover:text-text-secondary transition-colors">
+                      <input
+                        type="radio"
+                        name="interest"
+                        value="buyer"
+                        checked={interest === "buyer"}
+                        onChange={() => setInterest("buyer")}
+                        className="accent-accent"
+                      />
+                      I want to buy guest spots
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-text-muted hover:text-text-secondary transition-colors">
+                      <input
+                        type="radio"
+                        name="interest"
+                        value="host"
+                        checked={interest === "host"}
+                        onChange={() => setInterest("host")}
+                        className="accent-accent"
+                      />
+                      I want to host
+                    </label>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold px-6 py-3.5 rounded-full text-base transition-all hover:shadow-lg hover:shadow-accent/25"
+                  >
+                    {submitting ? "Joining..." : "Join the waitlist"}
+                  </button>
+
+                  <p className="text-xs text-text-muted text-center">
+                    We&apos;ll email you when it&apos;s your turn. No spam.
+                  </p>
+                </form>
+              )}
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
