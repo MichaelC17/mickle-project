@@ -201,7 +201,7 @@ export default function Header() {
       <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <span className="text-text-primary text-2xl font-bold tracking-tight">
-            COLLAB<span className="text-accent">.</span>
+            COMARI<span className="text-accent">.</span>
           </span>
         </Link>
 
@@ -421,7 +421,7 @@ export default function Header() {
             >
               <SheetHeader className="px-6 pt-6 pb-4 border-b border-border">
                 <SheetTitle className="text-text-primary text-left text-xl font-bold tracking-tight">
-                  COLLAB<span className="text-accent">.</span>
+                  COMARI<span className="text-accent">.</span>
                 </SheetTitle>
               </SheetHeader>
 

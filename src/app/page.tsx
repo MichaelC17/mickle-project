@@ -256,7 +256,7 @@ export default function Home() {
                   A marketplace where exposure has a price tag
                 </h2>
                 <p className="text-text-secondary leading-relaxed mb-6">
-                  COLLAB. lets you browse creators who are actively selling guest spots on
+                  COMARI. lets you browse creators who are actively selling guest spots on
                   their channels. See their audience size, niche, and rates. Book instantly.
                   Coordinate through our platform. Get in front of thousands&nbsp;— or
                   millions&nbsp;— of potential subscribers.
@@ -890,7 +890,7 @@ export default function Home() {
                   How do payments work?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-secondary leading-relaxed">
-                  When you book, payment is held by COLLAB. The host sees the funds are
+                  When you book, payment is held by COMARI. The host sees the funds are
                   secured and schedules your guest spot. Once it goes live and is confirmed,
                   funds are released within 3 business days.
                 </AccordionContent>
@@ -930,7 +930,7 @@ export default function Home() {
 
               <AccordionItem value="launch" className="border-border">
                 <AccordionTrigger className="text-text-primary hover:no-underline text-base font-medium py-5">
-                  When is COLLAB. launching?
+                  When is COMARI. launching?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-secondary leading-relaxed">
                   We&apos;re in early access. Join the waitlist to get priority

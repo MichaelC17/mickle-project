@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const resend = new Resend(process.env.RESEND_API_KEY)
 
     const { data, error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || "Collab <notifications@collab.com>",
+      from: process.env.EMAIL_FROM || "Comari <notifications@comari.com>",
       to,
       subject,
       html,

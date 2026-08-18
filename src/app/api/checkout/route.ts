@@ -56,7 +56,7 @@ export async function POST(request: Request) {
             currency: "usd",
             product_data: {
               name: `${packageName} with ${hostName}`,
-              description: `Guest spot package on COLLAB.`,
+              description: `Guest spot package on COMARI.`,
             },
             unit_amount: amountInCents,
           },

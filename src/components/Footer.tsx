@@ -45,7 +45,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="inline-block">
               <span className="text-text-primary text-2xl font-bold tracking-tight">
-                COLLAB<span className="text-accent">.</span>
+                COMARI<span className="text-accent">.</span>
               </span>
             </Link>
             <p className="mt-5 text-sm text-text-muted leading-relaxed">
@@ -133,14 +133,14 @@ export default function Footer() {
         <div className="gradient-divider" />
         <div className="pt-10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-text-muted">
-            &copy; {new Date().getFullYear()} COLLAB. All rights reserved.
+            &copy; {new Date().getFullYear()} COMARI. All rights reserved.
           </p>
           <a
-            href="mailto:hello@collab.io"
+            href="mailto:hello@comari.io"
             className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors"
           >
             <Mail className="w-3.5 h-3.5" />
-            hello@collab.io
+            hello@comari.io
           </a>
         </div>
       </div>

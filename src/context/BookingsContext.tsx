@@ -44,7 +44,7 @@ export function BookingsProvider({ children }: { children: React.ReactNode }) {
   // Load from localStorage on mount
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem("collab-bookings");
+    const saved = localStorage.getItem("comari-bookings");
     if (saved) {
       try {
         setBookings(JSON.parse(saved));
@@ -57,7 +57,7 @@ export function BookingsProvider({ children }: { children: React.ReactNode }) {
   // Save to localStorage when bookings change
   useEffect(() => {
     if (mounted) {
-      localStorage.setItem("collab-bookings", JSON.stringify(bookings));
+      localStorage.setItem("comari-bookings", JSON.stringify(bookings));
     }
   }, [bookings, mounted]);
 

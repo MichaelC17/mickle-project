@@ -7,23 +7,23 @@ import SessionProvider from "@/components/SessionProvider";
 
 export const metadata: Metadata = {
   title: {
-    default: "COLLAB. – The Marketplace for Creator Collaborations",
-    template: "%s | COLLAB.",
+    default: "COMARI. – The Marketplace for Creator Collaborations",
+    template: "%s | COMARI.",
   },
   description: "Book verified YouTube and Twitch creators for paid collaborations. Browse creators, set pricing, coordinate logistics, and track results.",
   keywords: ["creator collaborations", "youtube collaborations", "twitch collaborations", "creator marketplace", "gaming collaborations"],
-  authors: [{ name: "COLLAB." }],
+  authors: [{ name: "COMARI." }],
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://collab.io",
-    siteName: "COLLAB.",
-    title: "COLLAB. – The Marketplace for Creator Collaborations",
+    url: "https://comari.io",
+    siteName: "COMARI.",
+    title: "COMARI. – The Marketplace for Creator Collaborations",
     description: "Book verified YouTube and Twitch creators for paid collaborations.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "COLLAB. – The Marketplace for Creator Collaborations",
+    title: "COMARI. – The Marketplace for Creator Collaborations",
     description: "Book verified YouTube and Twitch creators for paid collaborations.",
   },
   robots: {

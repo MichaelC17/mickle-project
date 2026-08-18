@@ -84,7 +84,7 @@ function LoginContent() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
             <Link href="/" className="inline-flex">
               <span className="font-display text-2xl text-text-primary tracking-tight">
-                COLLAB.
+                COMARI.
               </span>
             </Link>
           </motion.div>
@@ -118,7 +118,7 @@ function LoginContent() {
             transition={{ delay: 0.8 }}
             className="text-text-muted text-sm"
           >
-            &copy; {new Date().getFullYear()} COLLAB. All rights reserved.
+            &copy; {new Date().getFullYear()} COMARI. All rights reserved.
           </motion.p>
         </div>
       </div>
@@ -137,7 +137,7 @@ function LoginContent() {
           <motion.div variants={fadeUp}>
             <Link href="/" className="lg:hidden inline-flex mb-10">
               <span className="font-display text-2xl text-text-primary tracking-tight">
-                COLLAB.
+                COMARI.
               </span>
             </Link>
           </motion.div>

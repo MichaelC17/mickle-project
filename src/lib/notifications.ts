@@ -54,7 +54,7 @@ async function sendEmailNotification(
 
     const resend = new Resend(process.env.RESEND_API_KEY)
     const { error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || "COLLAB. <notifications@collab.com>",
+      from: process.env.EMAIL_FROM || "COMARI. <notifications@comari.com>",
       to: user.email,
       subject: title,
       html: generateEmailHtml(user.name || "there", title, message, fullLink),
@@ -95,7 +95,7 @@ function generateEmailHtml(
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
     <tr>
       <td style="padding: 40px 30px; background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);">
-        <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">Collab</h1>
+        <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">Comari</h1>
       </td>
     </tr>
     <tr>
@@ -109,7 +109,7 @@ function generateEmailHtml(
     <tr>
       <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb;">
         <p style="margin: 0; color: #9ca3af; font-size: 12px; text-align: center;">
-          © ${new Date().getFullYear()} Collab. All rights reserved.<br>
+          © ${new Date().getFullYear()} Comari. All rights reserved.<br>
           <a href="${process.env.NEXT_PUBLIC_BASE_URL}" style="color: #7c3aed; text-decoration: none;">Unsubscribe</a>
         </p>
       </td>

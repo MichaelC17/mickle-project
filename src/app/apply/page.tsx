@@ -64,7 +64,7 @@ const PACKAGE_TEMPLATES: PackageInput[] = [
     ],
   },
   {
-    name: "Featured Collab",
+    name: "Featured Spot",
     price: "500",
     description: "A dedicated collaboration with full promotion",
     includes: [
