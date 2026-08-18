@@ -136,11 +136,11 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} COMARI. All rights reserved.
           </p>
           <a
-            href="mailto:hello@comari.io"
+            href="mailto:hello@comari.app"
             className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors"
           >
             <Mail className="w-3.5 h-3.5" />
-            hello@comari.io
+            hello@comari.app
           </a>
         </div>
       </div>

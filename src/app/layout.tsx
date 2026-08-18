@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://comari.io",
+    url: "https://comari.app",
     siteName: "COMARI.",
     title: "COMARI. – The Marketplace for Creator Collaborations",
     description: "Book verified YouTube and Twitch creators for paid collaborations.",
