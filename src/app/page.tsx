@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
@@ -30,31 +29,6 @@ import {
 } from "lucide-react";
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [interest, setInterest] = useState<"buyer" | "host">("buyer");
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-
-  async function handleWaitlistSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email || submitting) return;
-    setSubmitting(true);
-    try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, interest }),
-      });
-      if (res.ok) {
-        setSubmitted(true);
-      }
-    } catch {
-      // Silently handle -- user can retry
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
   return (
     <>
       <Header />
@@ -124,8 +98,8 @@ export default function Home() {
                 <p className="text-sm text-text-muted">Verified creators</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-bold text-text-primary mb-1">10K+</p>
-                <p className="text-sm text-text-muted">Min host subscribers</p>
+                <p className="text-3xl font-bold text-text-primary mb-1">24h</p>
+                <p className="text-sm text-text-muted">Avg response time</p>
               </div>
             </div>
           </AnimatedSection>
@@ -930,11 +904,11 @@ export default function Home() {
 
               <AccordionItem value="launch" className="border-border">
                 <AccordionTrigger className="text-text-primary hover:no-underline text-base font-medium py-5">
-                  When is COMARI. launching?
+                  Is COMARI. available now?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-secondary leading-relaxed">
-                  We&apos;re in early access. Join the waitlist to get priority
-                  access&nbsp;— we&apos;re adding new users gradually.
+                  Yes! COMARI. is live. You can browse creators and book guest spots
+                  right now, or apply to become a host if you have a YouTube channel.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
@@ -942,8 +916,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ───── CTA / WAITLIST ───── */}
-      <section id="waitlist" className="relative py-28 px-6 overflow-hidden">
+      {/* ───── CTA ───── */}
+      <section className="relative py-28 px-6 overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -963,84 +937,27 @@ export default function Home() {
                 Ready to grow faster?
               </h2>
               <p className="text-text-secondary text-lg">
-                Join the waitlist for early access. Whether you want to buy guest spots or
-                sell them, we&apos;ll notify you when we&apos;re ready.
+                Browse verified creators and book your first guest spot, or apply to
+                become a host and start earning.
               </p>
             </div>
           </AnimatedSection>
 
           <AnimatedSection delay={0.15}>
-            <div className="glass rounded-xl p-8">
-              {submitted ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="text-center py-4"
-                >
-                  <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="w-6 h-6 text-emerald-500" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-2">
-                    You&apos;re on the list!
-                  </h3>
-                  <p className="text-sm text-text-secondary">
-                    We&apos;ll email you at{" "}
-                    <span className="text-text-primary font-medium">{email}</span> when
-                    it&apos;s your turn. No spam, ever.
-                  </p>
-                </motion.div>
-              ) : (
-                <form onSubmit={handleWaitlistSubmit} className="space-y-6">
-                  <div>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="w-full bg-surface-raised border border-border rounded-xl px-4 py-3.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
-                      required
-                    />
-                  </div>
-
-                  <div className="flex justify-center gap-6">
-                    <label className="flex items-center gap-2 cursor-pointer text-sm text-text-muted hover:text-text-secondary transition-colors">
-                      <input
-                        type="radio"
-                        name="interest"
-                        value="buyer"
-                        checked={interest === "buyer"}
-                        onChange={() => setInterest("buyer")}
-                        className="accent-accent"
-                      />
-                      I want to buy guest spots
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer text-sm text-text-muted hover:text-text-secondary transition-colors">
-                      <input
-                        type="radio"
-                        name="interest"
-                        value="host"
-                        checked={interest === "host"}
-                        onChange={() => setInterest("host")}
-                        className="accent-accent"
-                      />
-                      I want to host
-                    </label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold px-6 py-3.5 rounded-full text-base transition-all hover:shadow-lg hover:shadow-accent/25"
-                  >
-                    {submitting ? "Joining..." : "Join the waitlist"}
-                  </button>
-
-                  <p className="text-xs text-text-muted text-center">
-                    We&apos;ll email you when it&apos;s your turn. No spam.
-                  </p>
-                </form>
-              )}
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Link
+                href="/browse"
+                className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:shadow-accent/25"
+              >
+                Browse Creators
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                href="/apply"
+                className="inline-flex items-center justify-center gap-2 glass text-text-primary font-semibold px-8 py-4 rounded-full text-lg transition-colors hover:bg-surface-raised"
+              >
+                Become a Host
+              </Link>
             </div>
           </AnimatedSection>
         </div>

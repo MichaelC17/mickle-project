@@ -405,7 +405,7 @@ export default function ApplyPage() {
 
                   <div className="flex items-center justify-center gap-2 text-text-muted text-xs">
                     <Clock className="w-3.5 h-3.5" />
-                    <span>Twitch and TikTok host onboarding coming Q2 2026.</span>
+                    <span>Twitch and TikTok coming soon.</span>
                   </div>
                 </div>
               )}

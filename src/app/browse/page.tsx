@@ -370,14 +370,14 @@ export default function BrowsePage() {
                     Creators are coming soon
                   </h2>
                   <p className="text-text-secondary mb-8 max-w-md mx-auto">
-                    We&apos;re onboarding creators now. Join the waitlist to get
-                    notified when new hosts are available.
+                    We&apos;re onboarding creators now. Check back soon or become
+                    one of our first hosts!
                   </p>
                   <Link
-                    href="/#waitlist"
+                    href="/apply"
                     className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-full transition-colors"
                   >
-                    Join the Waitlist
+                    Become a Host
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </>
