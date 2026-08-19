@@ -912,9 +912,9 @@ export default function Home() {
                   What are the requirements to become a host?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-secondary leading-relaxed">
-                  Currently, we require at least 10K subscribers on YouTube or equivalent
-                  followers on Twitch. We also review content quality and engagement
-                  metrics.
+                  Any creator with a YouTube channel can apply to become a host. We review
+                  content quality and engagement metrics to ensure a great experience for
+                  both hosts and buyers.
                 </AccordionContent>
               </AccordionItem>
 

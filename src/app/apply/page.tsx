@@ -19,7 +19,6 @@ import {
   Clock,
   Users,
   Sparkles,
-  Mail,
 } from "lucide-react"
 
 interface YouTubeChannel {
@@ -87,8 +86,6 @@ const PACKAGE_TEMPLATES: PackageInput[] = [
     ],
   },
 ]
-
-const MIN_SUBSCRIBERS = 10000
 
 const STEPS = [
   { label: "Connect YouTube", icon: Youtube },
@@ -189,14 +186,10 @@ export default function ApplyPage() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState("")
-  const [belowMinSubs, setBelowMinSubs] = useState(false)
 
   const [niche, setNiche] = useState("")
   const [bio, setBio] = useState("")
   const [packages, setPackages] = useState<PackageInput[]>([{ ...DEFAULT_PACKAGE }])
-
-  const [waitlistEmail, setWaitlistEmail] = useState("")
-  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false)
 
   useEffect(() => {
     if (status === "loading") return
@@ -219,11 +212,7 @@ export default function ApplyPage() {
         if (channelRes.ok) {
           const data = await channelRes.json()
           setChannel(data)
-          if (data.subscriberCount < MIN_SUBSCRIBERS) {
-            setBelowMinSubs(true)
-          } else {
-            setStep(2)
-          }
+          setStep(2)
         }
       }
 
@@ -340,13 +329,6 @@ export default function ApplyPage() {
     }
   }
 
-  const handleWaitlistSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (waitlistEmail) {
-      setWaitlistSubmitted(true)
-    }
-  }
-
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -391,117 +373,12 @@ export default function ApplyPage() {
                 </button>
               </div>
             </div>
-          ) : belowMinSubs && channel ? (
-            <div className="fade-in space-y-6">
-              <div className="glass rounded-xl p-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <AlertTriangle className="w-8 h-8 text-yellow-500" />
-                  </div>
-
-                  <div className="inline-flex items-center gap-3 px-4 py-2.5 rounded-xl bg-surface-raised mb-6">
-                    {channel.thumbnail && (
-                      <img
-                        src={channel.thumbnail}
-                        alt={channel.name}
-                        className="w-10 h-10 rounded-full"
-                      />
-                    )}
-                    <div className="text-left">
-                      <p className="font-semibold text-text-primary text-sm">{channel.name}</p>
-                      <p className="text-xs text-text-muted">
-                        {formatNumber(channel.subscriberCount)} subscribers
-                      </p>
-                    </div>
-                  </div>
-
-                  <h2 className="text-xl font-semibold text-text-primary mb-2">
-                    Not Eligible Yet
-                  </h2>
-                  <p className="text-text-secondary mb-2">
-                    Your channel needs at least{" "}
-                    <span className="font-semibold text-text-primary">10,000 subscribers</span>{" "}
-                    to become a host.
-                  </p>
-                  <p className="text-text-muted text-sm mb-8">
-                    You currently have {formatNumber(channel.subscriberCount)} subscribers.
-                  </p>
-                </div>
-
-                <div className="border-t border-border pt-6">
-                  {waitlistSubmitted ? (
-                    <div className="text-center">
-                      <div className="w-10 h-10 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <Check className="w-5 h-5 text-emerald-500" />
-                      </div>
-                      <p className="text-text-primary font-medium">You&apos;re on the list!</p>
-                      <p className="text-text-muted text-sm mt-1">
-                        We&apos;ll email you when you qualify or when we lower the threshold.
-                      </p>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleWaitlistSubmit} className="space-y-3">
-                      <div className="flex items-center gap-2 text-text-secondary text-sm">
-                        <Mail className="w-4 h-4" />
-                        <span>Join the waitlist</span>
-                      </div>
-                      <p className="text-text-muted text-xs">
-                        We&apos;ll notify you when you qualify or when we lower the threshold.
-                      </p>
-                      <div className="flex gap-2">
-                        <Input
-                          type="email"
-                          placeholder="you@email.com"
-                          value={waitlistEmail}
-                          onChange={(e) => setWaitlistEmail(e.target.value)}
-                          required
-                          className="flex-1 bg-background border-border rounded-full px-4 h-10"
-                        />
-                        <button
-                          type="submit"
-                          className="bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-5 py-2 rounded-full transition-colors text-sm whitespace-nowrap"
-                        >
-                          Notify Me
-                        </button>
-                      </div>
-                    </form>
-                  )}
-                </div>
-              </div>
-
-              <button
-                onClick={() => router.push("/browse")}
-                className="w-full text-text-secondary hover:text-text-primary font-medium py-3 rounded-full transition-colors text-sm border border-border hover:border-text-muted"
-              >
-                Browse Hosts Instead
-              </button>
-            </div>
           ) : (
             <>
               <StepIndicator currentStep={step} />
 
               {step === 1 && (
                 <div className="space-y-6 fade-in">
-                  <div className="relative overflow-hidden rounded-xl bg-indigo-500/5 border border-indigo-500/20 p-6">
-                    <div className="flex gap-4">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center">
-                        <Users className="w-5 h-5 text-indigo-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-text-primary mb-1">
-                          Subscriber Requirement
-                        </h3>
-                        <p className="text-text-secondary text-sm leading-relaxed">
-                          To become a host, you need at least{" "}
-                          <span className="font-bold text-indigo-400">
-                            10,000 YouTube subscribers
-                          </span>{" "}
-                          on your channel.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
                   <div className="glass rounded-xl p-8">
                     <div className="text-center mb-8">
                       <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
