@@ -98,8 +98,8 @@ export default function Home() {
                 <p className="text-sm text-text-muted">Verified creators</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-bold text-text-primary mb-1">24h</p>
-                <p className="text-sm text-text-muted">Avg response time</p>
+                <p className="text-3xl font-bold text-text-primary mb-1">Secure</p>
+                <p className="text-sm text-text-muted">Stripe payments</p>
               </div>
             </div>
           </AnimatedSection>
@@ -332,8 +332,8 @@ export default function Home() {
                   Get featured, grow
                 </h3>
                 <p className="text-sm text-text-secondary leading-relaxed">
-                  Your guest spot goes live. Track views, click-throughs, and new
-                  subscribers directly in your dashboard.
+                  Your guest spot goes live. Watch your channel grow as new viewers
+                  discover your content.
                 </p>
               </div>
             </AnimatedItem>
@@ -529,14 +529,14 @@ export default function Home() {
                     desc: "The additional subscribers gained over 90 days, above what the creator was already averaging.",
                   },
                   {
-                    icon: <CreditCard className="w-5 h-5" />,
-                    title: "Cost per incremental sub",
-                    desc: "What you actually paid for each subscriber above baseline — the true ROI metric.",
-                  },
-                  {
                     icon: <CheckCircle className="w-5 h-5" />,
                     title: "Completion rate",
                     desc: "See how reliably this host delivers on bookings. No surprises.",
+                  },
+                  {
+                    icon: <Star className="w-5 h-5" />,
+                    title: "Reviews & ratings",
+                    desc: "Read what other creators experienced working with this host before you book.",
                   },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-4">
@@ -594,14 +594,12 @@ export default function Home() {
                       <p className="text-xs text-text-muted">+94K incremental views</p>
                     </div>
                     <div>
-                      <p className="text-xs text-text-muted mb-1">
-                        Cost per incremental sub
-                      </p>
-                      <p className="text-lg font-semibold text-text-primary">$0.25</p>
-                    </div>
-                    <div>
                       <p className="text-xs text-text-muted mb-1">Completion rate</p>
                       <p className="text-lg font-semibold text-text-primary">100%</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">Avg rating</p>
+                      <p className="text-lg font-semibold text-text-primary">4.9 ★</p>
                     </div>
                   </div>
                 </div>
@@ -686,7 +684,7 @@ export default function Home() {
                   </li>
                   <li className="flex items-start gap-2 text-sm text-text-secondary">
                     <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
-                    Payouts within 3 business days
+                    Fast payouts via Stripe
                   </li>
                   <li className="flex items-start gap-2 text-sm text-text-secondary">
                     <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
@@ -790,18 +788,13 @@ export default function Home() {
                 },
                 {
                   icon: <Star className="w-5 h-5" />,
-                  title: "Ratings",
+                  title: "Reviews & ratings",
                   desc: "Both parties leave feedback after each guest spot. Reputation is built through completed bookings.",
                 },
                 {
-                  icon: <Calendar className="w-5 h-5" />,
-                  title: "Dispute resolution",
-                  desc: "If something goes wrong, our team reviews the situation and mediates a fair outcome.",
-                },
-                {
                   icon: <TrendingUp className="w-5 h-5" />,
-                  title: "Performance tracking",
-                  desc: "See views, engagement, and subscriber impact after your guest spot goes live. Measure your ROI.",
+                  title: "Growth tracking",
+                  desc: "Track subscriber and view growth over 90 days after your guest spot to measure real impact.",
                 },
               ] as const
             ).map((item) => (
@@ -865,8 +858,8 @@ export default function Home() {
                 </AccordionTrigger>
                 <AccordionContent className="text-text-secondary leading-relaxed">
                   When you book, payment is held by COMARI. The host sees the funds are
-                  secured and schedules your guest spot. Once it goes live and is confirmed,
-                  funds are released within 3 business days.
+                  secured and schedules your guest spot. Once both parties confirm completion,
+                  funds are released to the host via Stripe.
                 </AccordionContent>
               </AccordionItem>
 
