@@ -92,36 +92,53 @@ async function initializeGrowthTracking(booking: {
   buyerId: string
 }) {
   try {
-    const buyer = await prisma.user.findUnique({
-      where: { id: booking.buyerId },
-      include: {
-        accounts: {
-          where: { provider: "google-youtube" },
-        },
-      },
+    const existingTracking = await prisma.growthTracking.findUnique({
+      where: { bookingId: booking.id },
     })
-
-    if (!buyer?.accounts[0]) {
-      console.log("No YouTube account found for buyer, skipping growth tracking")
-      return
-    }
 
     const now = new Date()
     const trackingEndDate = new Date(now)
     trackingEndDate.setDate(trackingEndDate.getDate() + 90)
 
-    await prisma.growthTracking.create({
-      data: {
-        bookingId: booking.id,
-        buyerChannelId: buyer.accounts[0].providerAccountId,
-        baselineSubCount: 0,
-        baselineViewCount: 0,
-        baselineDate: now,
-        trackingStartDate: now,
-        trackingEndDate,
-        status: "TRACKING",
-      },
-    })
+    if (existingTracking) {
+      await prisma.growthTracking.update({
+        where: { id: existingTracking.id },
+        data: {
+          trackingStartDate: now,
+          trackingEndDate,
+          status: "TRACKING",
+        },
+      })
+      console.log("Started 90-day tracking for booking:", booking.id)
+    } else {
+      const buyer = await prisma.user.findUnique({
+        where: { id: booking.buyerId },
+        include: {
+          accounts: {
+            where: { provider: "google-youtube" },
+          },
+        },
+      })
+
+      if (!buyer?.accounts[0]) {
+        console.log("No YouTube account found for buyer, skipping growth tracking")
+        return
+      }
+
+      await prisma.growthTracking.create({
+        data: {
+          bookingId: booking.id,
+          buyerChannelId: buyer.accounts[0].providerAccountId,
+          baselineSubCount: 0,
+          baselineViewCount: 0,
+          baselineDate: now,
+          trackingStartDate: now,
+          trackingEndDate,
+          status: "TRACKING",
+        },
+      })
+      console.log("Created new tracking (no baseline) for booking:", booking.id)
+    }
   } catch (error) {
     console.error("Error initializing growth tracking:", error)
   }

@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/check-growth",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/check-inactive-hosts",
+      "schedule": "0 0 * * 0"
+    }
+  ]
+}
