@@ -79,12 +79,17 @@ model Host {
   stripeChargesEnabled   Boolean   @default(false)
   stripePayoutsEnabled   Boolean   @default(false)
   
+  // Activity tracking
+  lastVideoCheck   DateTime?
+  lastVideoDate    DateTime?
+  
   isActive         Boolean   @default(true)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   
   packages         Package[]
   bookings         Booking[]
+  reviewsReceived  Review[]  @relation("HostReviews")
 }
 
 model Package {
@@ -164,12 +169,19 @@ model Booking {
   notes           String?
   scheduledDate   DateTime?
   
+  // Completion confirmation
+  hostConfirmedComplete   Boolean   @default(false)
+  buyerConfirmedComplete  Boolean   @default(false)
+  completedAt             DateTime?
+  
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   
-  messages        Message[]
+  messages          Message[]
   scheduleProposals ScheduleProposal[]
-  refundRequest   RefundRequest?
+  refundRequest     RefundRequest?
+  reviews           Review[]
+  growthTracking    GrowthTracking?
 }
 
 model Message {
@@ -252,4 +264,73 @@ enum Role {
   CREATOR
   HOST
   ADMIN
+}
+
+model Review {
+  id          String       @id @default(cuid())
+  
+  bookingId   String
+  booking     Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  
+  // Who is being reviewed (host)
+  hostId      String
+  host        Host         @relation("HostReviews", fields: [hostId], references: [id], onDelete: Cascade)
+  
+  // Who left the review (buyer)
+  reviewerId  String
+  
+  reviewerType ReviewerType
+  
+  rating      Int          // 1-5 stars
+  comment     String?
+  
+  createdAt   DateTime     @default(now())
+  
+  @@unique([bookingId, reviewerType])
+  @@index([hostId])
+}
+
+enum ReviewerType {
+  BUYER
+  HOST
+}
+
+model GrowthTracking {
+  id              String         @id @default(cuid())
+  
+  bookingId       String         @unique
+  booking         Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  
+  buyerChannelId  String
+  
+  // Baseline stats (captured at booking creation)
+  baselineSubCount    Int
+  baselineViewCount   Int
+  baselineDate        DateTime
+  
+  // Tracking window (90 days after completion)
+  trackingStartDate   DateTime
+  trackingEndDate     DateTime
+  
+  // Final stats (captured after 90 days)
+  finalSubCount       Int?
+  finalViewCount      Int?
+  
+  // Calculated growth
+  subGrowth           Int?
+  viewGrowth          Int?
+  subGrowthPercent    Float?
+  viewGrowthPercent   Float?
+  
+  status              TrackingStatus @default(PENDING)
+  
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+}
+
+enum TrackingStatus {
+  PENDING
+  TRACKING
+  COMPLETED
+  FAILED
 }

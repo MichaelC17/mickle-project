@@ -27,6 +27,7 @@ import {
   RotateCcw,
   AlertCircle,
   Globe,
+  Star,
 } from "lucide-react"
 
 // ── Types ──────────────────────────────────────────────
@@ -63,6 +64,9 @@ interface Booking {
   platformFee: number
   scheduledDate: string | null
   createdAt: string
+  hostConfirmedComplete: boolean
+  buyerConfirmedComplete: boolean
+  completedAt: string | null
   package: {
     name: string
     description: string | null
@@ -86,6 +90,13 @@ interface Booking {
     }
   }
   isHost: boolean
+}
+
+interface Review {
+  id: string
+  rating: number
+  comment: string | null
+  createdAt: string
 }
 
 // ── Status Timeline ────────────────────────────────────
@@ -221,6 +232,14 @@ export default function BookingDetailPage() {
   const [refundReason, setRefundReason] = useState("")
   const [refundRequest, setRefundRequest] = useState<RefundRequest | null>(null)
   const [requestingRefund, setRequestingRefund] = useState(false)
+  
+  // Review & completion state
+  const [confirmingComplete, setConfirmingComplete] = useState(false)
+  const [myReview, setMyReview] = useState<Review | null>(null)
+  const [showReviewModal, setShowReviewModal] = useState(false)
+  const [reviewRating, setReviewRating] = useState(5)
+  const [reviewComment, setReviewComment] = useState("")
+  const [submittingReview, setSubmittingReview] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -249,6 +268,12 @@ export default function BookingDetailPage() {
       fetchRefundRequest()
     }
   }, [booking?.id, booking?.isHost])
+
+  useEffect(() => {
+    if (booking?.status === "COMPLETED" || booking?.status === "completed") {
+      fetchReview()
+    }
+  }, [booking?.id, booking?.status])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -400,6 +425,58 @@ export default function BookingDetailPage() {
     }
   }
 
+  const fetchReview = async () => {
+    try {
+      const res = await fetch(`/api/bookings/${bookingId}/review`)
+      if (res.ok) {
+        const data = await res.json()
+        setMyReview(data.myReview || null)
+      }
+    } catch (error) {
+      console.error("Failed to fetch review:", error)
+    }
+  }
+
+  const confirmCompletion = async () => {
+    if (confirmingComplete) return
+    setConfirmingComplete(true)
+    try {
+      const res = await fetch(`/api/bookings/${bookingId}/complete`, {
+        method: "POST",
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setBooking(data.booking)
+      }
+    } catch (error) {
+      console.error("Failed to confirm completion:", error)
+    } finally {
+      setConfirmingComplete(false)
+    }
+  }
+
+  const submitReview = async () => {
+    if (submittingReview) return
+    setSubmittingReview(true)
+    try {
+      const res = await fetch(`/api/bookings/${bookingId}/review`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating: reviewRating, comment: reviewComment }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setMyReview(data.review)
+        setShowReviewModal(false)
+        setReviewComment("")
+      }
+    } catch (error) {
+      console.error("Failed to submit review:", error)
+    } finally {
+      setSubmittingReview(false)
+    }
+  }
+
   // ── Derived values ──
 
   const otherParty = booking?.isHost ? booking.buyer : booking?.host.user
@@ -531,6 +608,89 @@ export default function BookingDetailPage() {
               </div>
             )}
 
+            {/* Completion confirmation — IN_PROGRESS only */}
+            {booking.status === "in_progress" && (
+              <div className="relative mt-5 pt-5 border-t border-white/[0.06]">
+                <div className="bg-accent/10 ring-1 ring-accent/20 rounded-xl p-4">
+                  <p className="text-sm font-medium text-accent mb-3">
+                    Confirm completion
+                  </p>
+                  <p className="text-xs text-white/60 mb-4">
+                    Once both you and the {booking.isHost ? "buyer" : "host"} confirm the guest spot is complete, the booking will be finalized.
+                  </p>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium ${
+                      booking.hostConfirmedComplete 
+                        ? "bg-emerald-500/20 text-emerald-400" 
+                        : "bg-white/5 text-white/40"
+                    }`}>
+                      {booking.hostConfirmedComplete ? <CheckCircle className="w-3.5 h-3.5" /> : <CircleDot className="w-3.5 h-3.5" />}
+                      Host {booking.hostConfirmedComplete ? "confirmed" : "pending"}
+                    </div>
+                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium ${
+                      booking.buyerConfirmedComplete 
+                        ? "bg-emerald-500/20 text-emerald-400" 
+                        : "bg-white/5 text-white/40"
+                    }`}>
+                      {booking.buyerConfirmedComplete ? <CheckCircle className="w-3.5 h-3.5" /> : <CircleDot className="w-3.5 h-3.5" />}
+                      Buyer {booking.buyerConfirmedComplete ? "confirmed" : "pending"}
+                    </div>
+                  </div>
+                  {((booking.isHost && !booking.hostConfirmedComplete) || 
+                    (!booking.isHost && !booking.buyerConfirmedComplete)) && (
+                    <button
+                      onClick={confirmCompletion}
+                      disabled={confirmingComplete}
+                      className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 text-white font-medium py-2.5 rounded-xl transition-colors text-sm"
+                    >
+                      {confirmingComplete ? "Confirming..." : "Confirm Completion"}
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Review section — COMPLETED only */}
+            {booking.status === "completed" && (
+              <div className="relative mt-5 pt-5 border-t border-white/[0.06]">
+                {myReview ? (
+                  <div className="bg-emerald-500/10 ring-1 ring-emerald-500/20 rounded-xl p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <p className="text-sm font-medium text-emerald-400">Your review</p>
+                      <div className="flex items-center gap-0.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`w-3.5 h-3.5 ${
+                              star <= myReview.rating ? "text-yellow-400 fill-yellow-400" : "text-white/20"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    {myReview.comment && (
+                      <p className="text-xs text-white/60">{myReview.comment}</p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="bg-accent/10 ring-1 ring-accent/20 rounded-xl p-4">
+                    <p className="text-sm font-medium text-accent mb-2">
+                      Leave a review
+                    </p>
+                    <p className="text-xs text-white/60 mb-3">
+                      Share your experience to help other creators make informed decisions.
+                    </p>
+                    <button
+                      onClick={() => setShowReviewModal(true)}
+                      className="w-full bg-accent hover:bg-accent-hover text-white font-medium py-2.5 rounded-xl transition-colors text-sm"
+                    >
+                      Write Review
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Refund section — buyer only */}
             {!booking.isHost &&
               booking.status !== "refunded" &&
@@ -649,6 +809,76 @@ export default function BookingDetailPage() {
                     className="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white font-medium text-sm transition-colors"
                   >
                     {requestingRefund ? "Submitting..." : "Submit Request"}
+                  </button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* ── Review dialog ── */}
+          <Dialog open={showReviewModal} onOpenChange={setShowReviewModal}>
+            <DialogContent className="bg-surface border-white/[0.06] rounded-xl sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle className="text-white flex items-center gap-2">
+                  <Star className="w-5 h-5 text-yellow-400" />
+                  Leave a Review
+                </DialogTitle>
+                <DialogDescription className="text-white/50">
+                  Share your experience with{" "}
+                  {booking.isHost ? booking.buyer.name : booking.host.channelName}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="mt-4 space-y-4">
+                <div>
+                  <p className="text-sm text-white/60 mb-3">Rating</p>
+                  <div className="flex items-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        onClick={() => setReviewRating(star)}
+                        className="p-1 transition-transform hover:scale-110"
+                      >
+                        <Star
+                          className={`w-8 h-8 ${
+                            star <= reviewRating
+                              ? "text-yellow-400 fill-yellow-400"
+                              : "text-white/20 hover:text-white/40"
+                          }`}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-sm text-white/60 mb-2">Comment (optional)</p>
+                  <textarea
+                    value={reviewComment}
+                    onChange={(e) => setReviewComment(e.target.value)}
+                    placeholder="Share details about your experience..."
+                    rows={4}
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-accent/50 resize-none"
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    onClick={() => {
+                      setShowReviewModal(false)
+                      setReviewComment("")
+                      setReviewRating(5)
+                    }}
+                    className="flex-1 py-3 rounded-xl border border-white/[0.08] text-white/60 hover:text-white hover:bg-white/[0.04] transition-all font-medium text-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={submitReview}
+                    disabled={submittingReview}
+                    className="flex-1 py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 text-white font-medium text-sm transition-colors"
+                  >
+                    {submittingReview ? "Submitting..." : "Submit Review"}
                   </button>
                 </div>
               </div>

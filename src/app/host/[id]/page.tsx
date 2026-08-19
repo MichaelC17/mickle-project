@@ -98,6 +98,25 @@ function HostSkeleton() {
   )
 }
 
+interface Review {
+  id: string
+  rating: number
+  comment: string | null
+  createdAt: string
+  reviewer: {
+    id: string
+    name: string | null
+    image: string | null
+  }
+  packageName: string
+}
+
+interface ReviewStats {
+  avgRating: number | null
+  totalReviews: number
+  ratingCounts: Record<number, number>
+}
+
 export default function HostProfilePage() {
   const params = useParams()
   const { showToast } = useToast()
@@ -105,6 +124,8 @@ export default function HostProfilePage() {
   const [loading, setLoading] = useState(true)
   const [selectedPackage, setSelectedPackage] = useState<number>(0)
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false)
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [reviewStats, setReviewStats] = useState<ReviewStats | null>(null)
 
   useEffect(() => {
     const fetchHost = async () => {
@@ -121,6 +142,22 @@ export default function HostProfilePage() {
       }
     }
     if (params.id) fetchHost()
+  }, [params.id])
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const res = await fetch(`/api/hosts/${params.id}/reviews`)
+        if (res.ok) {
+          const data = await res.json()
+          setReviews(data.reviews || [])
+          setReviewStats(data.stats || null)
+        }
+      } catch (error) {
+        console.error("Failed to fetch reviews:", error)
+      }
+    }
+    if (params.id) fetchReviews()
   }, [params.id])
 
   if (loading) return <HostSkeleton />
@@ -388,6 +425,87 @@ export default function HostProfilePage() {
                   ))}
                 </div>
               </AnimatedSection>
+
+              {/* Reviews section */}
+              {reviewStats && reviewStats.totalReviews > 0 && (
+                <AnimatedSection delay={0.2} className="mt-12">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold text-text-primary">
+                      Reviews
+                    </h2>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`w-4 h-4 ${
+                              reviewStats.avgRating && star <= Math.round(reviewStats.avgRating)
+                                ? "text-yellow-400 fill-yellow-400"
+                                : "text-text-muted"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-text-primary font-semibold">
+                        {reviewStats.avgRating?.toFixed(1)}
+                      </span>
+                      <span className="text-text-muted">
+                        ({reviewStats.totalReviews} {reviewStats.totalReviews === 1 ? "review" : "reviews"})
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    {reviews.slice(0, 5).map((review) => (
+                      <div
+                        key={review.id}
+                        className="glass rounded-xl p-5"
+                      >
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                          <div className="flex items-center gap-3">
+                            {review.reviewer.image ? (
+                              <img
+                                src={review.reviewer.image}
+                                alt={review.reviewer.name || "Reviewer"}
+                                className="w-10 h-10 rounded-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-semibold text-sm">
+                                {(review.reviewer.name || "?")[0].toUpperCase()}
+                              </div>
+                            )}
+                            <div>
+                              <p className="font-medium text-text-primary text-sm">
+                                {review.reviewer.name || "Anonymous"}
+                              </p>
+                              <p className="text-xs text-text-muted">
+                                {review.packageName} · {new Date(review.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-0.5">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`w-3.5 h-3.5 ${
+                                  star <= review.rating
+                                    ? "text-yellow-400 fill-yellow-400"
+                                    : "text-text-muted"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        {review.comment && (
+                          <p className="text-text-secondary text-sm leading-relaxed">
+                            {review.comment}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </AnimatedSection>
+              )}
             </div>
 
             {/* Right column: sticky checkout */}
