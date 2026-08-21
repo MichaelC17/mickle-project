@@ -354,6 +354,10 @@ export default function ApplyPage() {
               COMARI. is not yet a registered business. Host profiles created now are for
               demonstration purposes only — you will not receive bookings or payments until
               the platform officially launches.
+              However, if you want to see the full process in depth,{" "}
+              <a href="/how-it-works" className="text-amber-400 underline hover:text-amber-300 transition-colors">
+                click here
+              </a>.
             </p>
           </div>
 

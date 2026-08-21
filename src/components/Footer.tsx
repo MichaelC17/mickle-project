@@ -17,7 +17,7 @@ const socialLinks = [
 
 const productLinks = [
   { href: "/browse", label: "Browse Creators" },
-  { href: "#how-it-works", label: "How it Works" },
+  { href: "/how-it-works", label: "How it Works" },
   { href: "#pricing", label: "Pricing" },
   { href: "#faq", label: "FAQ" },
 ];

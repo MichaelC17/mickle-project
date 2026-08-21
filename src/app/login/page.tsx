@@ -164,6 +164,10 @@ function LoginContent() {
               <span className="font-semibold text-amber-400">Early preview.</span>{" "}
               COMARI. is not yet a registered business. Accounts created now are for
               demonstration purposes only — bookings and payments are not active.
+              However, if you want to see the full process in depth,{" "}
+              <Link href="/how-it-works" className="text-amber-400 underline hover:text-amber-300 transition-colors">
+                click here
+              </Link>.
             </p>
           </motion.div>
 

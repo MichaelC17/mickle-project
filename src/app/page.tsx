@@ -338,6 +338,18 @@ export default function Home() {
               </div>
             </AnimatedItem>
           </AnimatedStagger>
+
+          <AnimatedSection delay={0.3}>
+            <div className="text-center mt-12">
+              <Link
+                href="/how-it-works"
+                className="inline-flex items-center gap-2 text-accent hover:text-accent-hover font-medium transition-colors"
+              >
+                Read the full story of a COMARI. collaboration
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
