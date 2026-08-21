@@ -347,6 +347,16 @@ export default function ApplyPage() {
             </p>
           </div>
 
+          <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3.5 mb-8">
+            <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+            <p className="text-sm text-amber-200/90 leading-relaxed">
+              <span className="font-semibold text-amber-400">Early preview.</span>{" "}
+              COMARI. is not yet a registered business. Host profiles created now are for
+              demonstration purposes only — you will not receive bookings or payments until
+              the platform officially launches.
+            </p>
+          </div>
+
           {status === "loading" || loading ? (
             <LoadingSkeleton />
           ) : existingHost ? (

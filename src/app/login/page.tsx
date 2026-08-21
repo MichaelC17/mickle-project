@@ -7,7 +7,7 @@ import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { useTheme } from "@/context/ThemeContext"
 import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, AlertTriangle } from "lucide-react"
 
 const stagger = {
   hidden: {},
@@ -151,6 +151,19 @@ function LoginContent() {
               {mode === "signin"
                 ? "Sign in to continue to your dashboard"
                 : "Get started — it takes less than a minute"}
+            </p>
+          </motion.div>
+
+          {/* Early access disclaimer */}
+          <motion.div
+            variants={fadeUp}
+            className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3.5 mb-2"
+          >
+            <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+            <p className="text-sm text-amber-200/90 leading-relaxed">
+              <span className="font-semibold text-amber-400">Early preview.</span>{" "}
+              COMARI. is not yet a registered business. Accounts created now are for
+              demonstration purposes only — bookings and payments are not active.
             </p>
           </motion.div>
 
