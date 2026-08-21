@@ -291,7 +291,7 @@ export default function BrowsePage() {
                 Find Your Perfect Collab
               </h1>
               <p className="text-text-secondary text-center text-lg mb-10 max-w-2xl mx-auto">
-                Browse top creators ready to feature you on their channels
+                Preview the creators who will be available on COMARI.
               </p>
             </AnimatedSection>
 
@@ -367,11 +367,11 @@ export default function BrowsePage() {
               {hosts.length === 0 ? (
                 <>
                   <h2 className="text-2xl font-bold text-text-primary mb-3">
-                    Creators are coming soon
+                    Creators coming soon
                   </h2>
                   <p className="text-text-secondary mb-8 max-w-md mx-auto">
-                    We&apos;re onboarding creators now. Check back soon or become
-                    one of our first hosts!
+                    We&apos;re currently talking to creators and building the platform.
+                    Apply now to be one of the first hosts!
                   </p>
                   <Link
                     href="/apply"

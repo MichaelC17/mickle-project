@@ -318,8 +318,8 @@ export default function ApplyPage() {
 
       showToast({
         type: "success",
-        title: "Profile Published!",
-        message: "Your host profile is now live on the browse page.",
+        title: "Profile Submitted!",
+        message: "Your host profile has been created. We'll be in touch as we onboard creators.",
       })
       router.push("/browse")
     } catch {
@@ -343,7 +343,7 @@ export default function ApplyPage() {
               Become a Host
             </h1>
             <p className="text-text-secondary max-w-md mx-auto">
-              Set up your profile and start accepting guest spot bookings from creators
+              Set up your profile and get early access as we build the platform
             </p>
           </div>
 
@@ -363,7 +363,7 @@ export default function ApplyPage() {
                   <span className="font-medium text-text-primary">
                     {existingHost.channelName}
                   </span>{" "}
-                  is live.
+                  has been submitted.
                 </p>
                 <button
                   onClick={() => router.push("/browse")}

@@ -75,7 +75,7 @@ export default function Home() {
                 href="/browse"
                 className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:shadow-accent/25"
               >
-                Browse Creators
+                Learn More
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link
@@ -230,8 +230,8 @@ export default function Home() {
                   A marketplace where exposure has a price tag
                 </h2>
                 <p className="text-text-secondary leading-relaxed mb-6">
-                  COMARI. lets you browse creators who are actively selling guest spots on
-                  their channels. See their audience size, niche, and rates. Book instantly.
+                  COMARI. is building a marketplace where you can browse creators offering guest spots on
+                  their channels. See their audience size, niche, and rates. Book directly.
                   Coordinate through our platform. Get in front of thousands&nbsp;— or
                   millions&nbsp;— of potential subscribers.
                 </p>
@@ -897,11 +897,12 @@ export default function Home() {
 
               <AccordionItem value="launch" className="border-border">
                 <AccordionTrigger className="text-text-primary hover:no-underline text-base font-medium py-5">
-                  Is COMARI. available now?
+                  When will COMARI. be available?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-secondary leading-relaxed">
-                  Yes! COMARI. is live. You can browse creators and book guest spots
-                  right now, or apply to become a host if you have a YouTube channel.
+                  COMARI. is currently in development. We&apos;re working closely with
+                  creators to build the best possible experience. Sign up to get notified
+                  when we launch.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
@@ -927,11 +928,11 @@ export default function Home() {
           <AnimatedSection>
             <div className="text-center mb-10">
               <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-text-primary leading-tight mb-4">
-                Ready to grow faster?
+                Interested in collaborating?
               </h2>
               <p className="text-text-secondary text-lg">
-                Browse verified creators and book your first guest spot, or apply to
-                become a host and start earning.
+                We&apos;re currently building COMARI. with input from creators.
+                Check out what we&apos;re working on, or reach out if you&apos;d like to be involved.
               </p>
             </div>
           </AnimatedSection>
@@ -942,14 +943,14 @@ export default function Home() {
                 href="/browse"
                 className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:shadow-accent/25"
               >
-                Browse Creators
+                See the Vision
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link
                 href="/apply"
                 className="inline-flex items-center justify-center gap-2 glass text-text-primary font-semibold px-8 py-4 rounded-full text-lg transition-colors hover:bg-surface-raised"
               >
-                Become a Host
+                Apply as a Creator
               </Link>
             </div>
           </AnimatedSection>

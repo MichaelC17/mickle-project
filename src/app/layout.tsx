@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     default: "COMARI. – The Marketplace for Creator Collaborations",
     template: "%s | COMARI.",
   },
-  description: "Book verified YouTube and Twitch creators for paid collaborations. Browse creators, set pricing, coordinate logistics, and track results.",
+  description: "A marketplace for creator collaborations — in development. Connect with YouTube and Twitch creators for paid guest spots.",
   keywords: ["creator collaborations", "youtube collaborations", "twitch collaborations", "creator marketplace", "gaming collaborations"],
   authors: [{ name: "COMARI." }],
   openGraph: {
@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     url: "https://comari.app",
     siteName: "COMARI.",
     title: "COMARI. – The Marketplace for Creator Collaborations",
-    description: "Book verified YouTube and Twitch creators for paid collaborations.",
+    description: "A marketplace for creator collaborations — in development.",
   },
   twitter: {
     card: "summary_large_image",
     title: "COMARI. – The Marketplace for Creator Collaborations",
-    description: "Book verified YouTube and Twitch creators for paid collaborations.",
+    description: "A marketplace for creator collaborations — in development.",
   },
   robots: {
     index: true,

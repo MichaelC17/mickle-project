@@ -266,7 +266,7 @@ export default function DashboardPage() {
                             </span>
                           </div>
                           <p className="text-sm text-text-muted">
-                            Your creator profile is live
+                            Your creator profile is set up
                           </p>
                         </div>
                       </div>
