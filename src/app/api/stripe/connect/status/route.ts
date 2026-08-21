@@ -1,13 +1,9 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getStripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2026-01-28.clover",
-});
 
 export async function GET() {
   const session = await auth();
@@ -40,7 +36,7 @@ export async function GET() {
       });
     }
 
-    const account = await stripe.accounts.retrieve(host.stripeAccountId);
+    const account = await getStripe().accounts.retrieve(host.stripeAccountId);
 
     const chargesEnabled = account.charges_enabled || false;
     const payoutsEnabled = account.payouts_enabled || false;

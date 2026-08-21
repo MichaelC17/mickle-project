@@ -2,14 +2,9 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
 import { notifyBookingConfirmed } from "@/lib/notifications";
+import { getStripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2026-01-28.clover",
-});
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
 
 async function captureBaselineStats(bookingId: string, buyerId: string) {
   try {
@@ -73,13 +68,10 @@ async function captureBaselineStats(bookingId: string, buyerId: string) {
 }
 
 export async function POST(request: Request) {
-  console.log("Webhook received!");
-  console.log("Webhook secret exists:", !!webhookSecret, "length:", webhookSecret.length);
-  
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
+
   const body = await request.text();
   const signature = request.headers.get("stripe-signature") || "";
-  
-  console.log("Signature exists:", !!signature);
 
   if (!webhookSecret) {
     console.error("STRIPE_WEBHOOK_SECRET is not set!");
@@ -92,7 +84,7 @@ export async function POST(request: Request) {
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+    event = getStripe().webhooks.constructEvent(body, signature, webhookSecret);
     console.log("Event verified successfully:", event.type);
   } catch (err) {
     console.error("Webhook signature verification failed:", err);

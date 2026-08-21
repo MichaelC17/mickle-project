@@ -2,12 +2,9 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getStripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder", {
-  apiVersion: "2026-01-28.clover",
-});
 
 const PLATFORM_FEE_PERCENT = 15;
 
@@ -85,7 +82,7 @@ export async function POST(request: Request) {
       };
     }
 
-    const checkoutSession = await stripe.checkout.sessions.create(sessionParams);
+    const checkoutSession = await getStripe().checkout.sessions.create(sessionParams);
 
     return NextResponse.json({ 
       sessionId: checkoutSession.id,

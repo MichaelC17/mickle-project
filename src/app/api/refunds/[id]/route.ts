@@ -1,19 +1,10 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import Stripe from "stripe"
 import { notifyRefundResponse } from "@/lib/notifications"
+import { getStripe } from "@/lib/stripe"
 
 export const dynamic = "force-dynamic"
-
-function getStripe() {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error("STRIPE_SECRET_KEY is not set")
-  }
-  return new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2026-01-28.clover",
-  })
-}
 
 export async function PATCH(
   request: Request,

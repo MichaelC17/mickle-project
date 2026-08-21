@@ -1,13 +1,9 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getStripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2026-01-28.clover",
-});
 
 export async function POST() {
   const session = await auth();
@@ -31,7 +27,7 @@ export async function POST() {
       );
     }
 
-    const loginLink = await stripe.accounts.createLoginLink(host.stripeAccountId);
+    const loginLink = await getStripe().accounts.createLoginLink(host.stripeAccountId);
 
     return NextResponse.json({ url: loginLink.url });
   } catch (error) {

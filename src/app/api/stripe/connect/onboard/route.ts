@@ -1,13 +1,9 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getStripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2026-01-28.clover",
-});
 
 export async function POST() {
   const session = await auth();
@@ -35,7 +31,7 @@ export async function POST() {
     let stripeAccountId = host.stripeAccountId;
 
     if (!stripeAccountId) {
-      const account = await stripe.accounts.create({
+      const account = await getStripe().accounts.create({
         type: "express",
         country: "US",
         email: host.user.email,
@@ -60,7 +56,7 @@ export async function POST() {
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    const accountLink = await stripe.accountLinks.create({
+    const accountLink = await getStripe().accountLinks.create({
       account: stripeAccountId,
       refresh_url: `${baseUrl}/dashboard/host?stripe_refresh=true`,
       return_url: `${baseUrl}/dashboard/host?stripe_onboarding=complete`,
