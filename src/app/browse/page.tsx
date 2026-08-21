@@ -371,13 +371,13 @@ export default function BrowsePage() {
                   </h2>
                   <p className="text-text-secondary mb-8 max-w-md mx-auto">
                     We&apos;re currently talking to creators and building the platform.
-                    Apply now to be one of the first hosts!
+                    Check back soon — we&apos;re onboarding our first creators.
                   </p>
                   <Link
-                    href="/apply"
+                    href="/how-it-works"
                     className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-full transition-colors"
                   >
-                    Become a Host
+                    See How It Works
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </>

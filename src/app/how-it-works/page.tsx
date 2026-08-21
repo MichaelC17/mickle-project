@@ -16,7 +16,6 @@ import {
   CheckCircle2,
   TrendingUp,
   ArrowRight,
-  Gamepad2,
   Users,
   Star,
   Clock,
@@ -31,7 +30,7 @@ const steps = [
     accent: "from-indigo-500 to-blue-500",
     accentBg: "bg-indigo-500/10",
     accentText: "text-indigo-400",
-    story: `You've been grinding for months. The videos are good — you know they are — but the algorithm isn't picking them up. You've got 2,000 subscribers who genuinely love your content, but reaching the next audience feels impossible.`,
+    story: `Imagine you've been putting in the work for months. Your content is solid, your editing is getting better, and the people who watch you genuinely enjoy what you make. But growing an audience from scratch is hard — really hard. You've got 2,000 subscribers, and breaking through to the next level on your own is a slow grind.`,
     detail: `Then you find COMARI. You browse through creators in your niche — gaming, tech, lifestyle, whatever you make — and find hosts offering exactly what you need. Some offer a spot on their next live stream. Others will feature you in an edited video or a podcast episode. You pick the format that fits your style and budget.`,
     options: [
       "Live stream guest appearance",
@@ -70,13 +69,13 @@ const steps = [
     accentBg: "bg-amber-500/10",
     accentText: "text-amber-400",
     story: `It's Tuesday night. You're sitting in a Discord call, and then the host hits "Go Live." Suddenly, 3,000 people are watching. The host introduces you — tells their audience why your channel is worth checking out — and then you're playing together, making content, being yourself.`,
-    detail: `The chat is lighting up. People are clicking through to your channel. Some of them are subscribing right there during the stream. This is what months of cold emails and networking never got you — real, authentic exposure to an audience that's already primed to care about your kind of content.`,
+    detail: `The chat is lighting up. People are clicking through to your channel. Some of them are subscribing right there during the stream. You're getting real, authentic exposure to an audience that's already primed to care about your kind of content.`,
     options: null,
   },
   {
     number: "05",
     icon: CheckCircle2,
-    title: "The Confirmation",
+    title: "The Wrap-Up",
     accent: "from-emerald-500 to-green-500",
     accentBg: "bg-emerald-500/10",
     accentText: "text-emerald-400",
@@ -91,8 +90,8 @@ const steps = [
     accent: "from-cyan-500 to-blue-500",
     accentBg: "bg-cyan-500/10",
     accentText: "text-cyan-400",
-    story: `Over the next 90 days, you watch your numbers move. Not vanity metrics — real subscribers who stick around, real views on your own content from people who discovered you through the collab.`,
-    detail: `COMARI. tracks it for you. You can see exactly how many new subscribers and views came after the collaboration. For the first time, you can put a real number on what that exposure was worth. And when you're ready, you book your next one.`,
+    story: `The collaboration is over, but the impact isn't. New subscribers keep finding your channel. Views on your older content start climbing. People who discovered you through the collab are sticking around — because they genuinely like what you make.`,
+    detail: `But it's not just the numbers. Working alongside a larger creator gave you real insight — how they structure their streams, how they engage their chat, how they think about content. You walked away with experience and perspective you couldn't have gotten any other way. And when you're ready, you book your next one.`,
     options: null,
   },
 ];
@@ -138,8 +137,8 @@ export default function HowItWorksPage() {
 
           <AnimatedSection delay={0.2}>
             <p className="text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              Meet Alex. 2,000 subscribers, great content, zero luck with the
-              algorithm. This is the story of their first COMARI. booking —
+              Imagine you&apos;re a smaller creator with great content and a growing
+              audience. This is what your first COMARI. booking looks like —
               from search to growth.
             </p>
           </AnimatedSection>
@@ -269,7 +268,7 @@ export default function HowItWorksPage() {
                   <div className="text-center p-4 rounded-xl bg-surface-raised/50">
                     <Clock className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
                     <p className="text-sm font-medium text-text-primary">
-                      90-day growth tracking
+                      Real experience &amp; insight
                     </p>
                   </div>
                 </AnimatedItem>
@@ -284,10 +283,10 @@ export default function HowItWorksPage() {
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/apply"
+                  href="/"
                   className="inline-flex items-center justify-center gap-2 glass text-text-primary font-semibold px-6 py-3 rounded-full transition-colors hover:bg-surface-raised"
                 >
-                  Apply as a Creator
+                  Back to Home
                 </Link>
               </div>
             </div>

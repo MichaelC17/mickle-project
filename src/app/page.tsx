@@ -959,10 +959,10 @@ export default function Home() {
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link
-                href="/apply"
+                href="/how-it-works"
                 className="inline-flex items-center justify-center gap-2 glass text-text-primary font-semibold px-8 py-4 rounded-full text-lg transition-colors hover:bg-surface-raised"
               >
-                Apply as a Creator
+                How It Works
               </Link>
             </div>
           </AnimatedSection>
