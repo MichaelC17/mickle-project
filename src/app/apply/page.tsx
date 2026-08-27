@@ -339,7 +339,7 @@ export default function ApplyPage() {
               Become a Host
             </h1>
             <p className="text-text-secondary max-w-md mx-auto">
-              Fill out your profile so you're ready when we launch
+              Fill out your profile so you&apos;re ready when we launch
             </p>
           </div>
 
