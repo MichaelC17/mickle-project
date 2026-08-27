@@ -87,7 +87,7 @@ export default async function BlogPost({ params }: PageProps) {
             <span className="text-sm font-medium text-accent uppercase tracking-widest">
               {post.category}
             </span>
-            <h1 className="font-display text-4xl md:text-5xl font-semibold text-text-primary mt-4 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold text-text-primary mt-4 leading-tight">
               {post.title}
             </h1>
             <p className="mt-4 text-lg text-text-secondary leading-relaxed">
@@ -104,7 +104,7 @@ export default async function BlogPost({ params }: PageProps) {
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs px-3 py-1 bg-surface-raised rounded-full text-text-secondary"
+                    className="text-xs px-2 py-0.5 bg-surface-raised text-text-secondary font-mono"
                   >
                     {tag}
                   </span>
@@ -123,7 +123,7 @@ export default async function BlogPost({ params }: PageProps) {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <p className="text-sm text-text-muted">Written by</p>
-                <p className="font-display font-semibold text-text-primary">Michael Cai</p>
+                <p className="font-semibold text-text-primary">Michael Cai</p>
               </div>
               <Link
                 href="/blog"

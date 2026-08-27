@@ -54,8 +54,8 @@ export function useToast() {
 const iconConfig: Record<Toast["type"], { icon: typeof CheckCircle; color: string; bg: string }> = {
   success: { icon: CheckCircle, color: "text-emerald-500", bg: "bg-emerald-500/10" },
   error: { icon: AlertCircle, color: "text-red-500", bg: "bg-red-500/10" },
-  message: { icon: MessageSquare, color: "text-indigo-400", bg: "bg-indigo-500/10" },
-  schedule: { icon: Calendar, color: "text-purple-400", bg: "bg-purple-500/10" },
+  message: { icon: MessageSquare, color: "text-accent", bg: "bg-surface-raised" },
+  schedule: { icon: Calendar, color: "text-accent", bg: "bg-surface-raised" },
   info: { icon: Info, color: "text-blue-400", bg: "bg-blue-500/10" },
 };
 
@@ -93,7 +93,7 @@ function ToastItem({
       animate={{ opacity: 1, x: 0, scale: 1 }}
       exit={{ opacity: 0, x: 80, scale: 0.95 }}
       transition={{ type: "spring", stiffness: 400, damping: 30 }}
-      className="glass rounded-xl shadow-float p-4 flex gap-3 cursor-pointer hover:bg-surface-raised/50 transition-colors"
+      className="bg-surface border border-border p-4 flex gap-3 cursor-pointer hover:bg-surface-raised transition-colors"
       onClick={() => {
         onDismiss(toast.id);
         if (toast.link) {
@@ -101,7 +101,7 @@ function ToastItem({
         }
       }}
     >
-      <div className={`flex-shrink-0 w-10 h-10 rounded-full ${bg} flex items-center justify-center`}>
+      <div className={`flex-shrink-0 w-8 h-8 ${bg} flex items-center justify-center`}>
         <Icon className={`w-5 h-5 ${color}`} />
       </div>
       <div className="flex-1 min-w-0">

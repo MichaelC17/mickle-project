@@ -68,16 +68,16 @@ function sortHosts(hosts: Host[], sort: SortOption): Host[] {
 function SkeletonCard({ index }: { index: number }) {
   return (
     <div
-      className="rounded-xl overflow-hidden fade-in"
+      className="overflow-hidden fade-in"
       style={{ animationDelay: `${index * 60}ms` }}
     >
-      <div className="relative aspect-[3/4] rounded-xl overflow-hidden glass">
-        <Skeleton className="absolute inset-0 rounded-xl" />
+      <div className="relative aspect-[3/4] overflow-hidden bg-surface border border-border">
+        <Skeleton className="absolute inset-0" />
         <div className="absolute top-3 left-3">
           <Skeleton className="h-5 w-16 rounded" />
         </div>
         <div className="absolute top-3 right-3">
-          <Skeleton className="h-5 w-14 rounded-full" />
+          <Skeleton className="h-5 w-14 rounded" />
         </div>
         <div className="absolute bottom-4 left-4 right-4 space-y-2">
           <Skeleton className="h-5 w-3/4 rounded" />
@@ -106,7 +106,7 @@ function HostCard({ host }: { host: Host }) {
 
   return (
     <Link href={`/host/${host.id}`} className="group block">
-      <div className="relative aspect-[3/4] rounded-xl overflow-hidden glass hover:shadow-float hover:-translate-y-1 transition-all duration-300">
+      <div className="relative aspect-[3/4] overflow-hidden border border-border hover:-translate-y-1 transition-all duration-300">
         {host.channelThumbnail ? (
           <img
             src={host.channelThumbnail}
@@ -114,7 +114,7 @@ function HostCard({ host }: { host: Host }) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent/20 via-purple-500/10 to-pink-500/10">
+          <div className="w-full h-full flex items-center justify-center bg-surface-raised">
             <span className="text-5xl font-bold text-text-primary/20 select-none">
               {initials}
             </span>
@@ -127,7 +127,7 @@ function HostCard({ host }: { host: Host }) {
           <PlatformBadgeSmall platform={host.platform} />
         </div>
 
-        <div className="absolute top-3 right-3 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1.5">
+        <div className="absolute top-3 right-3 bg-background/90 border border-border px-2.5 py-1 flex items-center gap-1.5">
           <Users className="w-3 h-3 text-white/80" />
           <span className="text-[11px] font-semibold text-white">
             {formatNumber(host.subscriberCount)}
@@ -151,7 +151,7 @@ function HostCard({ host }: { host: Host }) {
               ? `@${host.channelHandle.replace("@", "")}`
               : `${host.packages.length} package${host.packages.length !== 1 ? "s" : ""}`}
           </p>
-          <span className="text-[11px] font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full shrink-0">
+          <span className="text-[11px] font-mono font-medium text-accent bg-surface-raised px-2 py-0.5 shrink-0">
             New
           </span>
         </div>
@@ -191,7 +191,7 @@ function SortDropdown({
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(o => !o)}
-        className="flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-text-secondary hover:text-text-primary transition-colors"
+        className="flex items-center gap-2 px-4 py-2 bg-surface border border-border text-sm text-text-secondary hover:text-text-primary transition-colors"
       >
         <SlidersHorizontal className="w-4 h-4" />
         <span className="hidden sm:inline">{sortLabels[value]}</span>
@@ -201,7 +201,7 @@ function SortDropdown({
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-52 rounded-xl glass border border-glass-border shadow-float z-50 py-1 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-52 bg-surface border border-border z-50 py-1 overflow-hidden">
           {(Object.keys(sortLabels) as SortOption[]).map(key => (
             <button
               key={key}
@@ -279,12 +279,6 @@ export default function BrowsePage() {
       <main className="min-h-screen pt-20 pb-20">
         {/* Hero */}
         <section className="relative overflow-hidden py-16 px-6 border-b border-border">
-          <div className="absolute inset-0 pointer-events-none" aria-hidden>
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-accent/8 rounded-full blur-[140px]" />
-            <div className="absolute top-24 right-1/4 w-[350px] h-[300px] bg-purple-500/6 rounded-full blur-[120px]" />
-            <div className="absolute -top-10 left-1/4 w-[250px] h-[250px] bg-pink-500/4 rounded-full blur-[100px]" />
-          </div>
-
           <div className="relative max-w-6xl mx-auto">
             <AnimatedSection>
               <h1 className="text-4xl md:text-5xl font-bold text-text-primary text-center mb-4 tracking-tight">
@@ -297,14 +291,14 @@ export default function BrowsePage() {
 
             <AnimatedSection delay={0.1}>
               <div className="max-w-xl mx-auto">
-                <div className="relative glass rounded-xl focus-within:shadow-glow focus-within:border-accent/30 transition-all duration-300">
+                <div className="relative border border-border bg-surface focus-within:border-accent transition-all duration-300">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
                   <input
                     type="text"
                     placeholder="Search by name, niche, or platform..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 bg-transparent text-text-primary placeholder-text-muted focus:outline-none rounded-xl"
+                    className="w-full pl-12 pr-4 py-4 bg-transparent text-text-primary placeholder-text-muted focus:outline-none"
                   />
                 </div>
               </div>
@@ -315,10 +309,10 @@ export default function BrowsePage() {
                 <div className="flex flex-wrap justify-center gap-2 mt-8">
                   <button
                     onClick={() => setActiveNiche(null)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
                       activeNiche === null
-                        ? "bg-accent text-white shadow-glow"
-                        : "glass text-text-secondary hover:text-text-primary"
+                        ? "bg-accent text-background"
+                        : "border border-border text-text-secondary hover:text-text-primary"
                     }`}
                   >
                     All
@@ -329,10 +323,10 @@ export default function BrowsePage() {
                       onClick={() =>
                         setActiveNiche(activeNiche === niche ? null : niche)
                       }
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
                         activeNiche === niche
-                          ? "bg-accent text-white shadow-glow"
-                          : "glass text-text-secondary hover:text-text-primary"
+                          ? "bg-accent text-background"
+                          : "border border-border text-text-secondary hover:text-text-primary"
                       }`}
                     >
                       {niche}
@@ -350,7 +344,7 @@ export default function BrowsePage() {
             <div>
               <div className="flex items-center justify-between mb-8">
                 <Skeleton className="h-5 w-36 rounded" />
-                <Skeleton className="h-9 w-28 rounded-full" />
+                <Skeleton className="h-9 w-28 rounded" />
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {Array.from({ length: 8 }).map((_, i) => (
@@ -360,7 +354,7 @@ export default function BrowsePage() {
             </div>
           ) : filteredHosts.length === 0 ? (
             <div className="text-center py-24">
-              <div className="w-20 h-20 glass rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-20 h-20 border border-border bg-surface flex items-center justify-center mx-auto mb-6">
                 <Users className="w-9 h-9 text-text-muted" />
               </div>
 
@@ -375,7 +369,7 @@ export default function BrowsePage() {
                   </p>
                   <Link
                     href="/how-it-works"
-                    className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-full transition-colors"
+                    className="inline-flex items-center gap-2 bg-text-primary text-background font-semibold px-8 py-4 transition-colors"
                   >
                     See How It Works
                     <ArrowRight className="w-4 h-4" />

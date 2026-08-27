@@ -18,7 +18,6 @@ import {
   AlertTriangle,
   Clock,
   Users,
-  Sparkles,
 } from "lucide-react"
 
 interface YouTubeChannel {
@@ -90,7 +89,7 @@ const PACKAGE_TEMPLATES: PackageInput[] = [
 const STEPS = [
   { label: "Connect YouTube", icon: Youtube },
   { label: "Profile Setup", icon: Users },
-  { label: "Create Packages", icon: Sparkles },
+  { label: "Create Packages", icon: Plus },
 ]
 
 const NICHES = [
@@ -121,19 +120,19 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
             {i > 0 && (
               <div className="w-12 sm:w-20 h-0.5 mx-1">
                 <div
-                  className={`h-full rounded-full transition-all duration-500 ${
-                    isComplete || isCurrent ? "bg-indigo-500" : "bg-border"
+                  className={`h-full transition-all duration-500 ${
+                    isComplete || isCurrent ? "bg-accent" : "bg-border"
                   }`}
                 />
               </div>
             )}
             <div className="flex flex-col items-center gap-2">
               <div
-                className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${
+                className={`relative w-10 h-10 flex items-center justify-center transition-all duration-500 ${
                   isComplete
-                    ? "bg-indigo-500 text-white shadow-glow"
+                    ? "bg-accent text-white"
                     : isCurrent
-                      ? "bg-indigo-500/20 text-indigo-400 ring-2 ring-indigo-500 shadow-glow"
+                      ? "bg-accent/20 text-accent ring-1 ring-accent"
                       : "bg-surface-raised text-text-muted border border-border"
                 }`}
               >
@@ -142,7 +141,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
               <span
                 className={`text-xs font-medium whitespace-nowrap transition-colors duration-300 ${
                   isCurrent
-                    ? "text-indigo-400"
+                    ? "text-accent"
                     : isComplete
                       ? "text-text-secondary"
                       : "text-text-muted"
@@ -162,15 +161,15 @@ function LoadingSkeleton() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-center gap-4 mb-12">
-        <Skeleton className="w-10 h-10 rounded-full" />
-        <Skeleton className="w-20 h-1 rounded-full" />
-        <Skeleton className="w-10 h-10 rounded-full" />
-        <Skeleton className="w-20 h-1 rounded-full" />
-        <Skeleton className="w-10 h-10 rounded-full" />
+        <Skeleton className="w-10 h-10" />
+        <Skeleton className="w-20 h-1" />
+        <Skeleton className="w-10 h-10" />
+        <Skeleton className="w-20 h-1" />
+        <Skeleton className="w-10 h-10" />
       </div>
-      <Skeleton className="h-24 w-full rounded-xl" />
-      <Skeleton className="h-56 w-full rounded-xl" />
-      <Skeleton className="h-12 w-48 mx-auto rounded-full" />
+      <Skeleton className="h-24 w-full" />
+      <Skeleton className="h-56 w-full" />
+      <Skeleton className="h-12 w-48 mx-auto" />
     </div>
   )
 }
@@ -335,11 +334,8 @@ export default function ApplyPage() {
       <main className="pt-32 pb-20 px-6">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-10 fade-in">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-sm font-medium mb-4">
-              <Sparkles className="w-3.5 h-3.5" />
-              Host Application
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-display text-text-primary mb-3">
+            <p className="text-xs font-bold uppercase tracking-widest text-accent mb-4">Host Application</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-3">
               Become a Host
             </h1>
             <p className="text-text-secondary max-w-md mx-auto">
@@ -347,7 +343,7 @@ export default function ApplyPage() {
             </p>
           </div>
 
-          <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3.5 mb-8">
+          <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 px-4 py-3.5 mb-8">
             <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
             <p className="text-sm text-amber-200/90 leading-relaxed">
               <span className="font-semibold text-amber-400">Early preview.</span>{" "}
@@ -365,8 +361,8 @@ export default function ApplyPage() {
             <LoadingSkeleton />
           ) : existingHost ? (
             <div className="fade-in">
-              <div className="glass rounded-xl p-8 text-center">
-                <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="border border-border bg-surface p-8 text-center">
+                <div className="w-16 h-16 bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
                   <Check className="w-8 h-8 text-emerald-500" />
                 </div>
                 <h2 className="text-xl font-semibold text-text-primary mb-2">
@@ -381,7 +377,7 @@ export default function ApplyPage() {
                 </p>
                 <button
                   onClick={() => router.push("/browse")}
-                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-8 py-3 rounded-full transition-colors"
+                  className="bg-accent hover:bg-accent-hover text-background font-medium px-8 py-3 transition-colors"
                 >
                   View Browse Page
                 </button>
@@ -393,9 +389,9 @@ export default function ApplyPage() {
 
               {step === 1 && (
                 <div className="space-y-6 fade-in">
-                  <div className="glass rounded-xl p-8">
+                  <div className="border border-border bg-surface p-8">
                     <div className="text-center mb-8">
-                      <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <div className="w-16 h-16 bg-red-500/10 flex items-center justify-center mx-auto mb-4">
                         <Youtube className="w-8 h-8 text-red-500" />
                       </div>
                       <h2 className="text-xl font-semibold text-text-primary mb-2">
@@ -409,7 +405,7 @@ export default function ApplyPage() {
 
                     <button
                       onClick={handleYouTubeSignIn}
-                      className="w-full flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-3 rounded-full transition-colors"
+                      className="w-full flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-3 transition-colors"
                     >
                       <Youtube className="w-5 h-5" />
                       Connect YouTube Channel
@@ -426,9 +422,9 @@ export default function ApplyPage() {
 
               {step === 2 && channel && (
                 <div className="space-y-6 fade-in">
-                  <div className="glass rounded-xl p-4">
+                  <div className="border border-border bg-surface p-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                      <div className="flex-shrink-0 w-8 h-8 bg-emerald-500/10 flex items-center justify-center">
                         <Check className="w-4 h-4 text-emerald-500" />
                       </div>
                       <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -451,7 +447,7 @@ export default function ApplyPage() {
                     </div>
                   </div>
 
-                  <div className="glass rounded-xl p-6 space-y-6">
+                  <div className="border border-border bg-surface p-6 space-y-6">
                     <div>
                       <h2 className="text-lg font-semibold text-text-primary mb-1">
                         Profile Setup
@@ -472,7 +468,7 @@ export default function ApplyPage() {
                         id="niche"
                         value={niche}
                         onChange={(e) => setNiche(e.target.value)}
-                        className="w-full px-4 py-2.5 bg-background border border-border rounded-xl text-text-primary focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
+                        className="w-full px-4 py-2.5 bg-background border border-border rounded-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent transition-all"
                       >
                         <option value="">Select your niche</option>
                         {NICHES.map((n) => (
@@ -496,7 +492,7 @@ export default function ApplyPage() {
                         onChange={(e) => setBio(e.target.value)}
                         rows={4}
                         placeholder="Describe your channel and what makes it great for collaborations..."
-                        className="w-full px-4 py-3 bg-background border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 resize-none transition-all"
+                        className="w-full px-4 py-3 bg-background border border-border rounded-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent resize-none transition-all"
                       />
                     </div>
                   </div>
@@ -518,7 +514,7 @@ export default function ApplyPage() {
                       setError("")
                       setStep(3)
                     }}
-                    className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-4 py-3 rounded-full transition-colors flex items-center justify-center gap-2"
+                    className="w-full bg-accent hover:bg-accent-hover text-background font-medium px-4 py-3 transition-colors flex items-center justify-center gap-2"
                   >
                     Continue to Packages
                     <ChevronRight className="w-4 h-4" />
@@ -528,9 +524,9 @@ export default function ApplyPage() {
 
               {step === 3 && channel && (
                 <form onSubmit={handleSubmit} className="space-y-6 fade-in">
-                  <div className="glass rounded-xl p-4 space-y-3">
+                  <div className="border border-border bg-surface p-4 space-y-3">
                     <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                      <div className="flex-shrink-0 w-8 h-8 bg-emerald-500/10 flex items-center justify-center">
                         <Check className="w-4 h-4 text-emerald-500" />
                       </div>
                       <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -547,7 +543,7 @@ export default function ApplyPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                      <div className="flex-shrink-0 w-8 h-8 bg-emerald-500/10 flex items-center justify-center">
                         <Check className="w-4 h-4 text-emerald-500" />
                       </div>
                       <p className="text-sm text-text-secondary truncate">
@@ -557,7 +553,7 @@ export default function ApplyPage() {
                     </div>
                   </div>
 
-                  <div className="glass rounded-xl p-6">
+                  <div className="border border-border bg-surface p-6">
                     <div className="flex items-center justify-between mb-1">
                       <h2 className="text-lg font-semibold text-text-primary">
                         Create Packages
@@ -571,9 +567,9 @@ export default function ApplyPage() {
                       <button
                         type="button"
                         onClick={loadTemplates}
-                        className="w-full mb-4 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/5 transition-colors text-sm font-medium"
+                        className="w-full mb-4 flex items-center justify-center gap-2 px-4 py-3 border border-dashed border-accent/30 text-accent hover:bg-accent/5 transition-colors text-sm font-medium"
                       >
-                        <Sparkles className="w-4 h-4" />
+                        <Plus className="w-4 h-4" />
                         Load example packages to customize
                       </button>
                     )}
@@ -582,7 +578,7 @@ export default function ApplyPage() {
                       {packages.map((pkg, pkgIndex) => (
                         <div
                           key={pkgIndex}
-                          className="p-4 bg-background/50 border border-border rounded-xl"
+                          className="p-4 bg-background/50 border border-border"
                         >
                           <div className="flex items-center justify-between mb-4">
                             <span className="text-xs font-medium text-text-muted uppercase tracking-wider">
@@ -652,7 +648,7 @@ export default function ApplyPage() {
                               <button
                                 type="button"
                                 onClick={() => addInclude(pkgIndex)}
-                                className="text-xs text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1"
+                                className="text-xs text-accent hover:text-accent-hover font-medium flex items-center gap-1"
                               >
                                 <Plus className="w-3 h-3" />
                                 Add
@@ -689,7 +685,7 @@ export default function ApplyPage() {
                     <button
                       type="button"
                       onClick={addPackage}
-                      className="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-border text-text-muted hover:text-text-secondary hover:border-text-muted transition-colors text-sm"
+                      className="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2.5 border border-dashed border-border text-text-muted hover:text-text-secondary hover:border-text-muted transition-colors text-sm"
                     >
                       <Plus className="w-4 h-4" />
                       Add Another Package
@@ -697,7 +693,7 @@ export default function ApplyPage() {
                   </div>
 
                   {error && (
-                    <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-red-500/10 text-red-400 text-sm">
+                    <div className="flex items-center gap-2 px-4 py-3 bg-red-500/10 text-red-400 text-sm">
                       <AlertTriangle className="w-4 h-4 flex-shrink-0" />
                       {error}
                     </div>
@@ -707,14 +703,14 @@ export default function ApplyPage() {
                     <button
                       type="button"
                       onClick={() => setStep(2)}
-                      className="px-6 py-3 rounded-full border border-border text-text-secondary hover:text-text-primary hover:border-text-muted transition-colors font-medium"
+                      className="px-6 py-3 border border-border text-text-secondary hover:text-text-primary hover:border-text-muted transition-colors font-medium"
                     >
                       Back
                     </button>
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-4 py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="flex-1 bg-accent hover:bg-accent-hover text-background font-medium px-4 py-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {submitting ? (
                         <>
@@ -723,7 +719,7 @@ export default function ApplyPage() {
                         </>
                       ) : (
                         <>
-                          <Sparkles className="w-4 h-4" />
+                          <ChevronRight className="w-4 h-4" />
                           Preview &amp; Publish
                         </>
                       )}

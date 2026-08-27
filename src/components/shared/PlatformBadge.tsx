@@ -9,7 +9,7 @@ const platformConfig: Record<
   youtube: { bg: "bg-red-500", color: "text-red-500", label: "YouTube", iconBg: "bg-red-500/10" },
   twitch: { bg: "bg-violet-500", color: "text-violet-500", label: "Twitch", iconBg: "bg-violet-500/10" },
   tiktok: { bg: "bg-pink-500", color: "text-pink-500", label: "TikTok", iconBg: "bg-pink-500/10" },
-  instagram: { bg: "bg-gradient-to-r from-purple-500 to-pink-500", color: "text-purple-500", label: "Instagram", iconBg: "bg-purple-500/10" },
+  instagram: { bg: "bg-pink-600", color: "text-pink-500", label: "Instagram", iconBg: "bg-pink-500/10" },
 };
 
 function TikTokIcon({ className }: { className?: string }) {
@@ -36,7 +36,7 @@ function PlatformIcon({ platform, className }: { platform: string; className?: s
 export function PlatformBadgeSolid({ platform }: { platform: string }) {
   const config = platformConfig[platform] || { bg: "bg-gray-500", color: "text-gray-500", label: platform, iconBg: "bg-gray-500/10" };
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-white text-xs font-semibold uppercase tracking-wide ${config.bg}`}>
+    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-white text-xs font-semibold uppercase tracking-wide ${config.bg}`}>
       <PlatformIcon platform={platform} className="w-3.5 h-3.5" />
       {config.label}
     </span>

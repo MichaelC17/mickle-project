@@ -25,7 +25,7 @@ export default function BlogPage() {
             <span className="text-sm font-medium text-accent tracking-widest uppercase">
               The Blog
             </span>
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary mt-4 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary mt-4 leading-tight">
               Thoughts, stories, and ideas.
             </h1>
             <p className="mt-6 max-w-2xl text-text-secondary text-lg leading-relaxed">

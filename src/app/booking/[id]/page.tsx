@@ -121,12 +121,12 @@ function StatusTimeline({ current }: { current: string }) {
           <div key={step.key} className="flex items-center flex-1 last:flex-none group">
             <div className="flex flex-col items-center relative">
               <div
-                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+                className={`w-9 h-9 flex items-center justify-center transition-all ${
                   isPast
-                    ? "bg-emerald-500/20 text-emerald-400 ring-2 ring-emerald-500/30"
+                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                     : isCurrent
-                    ? "bg-indigo-500/20 text-indigo-400 ring-2 ring-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.3)]"
-                    : "bg-white/5 text-white/25 ring-1 ring-white/10"
+                    ? "bg-surface-raised text-accent border border-accent/40"
+                    : "bg-white/5 text-white/25 border border-white/10"
                 }`}
               >
                 {isPast ? (
@@ -134,7 +134,7 @@ function StatusTimeline({ current }: { current: string }) {
                 ) : isCurrent ? (
                   <CircleDot className="w-4 h-4" />
                 ) : (
-                  <div className="w-2 h-2 rounded-full bg-current" />
+                  <div className="w-2 h-2 bg-current" />
                 )}
               </div>
               <span
@@ -142,7 +142,7 @@ function StatusTimeline({ current }: { current: string }) {
                   isPast
                     ? "text-emerald-400"
                     : isCurrent
-                    ? "text-indigo-400"
+                    ? "text-accent"
                     : "text-white/30"
                 }`}
               >
@@ -160,7 +160,7 @@ function StatusTimeline({ current }: { current: string }) {
             {i < STATUSES.length - 1 && (
               <div className="flex-1 mx-3 mt-[-1.5rem]">
                 <div
-                  className={`h-0.5 rounded-full transition-all ${
+                  className={`h-0.5 transition-all ${
                     isPast ? "bg-emerald-500/50" : "bg-white/10"
                   }`}
                 />
@@ -187,11 +187,11 @@ function Avatar({
   const dim = size === "sm" ? "w-7 h-7 text-xs" : size === "lg" ? "w-14 h-14 text-xl" : "w-9 h-9 text-sm"
 
   if (src) {
-    return <img src={src} alt="" className={`${dim} rounded-full object-cover`} />
+    return <img src={src} alt="" className={`${dim} object-cover`} />
   }
   return (
     <div
-      className={`${dim} rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-medium`}
+      className={`${dim} bg-accent flex items-center justify-center text-background font-medium`}
     >
       {fallback[0].toUpperCase()}
     </div>
@@ -494,10 +494,10 @@ export default function BookingDetailPage() {
         <Header />
         <main className="pt-32 pb-20 px-6">
           <div className="max-w-4xl mx-auto space-y-6">
-            <Skeleton className="h-5 w-40 rounded-lg" />
-            <Skeleton className="h-48 w-full rounded-xl" />
-            <Skeleton className="h-12 w-full rounded-lg" />
-            <Skeleton className="h-[400px] w-full rounded-xl" />
+            <Skeleton className="h-5 w-40" />
+            <Skeleton className="h-48 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-[400px] w-full" />
           </div>
         </main>
         <Footer />
@@ -517,7 +517,7 @@ export default function BookingDetailPage() {
             <p className="text-white/50 text-lg">Booking not found</p>
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 mt-6 text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+              className="inline-flex items-center gap-2 mt-6 text-sm text-accent hover:text-accent transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Dashboard
@@ -544,8 +544,8 @@ export default function BookingDetailPage() {
           </Link>
 
           {/* ── Glass header card ── */}
-          <div className="relative rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl p-6 mb-6 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.04] to-transparent pointer-events-none" />
+          <div className="relative border border-white/[0.06] bg-white/[0.03] p-6 mb-6 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] to-transparent pointer-events-none" />
 
             <div className="relative flex items-start justify-between gap-4 flex-wrap">
               <div className="flex items-start gap-4">
@@ -584,7 +584,7 @@ export default function BookingDetailPage() {
               {booking.scheduledDate && (
                 <div className="text-right shrink-0">
                   <div className="flex items-center gap-1.5 justify-end mb-1">
-                    <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                    <Calendar className="w-3.5 h-3.5 text-accent" />
                     <span className="text-sm text-white/40">Scheduled for</span>
                   </div>
                   <p className="text-lg font-semibold text-emerald-400">
@@ -611,7 +611,7 @@ export default function BookingDetailPage() {
             {/* Completion confirmation — IN_PROGRESS only */}
             {booking.status === "in_progress" && (
               <div className="relative mt-5 pt-5 border-t border-white/[0.06]">
-                <div className="bg-accent/10 ring-1 ring-accent/20 rounded-xl p-4">
+                <div className="bg-accent/10 border border-accent/20 p-4">
                   <p className="text-sm font-medium text-accent mb-3">
                     Confirm completion
                   </p>
@@ -641,7 +641,7 @@ export default function BookingDetailPage() {
                     <button
                       onClick={confirmCompletion}
                       disabled={confirmingComplete}
-                      className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 text-white font-medium py-2.5 rounded-xl transition-colors text-sm"
+                      className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 text-background font-medium py-2.5 rounded-xl transition-colors text-sm"
                     >
                       {confirmingComplete ? "Confirming..." : "Confirm Completion"}
                     </button>
@@ -654,7 +654,7 @@ export default function BookingDetailPage() {
             {booking.status === "completed" && (
               <div className="relative mt-5 pt-5 border-t border-white/[0.06]">
                 {myReview ? (
-                  <div className="bg-emerald-500/10 ring-1 ring-emerald-500/20 rounded-xl p-4">
+                  <div className="bg-emerald-500/10 border border-emerald-500/20 p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <p className="text-sm font-medium text-emerald-400">Your review</p>
                       <div className="flex items-center gap-0.5">
@@ -673,7 +673,7 @@ export default function BookingDetailPage() {
                     )}
                   </div>
                 ) : (
-                  <div className="bg-accent/10 ring-1 ring-accent/20 rounded-xl p-4">
+                  <div className="bg-accent/10 border border-accent/20 p-4">
                     <p className="text-sm font-medium text-accent mb-2">
                       Leave a review
                     </p>
@@ -682,7 +682,7 @@ export default function BookingDetailPage() {
                     </p>
                     <button
                       onClick={() => setShowReviewModal(true)}
-                      className="w-full bg-accent hover:bg-accent-hover text-white font-medium py-2.5 rounded-xl transition-colors text-sm"
+                      className="w-full bg-accent hover:bg-accent-hover text-background font-medium py-2.5 rounded-xl transition-colors text-sm"
                     >
                       Write Review
                     </button>
@@ -699,13 +699,13 @@ export default function BookingDetailPage() {
                 <div className="relative mt-5 pt-5 border-t border-white/[0.06]">
                   {refundRequest ? (
                     <div
-                      className={`flex items-center justify-between p-3.5 rounded-xl ${
+                      className={`flex items-center justify-between p-3.5 ${
                         refundRequest.status === "PENDING"
-                          ? "bg-yellow-500/10 ring-1 ring-yellow-500/20"
+                          ? "bg-yellow-500/10 border border-yellow-500/20"
                           : refundRequest.status === "APPROVED" ||
                             refundRequest.status === "PROCESSED"
-                          ? "bg-emerald-500/10 ring-1 ring-emerald-500/20"
-                          : "bg-red-500/10 ring-1 ring-red-500/20"
+                          ? "bg-emerald-500/10 border border-emerald-500/20"
+                          : "bg-red-500/10 border border-red-500/20"
                       }`}
                     >
                       <div>
@@ -734,7 +734,7 @@ export default function BookingDetailPage() {
                         </p>
                       </div>
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        className={`px-3 py-1 text-xs font-semibold ${
                           refundRequest.status === "PENDING"
                             ? "bg-yellow-500/20 text-yellow-400"
                             : refundRequest.status === "APPROVED" ||
@@ -761,7 +761,7 @@ export default function BookingDetailPage() {
 
           {/* ── Refund dialog (shadcn) ── */}
           <Dialog open={showRefundModal} onOpenChange={setShowRefundModal}>
-            <DialogContent className="bg-surface border-white/[0.06] rounded-xl sm:max-w-md">
+            <DialogContent className="bg-surface border-white/[0.06] sm:max-w-md">
               <DialogHeader>
                 <DialogTitle className="text-white flex items-center gap-2">
                   <RotateCcw className="w-5 h-5 text-red-400" />
@@ -782,7 +782,7 @@ export default function BookingDetailPage() {
                     value={refundReason}
                     onChange={(e) => setRefundReason(e.target.value)}
                     placeholder="Explain why you're requesting a refund..."
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 resize-none h-32 transition-all"
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent/30 resize-none h-32 transition-all"
                   />
                 </div>
 
@@ -817,7 +817,7 @@ export default function BookingDetailPage() {
 
           {/* ── Review dialog ── */}
           <Dialog open={showReviewModal} onOpenChange={setShowReviewModal}>
-            <DialogContent className="bg-surface border-white/[0.06] rounded-xl sm:max-w-md">
+            <DialogContent className="bg-surface border-white/[0.06] sm:max-w-md">
               <DialogHeader>
                 <DialogTitle className="text-white flex items-center gap-2">
                   <Star className="w-5 h-5 text-yellow-400" />
@@ -876,7 +876,7 @@ export default function BookingDetailPage() {
                   <button
                     onClick={submitReview}
                     disabled={submittingReview}
-                    className="flex-1 py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 text-white font-medium text-sm transition-colors"
+                    className="flex-1 py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 text-background font-medium text-sm transition-colors"
                   >
                     {submittingReview ? "Submitting..." : "Submit Review"}
                   </button>
@@ -887,7 +887,7 @@ export default function BookingDetailPage() {
 
           {/* ── Main content ── */}
           {!canMessage ? (
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl p-10 text-center">
+            <div className="border border-white/[0.06] bg-white/[0.03] p-10 text-center">
               <AlertCircle className="w-10 h-10 text-white/15 mx-auto mb-3" />
               <p className="text-white/50">
                 {booking.status === "completed"
@@ -900,12 +900,12 @@ export default function BookingDetailPage() {
           ) : (
             <>
               {/* Tab bar */}
-              <div className="flex gap-1 mb-4 bg-white/[0.03] border border-white/[0.06] rounded-xl p-1">
+              <div className="flex gap-1 mb-4 bg-white/[0.03] border border-white/[0.06] p-1">
                 <button
                   onClick={() => setActiveTab("messages")}
                   className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
                     activeTab === "messages"
-                      ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/20"
+                      ? "bg-accent text-background"
                       : "text-white/40 hover:text-white/70"
                   }`}
                 >
@@ -916,7 +916,7 @@ export default function BookingDetailPage() {
                   onClick={() => setActiveTab("schedule")}
                   className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
                     activeTab === "schedule"
-                      ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/20"
+                      ? "bg-accent text-background"
                       : "text-white/40 hover:text-white/70"
                   }`}
                 >
@@ -927,7 +927,7 @@ export default function BookingDetailPage() {
 
               {activeTab === "messages" ? (
                 /* ── Glass chat container ── */
-                <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl overflow-hidden flex flex-col h-[560px] max-h-[70vh]">
+                <div className="border border-white/[0.06] bg-white/[0.03] overflow-hidden flex flex-col h-[560px] max-h-[70vh]">
                   {/* Chat header */}
                   <div className="px-5 py-3.5 border-b border-white/[0.06] bg-white/[0.02] flex items-center gap-3">
                     <Avatar
@@ -962,7 +962,7 @@ export default function BookingDetailPage() {
                   <div className="flex-1 overflow-y-auto p-4 space-y-3">
                     {messages.length === 0 ? (
                       <div className="h-full flex flex-col items-center justify-center">
-                        <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-3">
+                        <div className="w-16 h-16 bg-white/[0.04] flex items-center justify-center mb-3">
                           <MessageSquare className="w-7 h-7 text-white/15" />
                         </div>
                         <p className="text-white/40 text-sm">No messages yet</p>
@@ -1020,15 +1020,15 @@ export default function BookingDetailPage() {
                             <div
                               className={`max-w-[70%] px-4 py-2.5 ${
                                 isMe
-                                  ? `bg-gradient-to-br from-indigo-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/10 ${
+                                  ? `bg-accent text-background ${
                                       isLast
-                                        ? "rounded-full rounded-br-lg"
-                                        : "rounded-full"
+                                        ? "rounded-br-lg"
+                                        : ""
                                     }`
                                   : `bg-white/[0.06] text-white border border-white/[0.06] ${
                                       isLast
-                                        ? "rounded-full rounded-bl-lg"
-                                        : "rounded-full"
+                                        ? "rounded-bl-lg"
+                                        : ""
                                     }`
                               }`}
                             >
@@ -1058,7 +1058,7 @@ export default function BookingDetailPage() {
                     onSubmit={sendMessage}
                     className="p-3 border-t border-white/[0.06] bg-white/[0.02]"
                   >
-                    <div className="flex items-center gap-2 bg-white/[0.04] rounded-full px-4 py-1 border border-white/[0.06] focus-within:border-indigo-500/40 focus-within:ring-1 focus-within:ring-indigo-500/20 transition-all">
+                    <div className="flex items-center gap-2 bg-white/[0.04] px-4 py-1 border border-white/[0.06] focus-within:border-accent/40 focus-within:ring-1 focus-within:ring-accent/20 transition-all">
                       <input
                         type="text"
                         value={newMessage}
@@ -1069,7 +1069,7 @@ export default function BookingDetailPage() {
                       <button
                         type="submit"
                         disabled={!newMessage.trim() || sending}
-                        className="w-9 h-9 flex items-center justify-center bg-indigo-500 hover:bg-indigo-400 disabled:opacity-30 disabled:hover:bg-indigo-500 text-white rounded-full transition-all hover:scale-105 disabled:hover:scale-100 shadow-lg shadow-indigo-500/20"
+                        className="w-9 h-9 flex items-center justify-center bg-accent hover:bg-accent-hover disabled:opacity-30 disabled:hover:bg-accent text-background transition-all hover:scale-105 disabled:hover:scale-100"
                       >
                         <Send className="w-4 h-4" />
                       </button>
@@ -1078,11 +1078,11 @@ export default function BookingDetailPage() {
                 </div>
               ) : (
                 /* ── Schedule tab ── */
-                <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl p-6">
+                <div className="border border-white/[0.06] bg-white/[0.03] p-6">
                   {/* Propose date */}
                   <div className="mb-8">
                     <div className="flex items-center gap-2 mb-4">
-                      <Calendar className="w-5 h-5 text-indigo-400" />
+                      <Calendar className="w-5 h-5 text-accent" />
                       <h3 className="font-medium text-white">Propose a Date</h3>
                       <div className="ml-auto">
                         <TimezoneIndicator />
@@ -1118,9 +1118,9 @@ export default function BookingDetailPage() {
                                     selectedPurpose === purpose ? "" : purpose
                                   )
                                 }
-                                className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all ${
+                                className={`px-3.5 py-1.5 text-sm font-medium transition-all ${
                                   selectedPurpose === purpose
-                                    ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/20"
+                                    ? "bg-accent text-background"
                                     : "bg-white/[0.04] text-white/50 hover:text-white/80 border border-white/[0.06] hover:border-white/[0.12]"
                                 }`}
                               >
@@ -1132,7 +1132,7 @@ export default function BookingDetailPage() {
                         <button
                           onClick={proposeDate}
                           disabled={proposing}
-                          className="w-full bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white py-3 rounded-xl font-medium transition-all shadow-lg shadow-indigo-500/20"
+                          className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 text-background py-3 rounded-xl font-medium transition-all"
                         >
                           {proposing ? "Proposing..." : "Propose This Date"}
                         </button>
@@ -1143,7 +1143,7 @@ export default function BookingDetailPage() {
                   {/* Proposals list */}
                   <div>
                     <div className="flex items-center gap-2 mb-4">
-                      <Clock className="w-5 h-5 text-indigo-400" />
+                      <Clock className="w-5 h-5 text-accent" />
                       <h3 className="font-medium text-white">
                         Proposed Dates
                       </h3>
@@ -1165,7 +1165,7 @@ export default function BookingDetailPage() {
                           return (
                             <div
                               key={proposal.id}
-                              className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
+                              className={`flex items-center justify-between p-4 border transition-all ${
                                 proposal.status === "ACCEPTED"
                                   ? "bg-emerald-500/[0.08] border-emerald-500/20"
                                   : proposal.status === "DECLINED"
@@ -1187,7 +1187,7 @@ export default function BookingDetailPage() {
                                     })}
                                   </p>
                                   {proposal.purpose && (
-                                    <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 text-xs font-medium rounded-full">
+                                    <span className="px-2 py-0.5 bg-surface-raised text-accent text-xs font-medium">
                                       {proposal.purpose}
                                     </span>
                                   )}

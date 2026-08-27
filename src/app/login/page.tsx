@@ -63,27 +63,11 @@ function LoginContent() {
   return (
     <div className="min-h-screen flex bg-background">
       {/* ───── Left Panel — Brand ───── */}
-      <div className="hidden lg:flex lg:w-[48%] relative overflow-hidden bg-gradient-to-br from-accent/20 via-purple-500/10 to-background">
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div
-            animate={{ scale: [1, 1.15, 1], opacity: [0.12, 0.18, 0.12] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-1/4 -left-1/4 w-[600px] h-[600px] rounded-full bg-accent/15 blur-[120px]"
-          />
-          <motion.div
-            animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.16, 0.1] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-purple-500/12 blur-[100px]"
-          />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-indigo-400/5 blur-[80px]" />
-        </div>
-
-        <div className="absolute inset-0 grid-bg opacity-30" />
-
+      <div className="hidden lg:flex lg:w-[48%] relative overflow-hidden bg-surface border-r border-border">
         <div className="relative z-10 flex flex-col justify-between w-full p-12 xl:p-16">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
             <Link href="/" className="inline-flex">
-              <span className="font-display text-2xl text-text-primary tracking-tight">
+              <span className="font-bold text-2xl text-text-primary tracking-tight">
                 COMARI.
               </span>
             </Link>
@@ -97,7 +81,7 @@ function LoginContent() {
           >
             <motion.h1
               variants={fadeUp}
-              className="font-display text-5xl xl:text-[3.5rem] 2xl:text-6xl text-text-primary leading-[1.08] tracking-tight"
+              className="font-bold text-5xl xl:text-[3.5rem] 2xl:text-6xl text-text-primary leading-[1.08] tracking-tight"
             >
               Grow your channel
               <br />
@@ -125,8 +109,6 @@ function LoginContent() {
 
       {/* ───── Right Panel — Form ───── */}
       <div className="flex-1 flex items-center justify-center px-6 py-12 sm:px-12 relative">
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[120px] pointer-events-none" />
-
         <motion.div
           initial="hidden"
           animate="show"
@@ -136,7 +118,7 @@ function LoginContent() {
           {/* Mobile logo */}
           <motion.div variants={fadeUp}>
             <Link href="/" className="lg:hidden inline-flex mb-10">
-              <span className="font-display text-2xl text-text-primary tracking-tight">
+              <span className="font-bold text-2xl text-text-primary tracking-tight">
                 COMARI.
               </span>
             </Link>
@@ -157,7 +139,7 @@ function LoginContent() {
           {/* Early access disclaimer */}
           <motion.div
             variants={fadeUp}
-            className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3.5 mb-2"
+            className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 px-4 py-3.5 mb-2"
           >
             <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
             <p className="text-sm text-amber-200/90 leading-relaxed">
@@ -174,12 +156,12 @@ function LoginContent() {
           {/* Form card */}
           <motion.div
             variants={fadeUp}
-            className="glass rounded-xl p-6 space-y-5 shadow-lg shadow-black/5"
+            className="border border-border bg-surface p-6 space-y-5"
           >
             {/* Google OAuth */}
             <button
               onClick={handleGoogleLogin}
-              className={`w-full flex items-center justify-center gap-3 font-medium px-4 py-3 rounded-lg border transition-all duration-200 ${
+              className={`w-full flex items-center justify-center gap-3 font-medium px-4 py-3 rounded-sm border transition-all duration-200 ${
                 theme === "dark"
                   ? "bg-[#131314] text-white border-[#2d2d2f] hover:bg-[#1e1e20] hover:border-[#3a3a3f]"
                   : "bg-white text-gray-800 border-gray-300 hover:bg-gray-50 hover:border-gray-400"
@@ -200,7 +182,7 @@ function LoginContent() {
                 <div className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-3 bg-glass text-text-muted backdrop-blur-sm">
+                <span className="px-3 bg-surface text-text-muted">
                   or continue with email
                 </span>
               </div>
@@ -212,7 +194,7 @@ function LoginContent() {
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
-                  className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg text-sm"
+                  className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 text-sm"
                 >
                   {error}
                 </motion.div>
@@ -251,10 +233,10 @@ function LoginContent() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-medium h-11 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-accent/20 hover:shadow-lg hover:shadow-accent/30"
+                className="group w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-background font-medium h-11 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
-                  <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="h-4 w-4 border-2 border-background/30 border-t-background rounded-full animate-spin" />
                 ) : (
                   <>
                     {mode === "signin" ? "Sign in" : "Create account"}
@@ -322,7 +304,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-background flex items-center justify-center">
-          <div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent rounded-full" />
+          <div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent" />
         </div>
       }
     >

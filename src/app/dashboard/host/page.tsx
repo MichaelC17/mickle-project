@@ -404,36 +404,36 @@ export default function HostDashboard() {
         <Header />
         <main className="pt-32 pb-20 px-6">
           <div className="max-w-4xl mx-auto">
-            <Skeleton className="h-4 w-36 mb-4 rounded-full" />
-            <Skeleton className="h-8 w-64 mb-8 rounded-full" />
+            <Skeleton className="h-4 w-36 mb-4" />
+            <Skeleton className="h-8 w-64 mb-8" />
 
-            <div className="glass rounded-xl p-6 mb-6">
+            <div className="bg-surface border border-border p-6 mb-6">
               <div className="flex items-start gap-4">
-                <Skeleton className="w-16 h-16 rounded-full shrink-0" />
+                <Skeleton className="w-16 h-16 shrink-0" />
                 <div className="flex-1 space-y-2">
-                  <Skeleton className="h-6 w-48 rounded-full" />
-                  <Skeleton className="h-4 w-64 rounded-full" />
+                  <Skeleton className="h-6 w-48" />
+                  <Skeleton className="h-4 w-64" />
                 </div>
               </div>
               <div className="mt-6 space-y-3">
-                <Skeleton className="h-4 w-24 rounded-full" />
-                <Skeleton className="h-4 w-full rounded-full" />
-                <Skeleton className="h-4 w-3/4 rounded-full" />
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-3/4" />
               </div>
             </div>
 
-            <div className="glass rounded-xl p-6 mb-6">
-              <Skeleton className="h-5 w-24 mb-4 rounded-full" />
+            <div className="bg-surface border border-border p-6 mb-6">
+              <Skeleton className="h-5 w-24 mb-4" />
               <div className="space-y-3">
-                <Skeleton className="h-24 w-full rounded-xl" />
-                <Skeleton className="h-24 w-full rounded-xl" />
+                <Skeleton className="h-24 w-full" />
+                <Skeleton className="h-24 w-full" />
               </div>
             </div>
 
-            <div className="glass rounded-xl p-6">
-              <Skeleton className="h-5 w-36 mb-4 rounded-full" />
-              <Skeleton className="h-10 w-full rounded-xl" />
-              <Skeleton className="h-12 w-full rounded-xl mt-4" />
+            <div className="bg-surface border border-border p-6">
+              <Skeleton className="h-5 w-36 mb-4" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-12 w-full mt-4" />
             </div>
           </div>
         </main>
@@ -449,8 +449,8 @@ export default function HostDashboard() {
         <Header />
         <main className="pt-32 pb-20 px-6">
           <div className="max-w-lg mx-auto text-center">
-            <div className="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center mx-auto mb-6">
-              <Eye className="w-7 h-7 text-indigo-400" />
+            <div className="w-16 h-16 bg-surface-raised flex items-center justify-center mx-auto mb-6">
+              <Eye className="w-7 h-7 text-accent" />
             </div>
             <h1 className="text-2xl font-semibold text-text-primary mb-2">No Host Profile</h1>
             <p className="text-text-muted mb-8">
@@ -458,7 +458,7 @@ export default function HostDashboard() {
             </p>
             <Link
               href="/apply"
-              className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-6 py-3 rounded-xl transition-colors"
+              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-background font-medium px-6 py-3 rounded-xl transition-colors"
             >
               Become a Host
               <ExternalLink className="w-4 h-4" />
@@ -495,14 +495,14 @@ export default function HostDashboard() {
               <div className="flex items-center gap-3">
                 <Link
                   href="/dashboard/host/bookings"
-                  className="glass text-text-primary font-medium px-4 py-2.5 rounded-xl transition-colors hover:bg-surface-raised inline-flex items-center gap-2 text-sm"
+                  className="bg-surface border border-border text-text-primary font-medium px-4 py-2.5 rounded-xl transition-colors hover:bg-surface-raised inline-flex items-center gap-2 text-sm"
                 >
                   <Eye className="w-4 h-4" />
                   Bookings
                 </Link>
                 <button
                   onClick={() => setEditing(true)}
-                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-4 py-2.5 rounded-xl transition-colors inline-flex items-center gap-2 text-sm"
+                  className="bg-accent hover:bg-accent-hover text-background font-medium px-4 py-2.5 rounded-xl transition-colors inline-flex items-center gap-2 text-sm"
                 >
                   <Edit className="w-4 h-4" />
                   Edit Profile
@@ -513,7 +513,7 @@ export default function HostDashboard() {
 
           {/* Error Banner */}
           {error && (
-            <div className="mb-6 flex items-start gap-3 bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+            <div className="mb-6 flex items-start gap-3 bg-red-500/10 border border-red-500/20 p-4">
               <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
               <div className="flex-1">
                 <p className="text-sm font-medium text-red-400">{error}</p>
@@ -525,16 +525,16 @@ export default function HostDashboard() {
           )}
 
           {/* Profile Card */}
-          <section className="glass rounded-xl p-6 mb-6">
+          <section className="bg-surface border border-border p-6 mb-6">
             <div className="flex items-start gap-4 mb-6">
               {host.channelThumbnail ? (
                 <img
                   src={host.channelThumbnail}
                   alt={host.channelName}
-                  className="w-16 h-16 rounded-full object-cover ring-2 ring-indigo-500/20"
+                  className="w-16 h-16 object-cover border border-border"
                 />
               ) : (
-                <div className="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-xl font-semibold text-indigo-400 ring-2 ring-indigo-500/20">
+                <div className="w-16 h-16 bg-surface-raised flex items-center justify-center text-xl font-semibold text-accent border border-border">
                   {host.channelName.slice(0, 2).toUpperCase()}
                 </div>
               )}
@@ -559,7 +559,7 @@ export default function HostDashboard() {
                   <select
                     value={niche}
                     onChange={(e) => setNiche(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-background border border-border rounded-xl text-text-primary focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all"
+                    className="w-full px-4 py-2.5 bg-background border border-border rounded-xl text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
                   >
                     <option value="">Select your niche</option>
                     {NICHES.map((n) => (
@@ -576,7 +576,7 @@ export default function HostDashboard() {
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     rows={3}
-                    className="w-full px-4 py-3 bg-background border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all resize-none"
+                    className="w-full px-4 py-3 bg-background border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all resize-none"
                     placeholder="Tell buyers about your channel and what they can expect..."
                   />
                 </div>
@@ -586,7 +586,7 @@ export default function HostDashboard() {
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-text-muted">Niche</span>
                   {host.niche ? (
-                    <span className="bg-indigo-500/10 text-indigo-400 rounded-full px-3 py-1 text-xs font-medium">
+                    <span className="bg-surface-raised text-accent px-3 py-1 text-xs font-medium">
                       {host.niche}
                     </span>
                   ) : (
@@ -604,13 +604,13 @@ export default function HostDashboard() {
           </section>
 
           {/* Packages Card */}
-          <section className="glass rounded-xl p-6 mb-6">
+          <section className="bg-surface border border-border p-6 mb-6">
             <div className="flex items-center justify-between mb-5">
               <h3 className="text-lg font-semibold text-text-primary">Packages</h3>
               {editing && (
                 <button
                   onClick={addPackage}
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   Add Package
@@ -623,7 +623,7 @@ export default function HostDashboard() {
                 {packages.map((pkg, pkgIndex) => (
                   <div
                     key={pkgIndex}
-                    className="bg-background border border-border rounded-xl p-5"
+                    className="bg-background border border-border p-5"
                   >
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-xs font-medium text-text-muted uppercase tracking-wider">
@@ -646,14 +646,14 @@ export default function HostDashboard() {
                         value={pkg.name}
                         onChange={(e) => updatePackage(pkgIndex, "name", e.target.value)}
                         placeholder="Package name"
-                        className="px-4 py-2.5 bg-surface border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all text-sm"
+                        className="px-4 py-2.5 bg-surface border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all text-sm"
                       />
                       <input
                         type="number"
                         value={pkg.price}
                         onChange={(e) => updatePackage(pkgIndex, "price", e.target.value)}
                         placeholder="Price (USD)"
-                        className="px-4 py-2.5 bg-surface border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all text-sm"
+                        className="px-4 py-2.5 bg-surface border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all text-sm"
                       />
                     </div>
 
@@ -662,7 +662,7 @@ export default function HostDashboard() {
                       value={pkg.description}
                       onChange={(e) => updatePackage(pkgIndex, "description", e.target.value)}
                       placeholder="Description"
-                      className="w-full px-4 py-2.5 bg-surface border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all text-sm mb-4"
+                      className="w-full px-4 py-2.5 bg-surface border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all text-sm mb-4"
                     />
 
                     <div>
@@ -670,7 +670,7 @@ export default function HostDashboard() {
                         <span className="text-xs text-text-muted">What&apos;s included</span>
                         <button
                           onClick={() => addInclude(pkgIndex)}
-                          className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+                          className="text-xs text-accent hover:text-accent transition-colors"
                         >
                           + Add item
                         </button>
@@ -685,7 +685,7 @@ export default function HostDashboard() {
                                 updateInclude(pkgIndex, incIndex, e.target.value)
                               }
                               placeholder="e.g., 5 min feature"
-                              className="flex-1 px-3 py-2 bg-surface border border-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all text-sm"
+                              className="flex-1 px-3 py-2 bg-surface border border-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all text-sm"
                             />
                             {pkg.includes.length > 1 && (
                               <button
@@ -707,7 +707,7 @@ export default function HostDashboard() {
                 {host.packages.map((pkg) => (
                   <div
                     key={pkg.id}
-                    className="bg-background border border-border rounded-xl p-5 flex items-start justify-between"
+                    className="bg-background border border-border p-5 flex items-start justify-between"
                   >
                     <div className="flex-1 min-w-0">
                       <h4 className="font-medium text-text-primary">{pkg.name}</h4>
@@ -719,7 +719,7 @@ export default function HostDashboard() {
                           {pkg.includes.map((inc, i) => (
                             <span
                               key={i}
-                              className="bg-surface-raised text-text-muted rounded-full px-2.5 py-0.5 text-xs"
+                              className="bg-surface-raised text-text-muted px-2.5 py-0.5 text-xs"
                             >
                               {inc}
                             </span>
@@ -749,7 +749,7 @@ export default function HostDashboard() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-6 py-2.5 rounded-xl transition-colors disabled:opacity-50 text-sm"
+                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-background font-medium px-6 py-2.5 rounded-xl transition-colors disabled:opacity-50 text-sm"
               >
                 {saving ? (
                   <>
@@ -767,12 +767,12 @@ export default function HostDashboard() {
           )}
 
           {/* Stripe Connect */}
-          <section className="relative glass rounded-xl p-6 mb-6 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.07] via-purple-500/[0.04] to-transparent pointer-events-none" />
+          <section className="relative bg-surface border border-border p-6 mb-6 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.07] via-accent/[0.03] to-transparent pointer-events-none" />
 
             <div className="relative">
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 rounded-xl bg-[#635BFF]/10 flex items-center justify-center">
+                <div className="w-10 h-10 bg-[#635BFF]/10 flex items-center justify-center">
                   <CreditCard className="w-5 h-5 text-[#635BFF]" />
                 </div>
                 <div>
@@ -788,11 +788,11 @@ export default function HostDashboard() {
                 {/* Step 1: Connect */}
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+                    className={`w-8 h-8 flex items-center justify-center text-xs font-bold transition-colors ${
                       stripeStep > 1
                         ? "bg-emerald-500/20 text-emerald-500"
                         : stripeStep === 1
-                          ? "bg-indigo-500/20 text-indigo-400"
+                          ? "bg-surface-raised text-accent"
                           : "bg-surface-raised text-text-muted"
                     }`}
                   >
@@ -812,11 +812,11 @@ export default function HostDashboard() {
                 {/* Step 2: Verify */}
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+                    className={`w-8 h-8 flex items-center justify-center text-xs font-bold transition-colors ${
                       stripeStep > 2
                         ? "bg-emerald-500/20 text-emerald-500"
                         : stripeStep === 2
-                          ? "bg-indigo-500/20 text-indigo-400"
+                          ? "bg-surface-raised text-accent"
                           : "bg-surface-raised text-text-muted"
                     }`}
                   >
@@ -836,7 +836,7 @@ export default function HostDashboard() {
                 {/* Step 3: Ready */}
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+                    className={`w-8 h-8 flex items-center justify-center text-xs font-bold transition-colors ${
                       stripeStep >= 3
                         ? "bg-emerald-500/20 text-emerald-500"
                         : "bg-surface-raised text-text-muted"
@@ -855,13 +855,13 @@ export default function HostDashboard() {
               {/* Stripe Status Content */}
               {stripeStatus === null ? (
                 <div className="space-y-3">
-                  <Skeleton className="h-16 w-full rounded-xl" />
-                  <Skeleton className="h-12 w-full rounded-xl" />
+                  <Skeleton className="h-16 w-full" />
+                  <Skeleton className="h-12 w-full" />
                 </div>
               ) : stripeStatus.connected && stripeStatus.chargesEnabled ? (
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
+                  <div className="flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/20">
+                    <div className="w-8 h-8 bg-emerald-500/20 flex items-center justify-center shrink-0">
                       <Check className="w-4 h-4 text-emerald-500" />
                     </div>
                     <div>
@@ -873,10 +873,10 @@ export default function HostDashboard() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-background rounded-xl p-4">
+                    <div className="bg-background p-4">
                       <div className="flex items-center gap-2 mb-1">
                         <span
-                          className={`w-2 h-2 rounded-full ${stripeStatus.chargesEnabled ? "bg-emerald-500" : "bg-yellow-500"}`}
+                          className={`w-2 h-2 ${stripeStatus.chargesEnabled ? "bg-emerald-500" : "bg-yellow-500"}`}
                         />
                         <span className="text-xs text-text-muted">Charges</span>
                       </div>
@@ -884,10 +884,10 @@ export default function HostDashboard() {
                         {stripeStatus.chargesEnabled ? "Enabled" : "Pending"}
                       </p>
                     </div>
-                    <div className="bg-background rounded-xl p-4">
+                    <div className="bg-background p-4">
                       <div className="flex items-center gap-2 mb-1">
                         <span
-                          className={`w-2 h-2 rounded-full ${stripeStatus.payoutsEnabled ? "bg-emerald-500" : "bg-yellow-500"}`}
+                          className={`w-2 h-2 ${stripeStatus.payoutsEnabled ? "bg-emerald-500" : "bg-yellow-500"}`}
                         />
                         <span className="text-xs text-text-muted">Payouts</span>
                       </div>
@@ -914,8 +914,8 @@ export default function HostDashboard() {
                 </div>
               ) : stripeStatus.connected && !stripeStatus.onboardingComplete ? (
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
-                    <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center shrink-0">
+                  <div className="flex items-center gap-3 p-4 bg-yellow-500/10 border border-yellow-500/20">
+                    <div className="w-8 h-8 bg-yellow-500/20 flex items-center justify-center shrink-0">
                       <Clock className="w-4 h-4 text-yellow-500" />
                     </div>
                     <div>
@@ -947,20 +947,20 @@ export default function HostDashboard() {
 
                   <div className="grid grid-cols-3 gap-4 py-2">
                     <div className="text-center">
-                      <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center mx-auto mb-2">
-                        <Shield className="w-5 h-5 text-indigo-400" />
+                      <div className="w-10 h-10 bg-surface-raised flex items-center justify-center mx-auto mb-2">
+                        <Shield className="w-5 h-5 text-accent" />
                       </div>
                       <p className="text-xs text-text-muted">Secure</p>
                     </div>
                     <div className="text-center">
-                      <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center mx-auto mb-2">
-                        <CreditCard className="w-5 h-5 text-indigo-400" />
+                      <div className="w-10 h-10 bg-surface-raised flex items-center justify-center mx-auto mb-2">
+                        <CreditCard className="w-5 h-5 text-accent" />
                       </div>
                       <p className="text-xs text-text-muted">Fast Payouts</p>
                     </div>
                     <div className="text-center">
-                      <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center mx-auto mb-2">
-                        <Check className="w-5 h-5 text-indigo-400" />
+                      <div className="w-10 h-10 bg-surface-raised flex items-center justify-center mx-auto mb-2">
+                        <Check className="w-5 h-5 text-accent" />
                       </div>
                       <p className="text-xs text-text-muted">Protected</p>
                     </div>
@@ -987,9 +987,9 @@ export default function HostDashboard() {
 
           {/* Refund Requests */}
           {refundRequests.length > 0 && (
-            <section className="glass rounded-xl p-6 mb-6">
+            <section className="bg-surface border border-border p-6 mb-6">
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center">
+                <div className="w-10 h-10 bg-red-500/10 flex items-center justify-center">
                   <AlertTriangle className="w-5 h-5 text-red-400" />
                 </div>
                 <div className="flex-1">
@@ -999,7 +999,7 @@ export default function HostDashboard() {
                   </p>
                 </div>
                 {pendingRefunds > 0 && (
-                  <span className="bg-red-500/10 text-red-400 rounded-full px-2.5 py-1 text-xs font-medium">
+                  <span className="bg-red-500/10 text-red-400 px-2.5 py-1 text-xs font-medium">
                     {pendingRefunds} pending
                   </span>
                 )}
@@ -1009,7 +1009,7 @@ export default function HostDashboard() {
                 {refundRequests.map((request) => (
                   <div
                     key={request.id}
-                    className={`p-4 rounded-xl border transition-colors ${
+                    className={`p-4 border transition-colors ${
                       request.status === "PENDING"
                         ? "bg-yellow-500/5 border-yellow-500/15"
                         : request.status === "PROCESSED" || request.status === "APPROVED"
@@ -1023,10 +1023,10 @@ export default function HostDashboard() {
                           <img
                             src={request.booking.buyer.image}
                             alt=""
-                            className="w-10 h-10 rounded-full shrink-0"
-                          />
-                        ) : (
-                          <div className="w-10 h-10 rounded-full bg-surface-raised flex items-center justify-center text-text-primary font-medium shrink-0">
+                          className="w-10 h-10 shrink-0"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 bg-surface-raised flex items-center justify-center text-text-primary font-medium shrink-0">
                             {(
                               request.booking.buyer.name || request.booking.buyer.email
                             )[0].toUpperCase()}
@@ -1052,13 +1052,13 @@ export default function HostDashboard() {
                         {request.status === "PENDING" ? (
                           <button
                             onClick={() => setShowRefundModal(request)}
-                            className="bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 font-medium px-3.5 py-1.5 rounded-full text-xs transition-colors"
+                            className="bg-surface-raised text-accent hover:bg-surface-raised/80 font-medium px-3.5 py-1.5 text-xs transition-colors"
                           >
                             Review
                           </button>
                         ) : (
                           <span
-                            className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                            className={`px-2.5 py-1 text-xs font-medium ${
                               request.status === "PROCESSED" || request.status === "APPROVED"
                                 ? "bg-emerald-500/15 text-emerald-500"
                                 : "bg-red-500/15 text-red-400"
@@ -1078,11 +1078,11 @@ export default function HostDashboard() {
           )}
 
           {/* Account Section */}
-          <section className="glass rounded-xl p-6">
+          <section className="bg-surface border border-border p-6">
             <h3 className="text-lg font-semibold text-text-primary mb-1">Account</h3>
             <p className="text-sm text-text-muted mb-5">Manage your host account settings</p>
 
-            <div className="bg-yellow-500/5 border border-yellow-500/10 rounded-xl p-4">
+              <div className="bg-yellow-500/5 border border-yellow-500/10 p-4">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-start gap-3 min-w-0">
                   <AlertTriangle className="w-5 h-5 text-yellow-500 shrink-0 mt-0.5" />
@@ -1095,7 +1095,7 @@ export default function HostDashboard() {
                 </div>
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="bg-red-500/10 text-red-400 hover:bg-red-500/20 font-medium px-4 py-2 rounded-xl text-sm transition-colors shrink-0 inline-flex items-center gap-1.5"
+                  className="bg-red-500/10 text-red-400 hover:bg-red-500/20 font-medium px-4 py-2 text-sm transition-colors shrink-0 inline-flex items-center gap-1.5"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   Delete
@@ -1117,7 +1117,7 @@ export default function HostDashboard() {
           }
         }}
       >
-        <DialogContent className="glass rounded-2xl border-0 sm:max-w-md">
+        <DialogContent className="bg-surface border border-border sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Review Refund Request</DialogTitle>
             <DialogDescription>
@@ -1127,16 +1127,16 @@ export default function HostDashboard() {
 
           {showRefundModal && (
             <div className="space-y-4">
-              <div className="bg-background rounded-xl p-4">
+              <div className="bg-background p-4">
                 <div className="flex items-center gap-3 mb-3">
                   {showRefundModal.booking.buyer.image ? (
                     <img
                       src={showRefundModal.booking.buyer.image}
                       alt=""
-                      className="w-10 h-10 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-surface-raised flex items-center justify-center text-text-primary font-medium">
+                    className="w-10 h-10"
+                  />
+                ) : (
+                  <div className="w-10 h-10 bg-surface-raised flex items-center justify-center text-text-primary font-medium">
                       {(
                         showRefundModal.booking.buyer.name ||
                         showRefundModal.booking.buyer.email
@@ -1173,7 +1173,7 @@ export default function HostDashboard() {
                   value={refundResponseNote}
                   onChange={(e) => setRefundResponseNote(e.target.value)}
                   placeholder="Add a note to the buyer..."
-                  className="w-full bg-background border border-border rounded-xl px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/40 resize-none h-20 text-sm transition-all"
+                  className="w-full bg-background border border-border rounded-xl px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 resize-none h-20 text-sm transition-all"
                 />
               </div>
 
@@ -1204,7 +1204,7 @@ export default function HostDashboard() {
 
       {/* Delete Confirmation AlertDialog */}
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <AlertDialogContent className="glass rounded-2xl border-0 sm:max-w-md">
+        <AlertDialogContent className="bg-surface border border-border sm:max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete host profile?</AlertDialogTitle>
             <AlertDialogDescription>

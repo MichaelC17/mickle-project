@@ -11,7 +11,7 @@ export function StatusBadge({ status }: { status: string }) {
   const displayStatus = status.replace(/_/g, " ");
   return (
     <span
-      className={`text-xs px-2.5 py-1 rounded-full font-medium border ${statusStyles[status] || statusStyles.pending}`}
+      className={`text-xs px-2 py-0.5 font-medium font-mono border ${statusStyles[status] || statusStyles.pending}`}
     >
       {displayStatus.charAt(0).toUpperCase() + displayStatus.slice(1)}
     </span>

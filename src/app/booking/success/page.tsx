@@ -78,14 +78,14 @@ function SuccessContent() {
           <div className="max-w-lg mx-auto">
             <div className="bg-surface border border-border rounded-lg p-8">
               <div className="flex flex-col items-center gap-4 mb-8">
-                <Skeleton className="w-16 h-16 rounded-full" />
+                <Skeleton className="w-16 h-16" />
                 <Skeleton className="h-7 w-48" />
                 <Skeleton className="h-5 w-64" />
               </div>
               <div className="space-y-3">
-                <Skeleton className="h-20 w-full rounded-lg" />
-                <Skeleton className="h-12 w-full rounded-md" />
-                <Skeleton className="h-12 w-full rounded-md" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
               </div>
             </div>
           </div>
@@ -105,7 +105,7 @@ function SuccessContent() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
-              className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6"
+              className="w-16 h-16 bg-emerald-500/10 flex items-center justify-center mx-auto mb-6"
             >
               <CheckCircle className="w-8 h-8 text-emerald-500" />
             </motion.div>
@@ -164,7 +164,7 @@ function SuccessContent() {
               <div className="space-y-3">
                 {nextSteps.map((item) => (
                   <div key={item.step} className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-8 h-8 bg-accent/10 flex items-center justify-center">
                       <item.icon className="w-4 h-4 text-accent" />
                     </div>
                     <p className="text-sm text-text-secondary pt-1.5">{item.text}</p>

@@ -58,11 +58,11 @@ function HostSkeleton() {
           <div className="grid lg:grid-cols-[1fr_380px] gap-10">
             <div>
               <div className="flex flex-col sm:flex-row gap-8 mb-12">
-                <Skeleton className="w-full sm:w-64 aspect-square rounded-2xl flex-shrink-0" />
+                <Skeleton className="w-full sm:w-64 aspect-square flex-shrink-0" />
                 <div className="flex-1 space-y-4 pt-2">
                   <div className="flex gap-2">
-                    <Skeleton className="h-6 w-20 rounded-full" />
-                    <Skeleton className="h-6 w-16 rounded-full" />
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-6 w-16" />
                   </div>
                   <Skeleton className="h-10 w-3/4" />
                   <Skeleton className="h-4 w-28" />
@@ -75,7 +75,7 @@ function HostSkeleton() {
                       </div>
                     ))}
                   </div>
-                  <Skeleton className="h-10 w-36 rounded-full" />
+                  <Skeleton className="h-10 w-36" />
                 </div>
               </div>
 
@@ -168,7 +168,7 @@ export default function HostProfilePage() {
         <Header />
         <main className="min-h-screen pt-20 pb-20 px-6">
           <div className="max-w-6xl mx-auto text-center py-20">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-raised mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-surface-raised mb-6">
               <Users className="w-7 h-7 text-text-muted" />
             </div>
             <h1 className="text-2xl font-bold text-text-primary mb-3">
@@ -179,7 +179,7 @@ export default function HostProfilePage() {
             </p>
             <Link
               href="/browse"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-white text-sm font-semibold hover:bg-accent-hover transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-background text-sm font-semibold hover:bg-accent-hover transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to browse
@@ -264,7 +264,7 @@ export default function HostProfilePage() {
             <div>
               <AnimatedSection>
                 <div className="flex flex-col sm:flex-row gap-8 mb-12">
-                  <div className="relative w-full sm:w-64 aspect-square flex-shrink-0 rounded-2xl overflow-hidden bg-surface-raised shadow-float ring-1 ring-glass-border">
+                  <div className="relative w-full sm:w-64 aspect-square flex-shrink-0 overflow-hidden bg-surface-raised border border-border">
                     {host.channelThumbnail ? (
                       <img
                         src={host.channelThumbnail}
@@ -272,7 +272,7 @@ export default function HostProfilePage() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent/20 to-purple-500/20">
+                      <div className="w-full h-full flex items-center justify-center bg-surface-raised">
                         <span className="text-6xl font-bold text-text-primary/20">
                           {initials}
                         </span>
@@ -280,15 +280,15 @@ export default function HostProfilePage() {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                      <span className="flex items-center gap-1.5 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                      <span className="flex items-center gap-1.5 bg-background/90 border border-border px-2 py-1">
                         <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
-                        <span className="text-white font-semibold text-xs">
+                        <span className="text-text-primary font-semibold text-xs">
                           5.0
                         </span>
                       </span>
-                      <span className="flex items-center gap-1.5 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                        <Users className="w-3.5 h-3.5 text-white/70" />
-                        <span className="text-white font-semibold text-xs">
+                      <span className="flex items-center gap-1.5 bg-background/90 border border-border px-2 py-1">
+                        <Users className="w-3.5 h-3.5 text-text-muted" />
+                        <span className="text-text-primary font-semibold text-xs">
                           {formatNumber(host.subscriberCount)}
                         </span>
                       </span>
@@ -298,13 +298,13 @@ export default function HostProfilePage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-3">
                       <PlatformBadgeSolid platform={host.platform} />
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 text-emerald-400 text-xs font-semibold">
                         <CheckCircle className="w-3 h-3" />
                         Verified
                       </span>
                     </div>
 
-                    <h1 className="text-3xl md:text-4xl font-display text-text-primary mb-1 leading-tight">
+                    <h1 className="text-3xl md:text-4xl font-bold text-text-primary mb-1 leading-tight">
                       {host.channelName}
                     </h1>
 
@@ -354,7 +354,7 @@ export default function HostProfilePage() {
                         href={host.channelUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 mt-5 px-4 py-2 rounded-full border border-border text-sm font-medium text-text-primary hover:border-accent/50 hover:text-accent transition-colors"
+                        className="inline-flex items-center gap-2 mt-5 px-4 py-2 border border-border text-sm font-medium text-text-primary hover:border-accent hover:text-accent transition-colors"
                       >
                         <ExternalLink className="w-4 h-4" />
                         View Channel
@@ -375,9 +375,9 @@ export default function HostProfilePage() {
                     <button
                       key={pkg.id}
                       onClick={() => setSelectedPackage(index)}
-                      className={`text-left p-5 rounded-xl border-2 transition-all duration-200 ${
+                      className={`text-left p-5 border-2 transition-all duration-200 ${
                         selectedPackage === index
-                          ? "border-accent shadow-glow bg-accent/5 scale-[1.01]"
+                          ? "border-accent bg-accent/5"
                           : "border-border bg-surface hover:border-accent/30 hover:bg-surface-raised"
                       }`}
                     >
@@ -386,7 +386,7 @@ export default function HostProfilePage() {
                           {pkg.name}
                         </h3>
                         <div
-                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                          className={`w-5 h-5 border-2 flex items-center justify-center transition-colors ${
                             selectedPackage === index
                               ? "border-accent bg-accent"
                               : "border-border"
@@ -459,7 +459,7 @@ export default function HostProfilePage() {
                     {reviews.slice(0, 5).map((review) => (
                       <div
                         key={review.id}
-                        className="glass rounded-xl p-5"
+                        className="border border-border p-5"
                       >
                         <div className="flex items-start justify-between gap-4 mb-3">
                           <div className="flex items-center gap-3">
@@ -470,7 +470,7 @@ export default function HostProfilePage() {
                                 className="w-10 h-10 rounded-full object-cover"
                               />
                             ) : (
-                              <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-semibold text-sm">
+                              <div className="w-10 h-10 bg-accent/20 flex items-center justify-center text-accent font-semibold text-sm">
                                 {(review.reviewer.name || "?")[0].toUpperCase()}
                               </div>
                             )}
@@ -511,7 +511,7 @@ export default function HostProfilePage() {
             {/* Right column: sticky checkout */}
             <div className="lg:sticky lg:top-24">
               <AnimatedSection delay={0.15}>
-                <div className="glass rounded-xl shadow-float p-6">
+                <div className="border border-border bg-surface p-6">
                   <div className="mb-5">
                     <p className="text-text-muted text-xs uppercase tracking-wide font-medium mb-1">
                       Selected package
@@ -527,7 +527,7 @@ export default function HostProfilePage() {
                   </div>
 
                   {currentPackage.includes.length > 0 && (
-                    <div className="border-t border-glass-border pt-4 mb-5">
+                    <div className="border-t border-border pt-4 mb-5">
                       <p className="text-xs text-text-muted uppercase tracking-wide font-medium mb-2.5">
                         Includes
                       </p>
@@ -548,7 +548,7 @@ export default function HostProfilePage() {
                   <button
                     onClick={handleCheckout}
                     disabled={isCheckoutLoading}
-                    className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-full text-base transition-all hover:shadow-glow flex items-center justify-center gap-2"
+                    className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-background font-semibold py-3.5 text-base transition-colors flex items-center justify-center gap-2"
                   >
                     {isCheckoutLoading ? (
                       <>
@@ -572,7 +572,7 @@ export default function HostProfilePage() {
                     refund if undelivered.
                   </p>
 
-                  <div className="border-t border-glass-border mt-4 pt-4 space-y-2">
+                  <div className="border-t border-border mt-4 pt-4 space-y-2">
                     <div className="flex items-center justify-center gap-1.5 text-xs text-text-muted">
                       <Shield className="w-3.5 h-3.5 text-emerald-500" />
                       <span>Secure checkout</span>
