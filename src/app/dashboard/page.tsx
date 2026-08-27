@@ -188,7 +188,7 @@ export default function DashboardPage() {
                       : ""}
                   </h1>
                   <p className="text-text-secondary">
-                    Manage your bookings and collaborations
+                    Your bookings and collabs
                   </p>
                 </div>
                 <Link
@@ -266,7 +266,7 @@ export default function DashboardPage() {
                             </span>
                           </div>
                           <p className="text-sm text-text-muted">
-                            Your creator profile is set up
+                            Host profile active
                           </p>
                         </div>
                       </div>
@@ -304,7 +304,7 @@ export default function DashboardPage() {
                             Become a Host
                           </p>
                           <p className="text-sm text-text-secondary">
-                            Monetize your audience by featuring other creators
+                            Earn money by featuring smaller creators on your channel
                           </p>
                         </div>
                       </div>
@@ -357,8 +357,8 @@ export default function DashboardPage() {
                       No bookings yet
                     </h3>
                     <p className="text-text-secondary mb-8 max-w-sm mx-auto">
-                      Start your growth journey by booking a guest spot with a
-                      creator
+                      Browse available hosts and book a guest spot to get
+                      featured on their channel
                     </p>
                     <Link
                       href="/browse"
@@ -451,8 +451,8 @@ export default function DashboardPage() {
                       No conversations yet
                     </h3>
                     <p className="text-text-secondary mb-8 max-w-sm mx-auto">
-                      Book a creator to start chatting and coordinate your
-                      collaboration
+                      Once you book a guest spot, you can message the host
+                      here to coordinate
                     </p>
                     <Link
                       href="/browse"

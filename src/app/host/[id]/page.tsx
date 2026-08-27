@@ -175,7 +175,7 @@ export default function HostProfilePage() {
               Host not found
             </h1>
             <p className="text-text-muted mb-6">
-              This host may have been removed or doesn&apos;t exist.
+              This profile doesn&apos;t exist or has been removed.
             </p>
             <Link
               href="/browse"

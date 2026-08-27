@@ -117,7 +117,7 @@ function SuccessContent() {
             >
               <h1 className="text-2xl font-semibold text-text-primary mb-2">Booking Confirmed!</h1>
               <p className="text-text-secondary">
-                You&apos;ve taken a big step for your channel.
+                Your guest spot has been booked and the host has been notified.
               </p>
             </motion.div>
 

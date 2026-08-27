@@ -282,7 +282,7 @@ export default function BrowsePage() {
           <div className="relative max-w-6xl mx-auto">
             <AnimatedSection>
               <h1 className="text-4xl md:text-5xl font-bold text-text-primary text-center mb-4 tracking-tight">
-                Find Your Perfect Collab
+                Browse hosts
               </h1>
               <p className="text-text-secondary text-center text-lg mb-10 max-w-2xl mx-auto">
                 Preview the creators who will be available on COMARI.
@@ -364,8 +364,8 @@ export default function BrowsePage() {
                     Creators coming soon
                   </h2>
                   <p className="text-text-secondary mb-8 max-w-md mx-auto">
-                    We&apos;re currently talking to creators and building the platform.
-                    Check back soon — we&apos;re onboarding our first creators.
+                    We&apos;re talking to creators and onboarding our first hosts.
+                    Check back soon.
                   </p>
                   <Link
                     href="/how-it-works"

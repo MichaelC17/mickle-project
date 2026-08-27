@@ -25,12 +25,12 @@ const steps = [
   {
     number: "01",
     icon: Search,
-    title: "The Search",
-    story: `Imagine you've been putting in the work for months. Your content is solid, your editing is getting better, and the people who watch you genuinely enjoy what you make. But growing an audience from scratch is hard — really hard. You've got 2,000 subscribers, and breaking through to the next level on your own is a slow grind.`,
-    detail: `Then you find COMARI. You browse through creators in your niche — gaming, tech, lifestyle, whatever you make — and find hosts offering exactly what you need. Some offer a spot on their next live stream. Others will feature you in an edited video or a podcast episode. You pick the format that fits your style and budget.`,
+    title: "Find a host",
+    story: `You've got 2,000 subscribers and solid content, but growing from scratch is slow. You know a collab with the right bigger creator would help, but you don't have the connections yet.`,
+    detail: `On COMARI, you browse hosts in your niche who are offering guest spots. Some offer a spot on their next stream, others will feature you in a video or podcast. You pick the format and price that works for you.`,
     options: [
-      "Live stream guest appearance",
-      "Collaborative video feature",
+      "Live stream guest spot",
+      "Video guest spot",
       "Podcast / interview episode",
       "Shoutout + channel review",
     ],
@@ -38,41 +38,41 @@ const steps = [
   {
     number: "02",
     icon: MessageSquare,
-    title: "The Confirmation",
-    story: `You send a booking request to a creator with 150K subscribers. They make the same type of content you do, and their audience would actually care about your stuff. This isn't random — this is a real fit.`,
-    detail: `Within a day, they accept. Payment is held securely through Stripe — the host doesn't get paid until the collaboration actually happens. Both sides are protected.`,
+    title: "Book the spot",
+    story: `You send a booking request to a host with 150K subscribers who makes similar content. Their audience would actually be interested in your stuff.`,
+    detail: `They accept within a day. Payment is held through Stripe until the collab happens — so both sides are protected.`,
     options: null,
   },
   {
     number: "03",
     icon: CalendarCheck,
-    title: "The Planning",
-    story: `Now you're in a direct chat with someone whose content you've been watching for years. Except now you're equals — collaborators working out the details together.`,
-    detail: `You schedule a date. You talk about the content — what game you'll play together on stream, what topic you'll cover in the video, how they'll introduce you to their audience. It's a real creative conversation, not a cold DM that gets ignored.`,
+    title: "Plan the content",
+    story: `You're now in a direct chat with the host. You schedule a date and talk through the content — what game you'll play on stream, what topic you'll cover, how they'll introduce you.`,
+    detail: `It's a real creative conversation. You're planning something together, not hoping a cold DM gets noticed.`,
     options: null,
   },
   {
     number: "04",
     icon: Video,
-    title: "The Moment",
-    story: `It's Tuesday night. You're sitting in a Discord call, and then the host hits "Go Live." Suddenly, 3,000 people are watching. The host introduces you — tells their audience why your channel is worth checking out — and then you're playing together, making content, being yourself.`,
-    detail: `The chat is lighting up. People are clicking through to your channel. Some of them are subscribing right there during the stream. You're getting real, authentic exposure to an audience that's already primed to care about your kind of content.`,
+    title: "Go live",
+    story: `Tuesday night. You're in a Discord call, the host hits "Go Live," and 3,000 people are watching. They introduce you, tell their audience about your channel, and then you're just making content together.`,
+    detail: `People click through to your channel during the stream. Some subscribe on the spot. You're in front of an audience that already watches content like yours.`,
     options: null,
   },
   {
     number: "05",
     icon: CheckCircle2,
-    title: "The Wrap-Up",
-    story: `The stream ends. The video goes up. Both of you hop back into the COMARI. platform and confirm that the collaboration happened as agreed.`,
-    detail: `The host gets paid. You leave a review so future buyers know what to expect. The host can review you too — building trust on both sides. No awkward follow-ups, no "hey did you forget about our deal." Everything is tracked and transparent.`,
+    title: "Confirm & review",
+    story: `After the stream or video goes up, both of you confirm in COMARI that the collab happened as agreed.`,
+    detail: `The host gets paid. You leave a review so future guests know what to expect, and the host can review you too. Everything's tracked — no awkward follow-ups needed.`,
     options: null,
   },
   {
     number: "06",
     icon: TrendingUp,
-    title: "The Growth",
-    story: `The collaboration is over, but the impact isn't. New subscribers keep finding your channel. Views on your older content start climbing. People who discovered you through the collab are sticking around — because they genuinely like what you make.`,
-    detail: `But it's not just the numbers. Working alongside a larger creator gave you real insight — how they structure their streams, how they engage their chat, how they think about content. You walked away with experience and perspective you couldn't have gotten any other way. And when you're ready, you book your next one.`,
+    title: "After the collab",
+    story: `New subscribers keep coming in over the next few days. Views on your older videos tick up. People who found you through the collab stick around because they like what you make.`,
+    detail: `You also pick up things from working alongside a bigger creator — how they run their stream, how they engage chat, how they think about content. When you're ready, you book another one.`,
     options: null,
   },
 ];
@@ -87,7 +87,7 @@ export default function HowItWorksPage() {
         <div className="relative max-w-3xl mx-auto text-center">
           <AnimatedSection>
             <p className="text-xs font-bold uppercase tracking-widest text-accent mb-4">
-              The Full Process
+              How It Works
             </p>
           </AnimatedSection>
 
@@ -102,9 +102,7 @@ export default function HowItWorksPage() {
 
           <AnimatedSection delay={0.2}>
             <p className="text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              Imagine you&apos;re a smaller creator with great content and a growing
-              audience. This is what your first COMARI. booking looks like —
-              from search to growth.
+              Here&apos;s what your first booking on COMARI looks like, start to finish.
             </p>
           </AnimatedSection>
         </div>
@@ -188,13 +186,12 @@ export default function HowItWorksPage() {
           <AnimatedSection>
             <div className="border border-border p-8 sm:p-10">
               <h2 className="text-2xl sm:text-3xl font-bold text-text-primary mb-4">
-                That&apos;s the whole process.
+                That&apos;s it.
               </h2>
               <p className="text-text-secondary leading-relaxed mb-6">
-                No cold DMs that go nowhere. No &ldquo;collab?&rdquo; comments
-                that get buried. No handshake deals where someone ghosts. Just a
-                clean, transparent marketplace where smaller creators pay for
-                real exposure on bigger channels — and both sides benefit.
+                You find a host, book a guest spot, show up, and grow. Payment
+                is handled, expectations are clear, and nobody has to chase
+                anyone down. It&apos;s a marketplace for collabs that actually happen.
               </p>
 
               <AnimatedStagger className="grid sm:grid-cols-3 gap-4 mb-8">
@@ -202,7 +199,7 @@ export default function HowItWorksPage() {
                   <div className="text-center p-4 border border-border">
                     <Users className="w-6 h-6 text-accent mx-auto mb-2" />
                     <p className="text-sm font-medium text-text-primary">
-                      Real audience access
+                      Relevant audiences
                     </p>
                   </div>
                 </AnimatedItem>
@@ -210,7 +207,7 @@ export default function HowItWorksPage() {
                   <div className="text-center p-4 border border-border">
                     <Star className="w-6 h-6 text-accent mx-auto mb-2" />
                     <p className="text-sm font-medium text-text-primary">
-                      Reviews from both sides
+                      Two-way reviews
                     </p>
                   </div>
                 </AnimatedItem>
@@ -218,7 +215,7 @@ export default function HowItWorksPage() {
                   <div className="text-center p-4 border border-border">
                     <Clock className="w-6 h-6 text-accent mx-auto mb-2" />
                     <p className="text-sm font-medium text-text-primary">
-                      Real experience &amp; insight
+                      Protected payments
                     </p>
                   </div>
                 </AnimatedItem>
@@ -229,7 +226,7 @@ export default function HowItWorksPage() {
                   href="/browse"
                   className="inline-flex items-center justify-center gap-2 bg-text-primary text-background font-medium px-7 py-3.5 transition-opacity hover:opacity-90"
                 >
-                  Explore the Platform
+                  Browse Hosts
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link

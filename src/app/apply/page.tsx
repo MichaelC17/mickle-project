@@ -75,7 +75,7 @@ const PACKAGE_TEMPLATES: PackageInput[] = [
   {
     name: "Premium Package",
     price: "1000",
-    description: "The ultimate collaboration experience with multi-platform reach",
+    description: "Full collab video plus promotion across all your platforms",
     includes: [
       "Dedicated collaboration video",
       "Multi-platform promotion",
@@ -339,7 +339,7 @@ export default function ApplyPage() {
               Become a Host
             </h1>
             <p className="text-text-secondary max-w-md mx-auto">
-              Set up your profile and get early access as we build the platform
+              Fill out your profile so you're ready when we launch
             </p>
           </div>
 
@@ -491,7 +491,7 @@ export default function ApplyPage() {
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
                         rows={4}
-                        placeholder="Describe your channel and what makes it great for collaborations..."
+                        placeholder="Describe your channel and the kind of collabs you'd do..."
                         className="w-full px-4 py-3 bg-background border border-border rounded-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent resize-none transition-all"
                       />
                     </div>

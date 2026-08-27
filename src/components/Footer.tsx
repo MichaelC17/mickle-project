@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Mail } from "lucide-react";
 
 const productLinks = [
-  { href: "/browse", label: "Browse Creators" },
+  { href: "/browse", label: "Browse Hosts" },
   { href: "/how-it-works", label: "How it Works" },
   { href: "#pricing", label: "Pricing" },
   { href: "#faq", label: "FAQ" },

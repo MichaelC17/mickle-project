@@ -83,16 +83,16 @@ function LoginContent() {
               variants={fadeUp}
               className="font-bold text-5xl xl:text-[3.5rem] 2xl:text-6xl text-text-primary leading-[1.08] tracking-tight"
             >
-              Grow your channel
+              Book guest spots on
               <br />
-              through collabs.
+              bigger channels.
             </motion.h1>
             <motion.p
               variants={fadeUp}
               className="text-text-secondary text-lg max-w-sm leading-relaxed"
             >
-              The marketplace for paid creator collaborations. Book guest spots
-              on bigger channels and get in front of new audiences.
+              Creators pay to appear on bigger channels. Pick a host,
+              book a guest spot, and their subscribers see your content.
             </motion.p>
           </motion.div>
 
@@ -132,7 +132,7 @@ function LoginContent() {
             <p className="mt-2 text-text-secondary text-[0.94rem]">
               {mode === "signin"
                 ? "Sign in to continue to your dashboard"
-                : "Get started — it takes less than a minute"}
+                : "Sign up to create your profile"}
             </p>
           </motion.div>
 

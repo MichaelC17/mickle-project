@@ -7,7 +7,7 @@ import { getAllPosts } from "@/lib/blog";
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Thoughts on technology, development, design, and the creative process.",
+    "Updates on COMARI, creator collaborations, and what we're building.",
 };
 
 export default function BlogPage() {
@@ -26,11 +26,11 @@ export default function BlogPage() {
               The Blog
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary mt-4 leading-tight">
-              Thoughts, stories, and ideas.
+              Blog
             </h1>
             <p className="mt-6 max-w-2xl text-text-secondary text-lg leading-relaxed">
-              Exploring the intersection of technology and design. Writing about
-              development, creativity, and the things I learn along the way.
+              Updates on COMARI, creator collaborations, and what we&apos;re learning
+              as we build the platform.
             </p>
           </div>
 

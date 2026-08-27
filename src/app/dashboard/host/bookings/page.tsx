@@ -235,7 +235,7 @@ export default function HostBookingsPage() {
               Incoming Bookings
             </h1>
             <p className="text-text-secondary mt-1">
-              Manage guest spot requests from creators
+              Guest spot requests from buyers
             </p>
           </div>
 
@@ -337,7 +337,7 @@ export default function HostBookingsPage() {
                 No bookings yet
               </p>
               <p className="text-text-muted text-sm max-w-sm mx-auto">
-                When creators book your packages, they&apos;ll appear here.
+                When someone books one of your packages, it&apos;ll show up here.
               </p>
             </div>
           ) : (
@@ -369,7 +369,7 @@ export default function HostBookingsPage() {
                         </div>
                         {booking.status === "confirmed" && (
                           <p className="text-xs text-yellow-500/80 mb-1">
-                            New Booking — awaiting your action
+                            New — needs your response
                           </p>
                         )}
                         <p className="text-sm text-text-muted">
@@ -440,8 +440,8 @@ export default function HostBookingsPage() {
                                 : "Start Work"}
                             </button>
                             <div className="absolute bottom-full right-0 mb-2 w-56 p-2.5 rounded-lg bg-surface border border-border text-xs text-text-secondary shadow-xl opacity-0 pointer-events-none group-hover/start:opacity-100 transition-opacity z-10">
-                              Signals to the buyer that you&apos;ve begun
-                              working on their guest spot
+                              Lets the buyer know you&apos;ve started working on
+                              their guest spot
                             </div>
                           </div>
                           <button
@@ -505,8 +505,8 @@ export default function HostBookingsPage() {
               Decline this booking?
             </AlertDialogTitle>
             <AlertDialogDescription className="text-text-muted">
-              Declining will cancel this booking and refund the buyer. This
-              cannot be undone.
+              This will cancel the booking and refund the buyer. You can&apos;t
+              undo this.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

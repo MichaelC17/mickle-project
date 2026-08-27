@@ -454,7 +454,7 @@ export default function HostDashboard() {
             </div>
             <h1 className="text-2xl font-semibold text-text-primary mb-2">No Host Profile</h1>
             <p className="text-text-muted mb-8">
-              You haven&apos;t created a host profile yet. Apply to start receiving bookings.
+              You haven&apos;t set up a host profile yet. Apply to list your guest spots.
             </p>
             <Link
               href="/apply"
@@ -778,7 +778,7 @@ export default function HostDashboard() {
                 <div>
                   <h3 className="font-semibold text-text-primary">Stripe Connect</h3>
                   <p className="text-xs text-text-muted">
-                    Receive payments directly to your bank account
+                    Get paid directly to your bank account
                   </p>
                 </div>
               </div>
@@ -867,7 +867,7 @@ export default function HostDashboard() {
                     <div>
                       <p className="font-medium text-emerald-500 text-sm">Account connected</p>
                       <p className="text-xs text-emerald-500/70">
-                        Your account is ready to receive payments
+                        You&apos;re all set to get paid for bookings
                       </p>
                     </div>
                   </div>
@@ -921,7 +921,7 @@ export default function HostDashboard() {
                     <div>
                       <p className="font-medium text-yellow-500 text-sm">Onboarding incomplete</p>
                       <p className="text-xs text-yellow-500/70">
-                        Complete your Stripe account setup to receive payments
+                        Finish your Stripe setup so you can get paid
                       </p>
                     </div>
                   </div>
@@ -941,8 +941,7 @@ export default function HostDashboard() {
               ) : (
                 <div className="space-y-4">
                   <p className="text-sm text-text-secondary">
-                    Connect your Stripe account to receive direct payments from bookings. We charge a
-                    15% platform fee on each transaction.
+                    Connect Stripe so buyers can pay you directly. We take a 15% platform fee per booking.
                   </p>
 
                   <div className="grid grid-cols-3 gap-4 py-2">
@@ -1080,7 +1079,7 @@ export default function HostDashboard() {
           {/* Account Section */}
           <section className="bg-surface border border-border p-6">
             <h3 className="text-lg font-semibold text-text-primary mb-1">Account</h3>
-            <p className="text-sm text-text-muted mb-5">Manage your host account settings</p>
+            <p className="text-sm text-text-muted mb-5">Settings for your host account</p>
 
               <div className="bg-yellow-500/5 border border-yellow-500/10 p-4">
               <div className="flex items-center justify-between gap-4">
@@ -1089,7 +1088,7 @@ export default function HostDashboard() {
                   <div className="min-w-0">
                     <p className="font-medium text-text-primary text-sm">Delete host profile</p>
                     <p className="text-xs text-text-muted mt-0.5">
-                      Permanently removes your profile, packages, and all associated data.
+                      Permanently removes your profile, packages, and listing data.
                     </p>
                   </div>
                 </div>
@@ -1208,7 +1207,7 @@ export default function HostDashboard() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete host profile?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. Your host profile, all packages, and any associated data
+              This can&apos;t be undone. Your profile, packages, and all related data
               will be permanently deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
