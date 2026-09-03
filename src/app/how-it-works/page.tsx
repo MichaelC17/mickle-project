@@ -26,11 +26,11 @@ const steps = [
     number: "01",
     icon: Search,
     title: "Find a host",
-    story: `You've got 2,000 subscribers and solid content, but growing from scratch is slow. You know a collab with the right bigger creator would help, but you don't have the connections yet.`,
-    detail: `On COMARI, you browse hosts in your niche who are offering guest spots. Some offer a spot on their next stream, others will feature you in a video or podcast. You pick the format and price that works for you.`,
+    story: `You browse COMARI's host listings and filter by niche, audience size, and price. Each host has a profile showing their channel, what kind of guest spots they offer, and what's included in each package.`,
+    detail: `Hosts offer different formats — a spot on their live stream, a collab video, a podcast episode, or a shoutout. You pick the one that fits your budget and content style.`,
     options: [
       "Live stream guest spot",
-      "Video guest spot",
+      "Video collab",
       "Podcast / interview episode",
       "Shoutout + channel review",
     ],
@@ -38,41 +38,41 @@ const steps = [
   {
     number: "02",
     icon: MessageSquare,
-    title: "Book the spot",
-    story: `You send a booking request to a host with 150K subscribers who makes similar content. Their audience would actually be interested in your stuff.`,
-    detail: `They accept within a day. Payment is held through Stripe until the collab happens — so both sides are protected.`,
+    title: "Request a booking",
+    story: `You pick a host and send a booking request. The host gets notified and can check out your channel before deciding whether to accept.`,
+    detail: `If they accept, you pay through the platform. Your payment is held by Stripe until the guest spot is completed — neither side is taking a risk.`,
     options: null,
   },
   {
     number: "03",
     icon: CalendarCheck,
-    title: "Plan the content",
-    story: `You're now in a direct chat with the host. You schedule a date and talk through the content — what game you'll play on stream, what topic you'll cover, how they'll introduce you.`,
-    detail: `It's a real creative conversation. You're planning something together, not hoping a cold DM gets noticed.`,
+    title: "Coordinate the details",
+    story: `Once the booking is confirmed, you and the host use COMARI's built-in chat to work out the specifics: date, content format, how the introduction will work, any prep needed.`,
+    detail: `You can also propose specific times through the scheduling feature. Everything stays in one place so there's a clear record of what was agreed on.`,
     options: null,
   },
   {
     number: "04",
     icon: Video,
-    title: "Go live",
-    story: `Tuesday night. You're in a Discord call, the host hits "Go Live," and 3,000 people are watching. They introduce you, tell their audience about your channel, and then you're just making content together.`,
-    detail: `People click through to your channel during the stream. Some subscribe on the spot. You're in front of an audience that already watches content like yours.`,
+    title: "The guest spot happens",
+    story: `The host features you in whatever format you booked — you join their stream, film a video together, or record a podcast episode. Their audience sees your content.`,
+    detail: `The format depends on the package. Some hosts do a full collab, others do an introduction and shoutout. It's defined in the listing so you know what you're getting.`,
     options: null,
   },
   {
     number: "05",
     icon: CheckCircle2,
-    title: "Confirm & review",
-    story: `After the stream or video goes up, both of you confirm in COMARI that the collab happened as agreed.`,
-    detail: `The host gets paid. You leave a review so future guests know what to expect, and the host can review you too. Everything's tracked — no awkward follow-ups needed.`,
+    title: "Confirm and review",
+    story: `After the guest spot, both you and the host confirm in COMARI that it happened as agreed. Once both sides confirm, the host gets paid (minus the 15% platform fee).`,
+    detail: `You can leave a review about your experience, and the host can review you too. Future guests can read these reviews before booking.`,
     options: null,
   },
   {
     number: "06",
     icon: TrendingUp,
-    title: "After the collab",
-    story: `New subscribers keep coming in over the next few days. Views on your older videos tick up. People who found you through the collab stick around because they like what you make.`,
-    detail: `You also pick up things from working alongside a bigger creator — how they run their stream, how they engage chat, how they think about content. When you're ready, you book another one.`,
+    title: "Track the results",
+    story: `If you've connected your YouTube channel, COMARI can track changes in your subscriber count and views after the guest spot so you can see what happened.`,
+    detail: `Growth depends on a lot of factors — the host's audience size, how relevant their viewers are to your content, and the quality of the guest spot itself. There's no guaranteed outcome, but the data helps you decide if it's worth booking again.`,
     options: null,
   },
 ];
@@ -93,16 +93,16 @@ export default function HowItWorksPage() {
 
           <AnimatedSection delay={0.1}>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-text-primary leading-[1.08] tracking-tight mb-6">
-              What a collaboration{" "}
+              How a booking works{" "}
               <span className="text-accent">
-                actually looks like
+                on COMARI
               </span>
             </h1>
           </AnimatedSection>
 
           <AnimatedSection delay={0.2}>
             <p className="text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              Here&apos;s what your first booking on COMARI looks like, start to finish.
+              From finding a host to tracking your results — here&apos;s the full process, step by step.
             </p>
           </AnimatedSection>
         </div>
@@ -186,12 +186,12 @@ export default function HowItWorksPage() {
           <AnimatedSection>
             <div className="border border-border p-8 sm:p-10">
               <h2 className="text-2xl sm:text-3xl font-bold text-text-primary mb-4">
-                That&apos;s it.
+                That&apos;s the full process.
               </h2>
               <p className="text-text-secondary leading-relaxed mb-6">
-                You find a host, book a guest spot, show up, and grow. Payment
-                is handled, expectations are clear, and nobody has to chase
-                anyone down. It&apos;s a marketplace for collabs that actually happen.
+                You find a host, book a guest spot, coordinate the content,
+                and confirm when it&apos;s done. Payments are handled through
+                Stripe, and both sides leave reviews afterward.
               </p>
 
               <AnimatedStagger className="grid sm:grid-cols-3 gap-4 mb-8">

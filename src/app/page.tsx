@@ -77,7 +77,7 @@ export default function Home() {
               </div>
               <div className="border-x border-border px-6">
                 <p className="text-2xl font-bold text-text-primary mb-1">15%</p>
-                <p className="text-xs text-text-muted uppercase tracking-wide">Host cut</p>
+                <p className="text-xs text-text-muted uppercase tracking-wide">Platform fee</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-text-primary mb-1">Stripe</p>
