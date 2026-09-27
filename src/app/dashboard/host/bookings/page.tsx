@@ -43,6 +43,20 @@ interface Booking {
   earnings: number
   status: string
   notes: string | null
+  collaborationIdea: string | null
+  introductionNotes: string | null
+  scheduledDate: string | null
+  creatorProfile: {
+    channelName: string
+    channelUrl: string | null
+    channelThumbnail: string | null
+    subscriberCount: number
+    niche: string
+    about: string
+    audience: string
+    contentStyle: string
+    exampleVideoUrl: string
+  } | null
   date: string
 }
 
@@ -94,7 +108,9 @@ export default function HostBookingsPage() {
 
       if (res.ok) {
         const label =
-          newStatus === "IN_PROGRESS"
+          newStatus === "CONFIRMED"
+            ? "accepted"
+            : newStatus === "IN_PROGRESS"
             ? "started"
             : newStatus === "COMPLETED"
               ? "completed"
@@ -138,8 +154,11 @@ export default function HostBookingsPage() {
     setDeclineTarget(null)
   }
 
-  const filteredBookings =
-    filter === "all" ? bookings : bookings.filter((b) => b.status === filter)
+  const filteredBookings = filter === "all"
+    ? bookings
+    : filter === "confirmed"
+      ? bookings.filter((b) => b.status === "pending" || b.status === "confirmed")
+      : bookings.filter((b) => b.status === filter)
 
   const stats = {
     total: bookings.length,
@@ -384,6 +403,9 @@ export default function HostBookingsPage() {
                             year: "numeric",
                           })}
                         </p>
+                        {booking.scheduledDate && <p className="text-sm text-accent mt-2">Requested time: {new Date(booking.scheduledDate).toLocaleString()}</p>}
+                        {booking.collaborationIdea && <div className="mt-3 max-w-xl"><p className="text-xs uppercase tracking-wider text-text-muted mb-1">Their idea</p><p className="text-sm text-text-secondary">{booking.collaborationIdea}</p></div>}
+                        {booking.creatorProfile && <div className="mt-3 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-xs text-text-muted max-w-2xl"><p><span className="text-text-secondary">Niche:</span> {booking.creatorProfile.niche}</p><p><span className="text-text-secondary">Audience:</span> {booking.creatorProfile.audience}</p><p className="sm:col-span-2"><span className="text-text-secondary">About:</span> {booking.creatorProfile.about}</p><a href={booking.creatorProfile.exampleVideoUrl} target="_blank" rel="noreferrer" className="text-accent hover:underline">Watch example video</a></div>}
                         {booking.notes && (
                           <p className="text-xs text-text-muted mt-2 italic max-w-md line-clamp-2">
                             &ldquo;{booking.notes}&rdquo;
@@ -424,6 +446,12 @@ export default function HostBookingsPage() {
                     </div>
 
                     <div className="flex items-center gap-2">
+                      {booking.status === "pending" && (
+                        <>
+                          <button onClick={() => updateBookingStatus(booking.id, "CONFIRMED")} disabled={updating === booking.id} className="inline-flex items-center gap-1.5 px-4 py-2 bg-accent hover:bg-accent-hover text-background text-sm font-medium disabled:opacity-50"><CheckCircle className="w-3.5 h-3.5" />Accept booking</button>
+                          <button onClick={() => handleDecline(booking.id)} disabled={updating === booking.id} className="inline-flex items-center gap-1.5 px-4 py-2 bg-surface border border-border text-text-secondary hover:text-red-400 text-sm font-medium disabled:opacity-50"><XCircle className="w-3.5 h-3.5" />Decline</button>
+                        </>
+                      )}
                       {booking.status === "confirmed" && (
                         <>
                           <div className="relative group/start">

@@ -19,6 +19,7 @@ Your Google Cloud project is in "testing mode" which means:
 **Important:** Your basic Google Sign-In only uses `openid`, `email`, and `profile` scopes. These are **non-sensitive** and do NOT require verification. Publishing will work immediately.
 
 The YouTube scope (`youtube.readonly`) used for host verification IS sensitive and will need separate verification (see Step 2).
+Google Calendar connection uses `calendar.readonly`, which is also sensitive and should be included in the same verification submission.
 
 ### What this fixes:
 - Anyone can log in with Google (no manual approval)
@@ -63,6 +64,10 @@ Upload as an **unlisted** YouTube video. Keep the link.
 
 Justification: "COMARI is a creator collaboration marketplace. We use the youtube.readonly scope for two purposes: (1) to verify that a user owns a YouTube channel when they apply to become a host on our platform, and (2) to display their channel name, subscriber count, and channel thumbnail on their public host profile. We only read basic channel metadata (channel name, subscriber count, video count, view count, thumbnail URL, and custom URL). We do not access private videos, comments, playlists, or any data beyond the channel's public statistics. A narrower scope is not available for reading channel ownership and statistics through the YouTube Data API."
 
+**Scope: `https://www.googleapis.com/auth/calendar.readonly`**
+
+Justification: "Hosts may optionally connect Google Calendar so COMARI can avoid offering booking times that conflict with existing events. COMARI reads free/busy information from the host's primary calendar. Event names, attendees, descriptions, and private calendar details are not shown to buyers or stored in COMARI. Calendar connection is optional and can be disconnected through the user's Google account."
+
 ### Submit for verification:
 1. Go to Google Cloud Console > **APIs & Services** > **OAuth consent screen**
 2. Click **"Prepare for Verification"** (or "Edit App")
@@ -101,5 +106,9 @@ AUTH_URL=https://comari.app
 Also make sure your Google Cloud OAuth client has these redirect URIs:
 - `https://comari.app/api/auth/callback/google`
 - `https://comari.app/api/auth/callback/google-youtube`
+- `https://comari.app/api/auth/callback/google-calendar`
 - `http://localhost:3000/api/auth/callback/google` (for local dev)
 - `http://localhost:3000/api/auth/callback/google-youtube` (for local dev)
+- `http://localhost:3000/api/auth/callback/google-calendar` (for local dev)
+
+Enable **Google Calendar API** in the same Google Cloud project before testing calendar connection.

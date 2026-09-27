@@ -20,18 +20,19 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { hostId, hostName, packageId, packageName, price } = body;
+    const { hostId, packageId, scheduledDate, collaborationIdea, introductionNotes } = body;
 
-    if (!hostId || !packageId || !price) {
+    if (!hostId || !packageId || !scheduledDate || !collaborationIdea?.trim()) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    const host = await prisma.host.findUnique({
+    const [host, creatorProfile] = await Promise.all([prisma.host.findUnique({
       where: { id: hostId },
-    });
+      include: { packages: { where: { id: packageId } } },
+    }), prisma.creatorProfile.findUnique({ where: { userId: session.user.id } })]);
 
     if (!host) {
       return NextResponse.json(
@@ -40,6 +41,30 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!creatorProfile?.isComplete) {
+      return NextResponse.json({ error: "Complete your creator profile before booking" }, { status: 400 });
+    }
+
+    const selectedPackage = host.packages[0];
+    if (!selectedPackage) return NextResponse.json({ error: "Offer not found" }, { status: 404 });
+    const requestedDate = new Date(scheduledDate);
+    if (Number.isNaN(requestedDate.getTime()) || requestedDate <= new Date()) {
+      return NextResponse.json({ error: "Choose a valid future booking time" }, { status: 400 });
+    }
+
+    const overlappingBooking = await prisma.booking.findFirst({
+      where: {
+        hostId,
+        scheduledDate: {
+          gte: new Date(requestedDate.getTime() - (selectedPackage.durationMinutes + selectedPackage.bufferMinutes) * 60_000),
+          lte: new Date(requestedDate.getTime() + (selectedPackage.durationMinutes + selectedPackage.bufferMinutes) * 60_000),
+        },
+        status: { notIn: ["CANCELLED", "REFUNDED"] },
+      },
+    });
+    if (overlappingBooking) return NextResponse.json({ error: "That time was just booked. Please choose another." }, { status: 409 });
+
+    const price = selectedPackage.price;
     const amountInCents = price * 100;
     const platformFee = Math.round(amountInCents * (PLATFORM_FEE_PERCENT / 100));
 
@@ -52,7 +77,7 @@ export async function POST(request: Request) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: `${packageName} with ${hostName}`,
+              name: `${selectedPackage.name} with ${host.channelName}`,
               description: `Guest spot package on COMARI.`,
             },
             unit_amount: amountInCents,
@@ -67,9 +92,13 @@ export async function POST(request: Request) {
         buyerId: session.user.id,
         hostId,
         packageId,
-        packageName,
+        packageName: selectedPackage.name,
         amount: price.toString(),
         platformFee: (platformFee / 100).toString(),
+        scheduledDate: requestedDate.toISOString(),
+        collaborationIdea: collaborationIdea.trim().slice(0, 500),
+        introductionNotes: String(introductionNotes || "").trim().slice(0, 300),
+        bookingMode: selectedPackage.bookingMode,
       },
     };
 

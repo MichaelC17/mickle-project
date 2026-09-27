@@ -36,6 +36,11 @@ interface PackageInput {
   price: string
   description: string
   includes: string[]
+  format: string
+  durationMinutes: string
+  bookingMode: "INSTANT" | "APPROVAL"
+  bufferMinutes: string
+  leadTimeHours: string
 }
 
 interface ExistingHost {
@@ -48,6 +53,11 @@ const DEFAULT_PACKAGE: PackageInput = {
   price: "",
   description: "",
   includes: [""],
+  format: "Livestream feature",
+  durationMinutes: "30",
+  bookingMode: "APPROVAL",
+  bufferMinutes: "15",
+  leadTimeHours: "24",
 }
 
 const PACKAGE_TEMPLATES: PackageInput[] = [
@@ -60,6 +70,7 @@ const PACKAGE_TEMPLATES: PackageInput[] = [
       "Channel mention in description",
       "Social media shoutout",
     ],
+    format: "Video feature", durationMinutes: "15", bookingMode: "APPROVAL", bufferMinutes: "15", leadTimeHours: "24",
   },
   {
     name: "Featured Spot",
@@ -71,6 +82,7 @@ const PACKAGE_TEMPLATES: PackageInput[] = [
       "Pinned comment feature",
       "Social media cross-promotion",
     ],
+    format: "Video collaboration", durationMinutes: "45", bookingMode: "APPROVAL", bufferMinutes: "30", leadTimeHours: "48",
   },
   {
     name: "Premium Package",
@@ -83,6 +95,7 @@ const PACKAGE_TEMPLATES: PackageInput[] = [
       "Priority scheduling",
       "Post-video analytics report",
     ],
+    format: "Dedicated video", durationMinutes: "90", bookingMode: "APPROVAL", bufferMinutes: "30", leadTimeHours: "72",
   },
 ]
 
@@ -304,6 +317,11 @@ export default function ApplyPage() {
             price: parseInt(pkg.price, 10),
             description: pkg.description,
             includes: pkg.includes.filter((inc) => inc.trim() !== ""),
+            format: pkg.format,
+            durationMinutes: parseInt(pkg.durationMinutes, 10),
+            bookingMode: pkg.bookingMode,
+            bufferMinutes: parseInt(pkg.bufferMinutes, 10),
+            leadTimeHours: parseInt(pkg.leadTimeHours, 10),
           })),
         }),
       })
@@ -638,6 +656,25 @@ export default function ApplyPage() {
                               placeholder="Brief description of what's included"
                               className="bg-background border-border rounded-lg h-10"
                             />
+                          </div>
+
+                          <div className="grid sm:grid-cols-2 gap-3 mb-3">
+                            <label className="block text-xs font-medium text-text-secondary">Format
+                              <select value={pkg.format} onChange={(e) => updatePackage(pkgIndex, "format", e.target.value)} className="mt-1 w-full bg-background border border-border px-3 h-10 text-text-primary">
+                                <option>Livestream feature</option><option>Video feature</option><option>Remote recording</option><option>Gameplay session</option><option>Interview</option><option>Dedicated video</option>
+                              </select>
+                            </label>
+                            <label className="block text-xs font-medium text-text-secondary">Host approval
+                              <select value={pkg.bookingMode} onChange={(e) => updatePackage(pkgIndex, "bookingMode", e.target.value as "INSTANT" | "APPROVAL")} className="mt-1 w-full bg-background border border-border px-3 h-10 text-text-primary">
+                                <option value="APPROVAL">Quick approval required</option><option value="INSTANT">Instant booking</option>
+                              </select>
+                            </label>
+                            <label className="block text-xs font-medium text-text-secondary">Feature length (minutes)
+                              <Input type="number" min="5" value={pkg.durationMinutes} onChange={(e) => updatePackage(pkgIndex, "durationMinutes", e.target.value)} className="mt-1 bg-background border-border rounded-lg h-10" />
+                            </label>
+                            <label className="block text-xs font-medium text-text-secondary">Advance notice (hours)
+                              <Input type="number" min="1" value={pkg.leadTimeHours} onChange={(e) => updatePackage(pkgIndex, "leadTimeHours", e.target.value)} className="mt-1 bg-background border-border rounded-lg h-10" />
+                            </label>
                           </div>
 
                           <div>

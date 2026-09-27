@@ -323,6 +323,11 @@ export default function DashboardPage() {
           )}
 
           {/* Underline tabs */}
+          <div className="mb-6 flex justify-end">
+            <Link href="/dashboard/profile" className="text-sm font-medium text-accent hover:text-accent-hover">
+              Edit creator profile
+            </Link>
+          </div>
           <div className="flex items-center gap-6 mb-8 border-b border-border overflow-x-auto">
             {tabs.map((tab) => (
               <button

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { notifyBookingStarted } from "@/lib/notifications"
+import { notifyBookingAccepted, notifyBookingStarted } from "@/lib/notifications"
+import { getStripe } from "@/lib/stripe"
 
 export const dynamic = "force-dynamic"
 
@@ -36,6 +37,7 @@ export async function GET() {
             name: true,
             email: true,
             image: true,
+            creatorProfile: true,
           },
         },
         package: {
@@ -60,6 +62,10 @@ export async function GET() {
         earnings: booking.amount - booking.platformFee,
         status: booking.status.toLowerCase(),
         notes: booking.notes,
+        collaborationIdea: booking.collaborationIdea,
+        introductionNotes: booking.introductionNotes,
+        scheduledDate: booking.scheduledDate?.toISOString() || null,
+        creatorProfile: booking.buyer.creatorProfile,
         date: booking.createdAt.toISOString(),
       })),
     })
@@ -116,13 +122,27 @@ export async function PATCH(request: Request) {
       )
     }
 
+    let finalStatus = status as "CONFIRMED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | "REFUNDED"
+    if (status === "CANCELLED" && booking.status === "PENDING" && booking.stripePaymentId) {
+      await getStripe().refunds.create({
+        payment_intent: booking.stripePaymentId,
+        ...(host.stripeAccountId
+          ? { refund_application_fee: true, reverse_transfer: true }
+          : {}),
+      })
+      finalStatus = "REFUNDED"
+    }
+
     const updatedBooking = await prisma.booking.update({
       where: { id: bookingId },
-      data: { status },
+      data: { status: finalStatus },
     })
 
     if (status === "IN_PROGRESS") {
       await notifyBookingStarted(bookingId)
+    }
+    if (status === "CONFIRMED" && booking.status === "PENDING") {
+      await notifyBookingAccepted(bookingId)
     }
 
     return NextResponse.json({ booking: updatedBooking })

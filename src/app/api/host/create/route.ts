@@ -67,11 +67,16 @@ export async function POST(request: Request) {
         niche,
         bio,
         packages: {
-          create: packages.map((pkg: { name: string; price: number; description?: string; includes: string[] }) => ({
+          create: packages.map((pkg: { name: string; price: number; description?: string; includes: string[]; format?: string; durationMinutes?: number; bookingMode?: "INSTANT" | "APPROVAL"; bufferMinutes?: number; leadTimeHours?: number }) => ({
             name: pkg.name,
             price: pkg.price,
             description: pkg.description || "",
             includes: pkg.includes || [],
+            format: pkg.format || "Video feature",
+            durationMinutes: pkg.durationMinutes || 30,
+            bookingMode: pkg.bookingMode || "APPROVAL",
+            bufferMinutes: pkg.bufferMinutes ?? 15,
+            leadTimeHours: pkg.leadTimeHours ?? 24,
           })),
         },
       },
@@ -167,11 +172,16 @@ export async function PUT(request: Request) {
         niche,
         bio,
         packages: {
-          create: packages.map((pkg: { name: string; price: number; description?: string; includes: string[] }) => ({
+          create: packages.map((pkg: { name: string; price: number; description?: string; includes: string[]; format?: string; durationMinutes?: number; bookingMode?: "INSTANT" | "APPROVAL"; bufferMinutes?: number; leadTimeHours?: number }) => ({
             name: pkg.name,
             price: pkg.price,
             description: pkg.description || "",
             includes: pkg.includes || [],
+            format: pkg.format || "Video feature",
+            durationMinutes: pkg.durationMinutes || 30,
+            bookingMode: pkg.bookingMode || "APPROVAL",
+            bufferMinutes: pkg.bufferMinutes ?? 15,
+            leadTimeHours: pkg.leadTimeHours ?? 24,
           })),
         },
       },

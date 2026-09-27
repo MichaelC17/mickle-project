@@ -40,6 +40,7 @@ import {
   Clock,
   AlertTriangle,
   CreditCard,
+  CalendarDays,
 } from "lucide-react"
 
 interface Package {
@@ -48,6 +49,11 @@ interface Package {
   price: number
   description: string | null
   includes: string[]
+  format: string
+  durationMinutes: number
+  bookingMode: "INSTANT" | "APPROVAL"
+  bufferMinutes: number
+  leadTimeHours: number
 }
 
 interface Host {
@@ -98,6 +104,11 @@ interface PackageInput {
   price: string
   description: string
   includes: string[]
+  format: string
+  durationMinutes: string
+  bookingMode: "INSTANT" | "APPROVAL"
+  bufferMinutes: string
+  leadTimeHours: string
 }
 
 const NICHES = [
@@ -160,6 +171,11 @@ export default function HostDashboard() {
                 price: pkg.price.toString(),
                 description: pkg.description || "",
                 includes: pkg.includes.length > 0 ? pkg.includes : [""],
+                format: pkg.format,
+                durationMinutes: pkg.durationMinutes.toString(),
+                bookingMode: pkg.bookingMode,
+                bufferMinutes: pkg.bufferMinutes.toString(),
+                leadTimeHours: pkg.leadTimeHours.toString(),
               }))
             )
           }
@@ -277,7 +293,7 @@ export default function HostDashboard() {
   }
 
   const addPackage = () => {
-    setPackages([...packages, { name: "", price: "", description: "", includes: [""] }])
+    setPackages([...packages, { name: "", price: "", description: "", includes: [""], format: "Livestream feature", durationMinutes: "30", bookingMode: "APPROVAL", bufferMinutes: "15", leadTimeHours: "24" }])
   }
 
   const removePackage = (index: number) => {
@@ -336,6 +352,11 @@ export default function HostDashboard() {
             price: parseInt(pkg.price, 10),
             description: pkg.description,
             includes: pkg.includes.filter((inc) => inc.trim() !== ""),
+            format: pkg.format,
+            durationMinutes: parseInt(pkg.durationMinutes, 10),
+            bookingMode: pkg.bookingMode,
+            bufferMinutes: parseInt(pkg.bufferMinutes, 10),
+            leadTimeHours: parseInt(pkg.leadTimeHours, 10),
           })),
         }),
       })
@@ -386,6 +407,11 @@ export default function HostDashboard() {
           price: pkg.price.toString(),
           description: pkg.description || "",
           includes: pkg.includes.length > 0 ? pkg.includes : [""],
+          format: pkg.format,
+          durationMinutes: pkg.durationMinutes.toString(),
+          bookingMode: pkg.bookingMode,
+          bufferMinutes: pkg.bufferMinutes.toString(),
+          leadTimeHours: pkg.leadTimeHours.toString(),
         }))
       )
     }
@@ -499,6 +525,13 @@ export default function HostDashboard() {
                 >
                   <Eye className="w-4 h-4" />
                   Bookings
+                </Link>
+                <Link
+                  href="/dashboard/host/availability"
+                  className="bg-surface border border-border text-text-primary font-medium px-4 py-2.5 rounded-xl transition-colors hover:bg-surface-raised inline-flex items-center gap-2 text-sm"
+                >
+                  <CalendarDays className="w-4 h-4" />
+                  Availability
                 </Link>
                 <button
                   onClick={() => setEditing(true)}
@@ -664,6 +697,25 @@ export default function HostDashboard() {
                       placeholder="Description"
                       className="w-full px-4 py-2.5 bg-surface border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all text-sm mb-4"
                     />
+
+                    <div className="grid sm:grid-cols-2 gap-3 mb-4">
+                      <label className="text-xs text-text-muted">Format
+                        <select value={pkg.format} onChange={(e) => updatePackage(pkgIndex, "format", e.target.value)} className="mt-1 w-full px-3 py-2.5 bg-surface border border-border text-text-primary text-sm">
+                          <option>Livestream feature</option><option>Video feature</option><option>Remote recording</option><option>Gameplay session</option><option>Interview</option><option>Dedicated video</option>
+                        </select>
+                      </label>
+                      <label className="text-xs text-text-muted">Booking mode
+                        <select value={pkg.bookingMode} onChange={(e) => updatePackage(pkgIndex, "bookingMode", e.target.value as "INSTANT" | "APPROVAL")} className="mt-1 w-full px-3 py-2.5 bg-surface border border-border text-text-primary text-sm">
+                          <option value="APPROVAL">Quick approval</option><option value="INSTANT">Instant booking</option>
+                        </select>
+                      </label>
+                      <label className="text-xs text-text-muted">Length in minutes
+                        <input type="number" min="5" value={pkg.durationMinutes} onChange={(e) => updatePackage(pkgIndex, "durationMinutes", e.target.value)} className="mt-1 w-full px-3 py-2.5 bg-surface border border-border text-text-primary text-sm" />
+                      </label>
+                      <label className="text-xs text-text-muted">Advance notice in hours
+                        <input type="number" min="1" value={pkg.leadTimeHours} onChange={(e) => updatePackage(pkgIndex, "leadTimeHours", e.target.value)} className="mt-1 w-full px-3 py-2.5 bg-surface border border-border text-text-primary text-sm" />
+                      </label>
+                    </div>
 
                     <div>
                       <div className="flex items-center justify-between mb-2">

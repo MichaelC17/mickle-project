@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
-import { notifyBookingConfirmed } from "@/lib/notifications";
+import { notifyBookingConfirmed, notifyBookingRequested } from "@/lib/notifications";
 import { getStripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
@@ -100,7 +100,7 @@ export async function POST(request: Request) {
     console.log("Processing checkout.session.completed for:", session.id);
     console.log("Session metadata:", JSON.stringify(session.metadata));
     
-    const { buyerId, hostId, packageId, amount } = session.metadata || {};
+    const { buyerId, hostId, packageId, amount, scheduledDate, collaborationIdea, introductionNotes, bookingMode } = session.metadata || {};
     
     if (!buyerId || !hostId || !packageId || !amount) {
       console.error("Missing metadata in checkout session:", session.id);
@@ -131,13 +131,17 @@ export async function POST(request: Request) {
           platformFee,
           stripeSessionId: session.id,
           stripePaymentId: session.payment_intent as string,
-          status: "CONFIRMED",
+          status: bookingMode === "INSTANT" ? "CONFIRMED" : "PENDING",
+          scheduledDate: scheduledDate ? new Date(scheduledDate) : null,
+          collaborationIdea: collaborationIdea || null,
+          introductionNotes: introductionNotes || null,
         },
       });
 
       console.log("Booking created successfully:", booking.id);
 
-      await notifyBookingConfirmed(booking.id);
+      if (bookingMode === "INSTANT") await notifyBookingConfirmed(booking.id);
+      else await notifyBookingRequested(booking.id);
       
       captureBaselineStats(booking.id, buyerId).catch((err) =>
         console.error("Failed to capture baseline stats:", err)

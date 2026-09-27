@@ -26,6 +26,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       },
     }),
+    Google({
+      id: "google-calendar",
+      name: "Google Calendar",
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
+      authorization: {
+        params: {
+          scope: "openid email profile https://www.googleapis.com/auth/calendar.readonly",
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
+    }),
     Credentials({
       name: "Email",
       credentials: {

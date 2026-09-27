@@ -20,6 +20,7 @@ import {
   ChevronRight,
   Clock,
   Users,
+  CalendarDays,
 } from "lucide-react"
 
 interface Package {
@@ -28,6 +29,9 @@ interface Package {
   price: number
   description: string | null
   includes: string[]
+  format: string
+  durationMinutes: number
+  bookingMode: "INSTANT" | "APPROVAL"
 }
 
 interface Host {
@@ -126,6 +130,12 @@ export default function HostProfilePage() {
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false)
   const [reviews, setReviews] = useState<Review[]>([])
   const [reviewStats, setReviewStats] = useState<ReviewStats | null>(null)
+  const [slots, setSlots] = useState<string[]>([])
+  const [slotsLoading, setSlotsLoading] = useState(false)
+  const [selectedSlot, setSelectedSlot] = useState("")
+  const [collaborationIdea, setCollaborationIdea] = useState("")
+  const [introductionNotes, setIntroductionNotes] = useState("")
+  const [profileComplete, setProfileComplete] = useState<boolean | null>(null)
 
   useEffect(() => {
     const fetchHost = async () => {
@@ -143,6 +153,25 @@ export default function HostProfilePage() {
     }
     if (params.id) fetchHost()
   }, [params.id])
+
+  useEffect(() => {
+    fetch("/api/creator-profile").then(async (response) => {
+      if (!response.ok) return setProfileComplete(false)
+      const data = await response.json()
+      setProfileComplete(Boolean(data.profile?.isComplete))
+    })
+  }, [])
+
+  useEffect(() => {
+    const offer = host?.packages[selectedPackage]
+    if (!host || !offer) return
+    setSlotsLoading(true)
+    setSelectedSlot("")
+    fetch(`/api/hosts/${host.id}/availability?packageId=${offer.id}`)
+      .then(async (response) => response.ok ? (await response.json()).slots : [])
+      .then(setSlots)
+      .finally(() => setSlotsLoading(false))
+  }, [host, selectedPackage])
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -201,6 +230,14 @@ export default function HostProfilePage() {
   const lowestPrice = Math.min(...host.packages.map((p) => p.price))
 
   const handleCheckout = async () => {
+    if (!profileComplete) {
+      window.location.href = `/dashboard/profile`
+      return
+    }
+    if (!selectedSlot || !collaborationIdea.trim()) {
+      showToast({ type: "error", title: "Add the booking details", message: "Choose a time and briefly explain what you’d like to do." })
+      return
+    }
     setIsCheckoutLoading(true)
     try {
       const response = await fetch("/api/checkout", {
@@ -212,6 +249,9 @@ export default function HostProfilePage() {
           packageId: currentPackage.id,
           packageName: currentPackage.name,
           price: currentPackage.price,
+          scheduledDate: selectedSlot,
+          collaborationIdea,
+          introductionNotes,
         }),
       })
       const data = await response.json()
@@ -524,6 +564,7 @@ export default function HostProfilePage() {
                         ${currentPackage.price.toLocaleString()}
                       </p>
                     </div>
+                    <p className="text-sm text-text-muted mt-2">{currentPackage.format} · {currentPackage.durationMinutes} minutes · {currentPackage.bookingMode === "INSTANT" ? "Instant booking" : "Host approval"}</p>
                   </div>
 
                   {currentPackage.includes.length > 0 && (
@@ -545,9 +586,21 @@ export default function HostProfilePage() {
                     </div>
                   )}
 
+                  <div className="border-t border-border pt-4 mb-5">
+                    <div className="flex items-center gap-2 mb-3"><CalendarDays className="w-4 h-4 text-accent" /><p className="text-sm font-semibold text-text-primary">Choose an available time</p></div>
+                    {slotsLoading ? <p className="text-sm text-text-muted">Checking availability…</p> : slots.length ? <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)} className="w-full bg-background border border-border px-3 py-3 text-sm text-text-primary"><option value="">Select a date and time</option>{slots.map((slot) => <option key={slot} value={slot}>{new Date(slot).toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" })}</option>)}</select> : <p className="text-sm text-text-muted">This host hasn’t opened any booking times yet.</p>}
+                  </div>
+
+                  <div className="border-t border-border pt-4 mb-5 space-y-4">
+                    <label className="block"><span className="block text-sm font-semibold text-text-primary mb-2">What would you like to do? *</span><textarea value={collaborationIdea} onChange={(e) => setCollaborationIdea(e.target.value)} rows={3} maxLength={800} className="w-full bg-background border border-border px-3 py-3 text-sm text-text-primary" placeholder="Give the host a clear idea they can quickly review." /></label>
+                    <label className="block"><span className="block text-sm font-semibold text-text-primary mb-2">How should they introduce you?</span><textarea value={introductionNotes} onChange={(e) => setIntroductionNotes(e.target.value)} rows={2} maxLength={400} className="w-full bg-background border border-border px-3 py-3 text-sm text-text-primary" placeholder="Channel name, topic, or link you want mentioned." /></label>
+                  </div>
+
+                  {profileComplete === false && <Link href="/dashboard/profile" className="block mb-4 border border-accent/40 bg-accent/5 px-4 py-3 text-sm text-accent">Complete your creator profile before booking →</Link>}
+
                   <button
                     onClick={handleCheckout}
-                    disabled={isCheckoutLoading}
+                    disabled={isCheckoutLoading || !selectedSlot || !collaborationIdea.trim() || slots.length === 0}
                     className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-background font-semibold py-3.5 text-base transition-colors flex items-center justify-center gap-2"
                   >
                     {isCheckoutLoading ? (
@@ -558,7 +611,7 @@ export default function HostProfilePage() {
                     ) : (
                       <>
                         <CreditCard className="w-4 h-4" />
-                        Continue to Payment
+                        {currentPackage.bookingMode === "INSTANT" ? "Book and Pay" : "Reserve and Send for Approval"}
                       </>
                     )}
                   </button>

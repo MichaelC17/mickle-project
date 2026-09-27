@@ -25,6 +25,7 @@ export async function GET(
             name: true,
             email: true,
             image: true,
+            creatorProfile: true,
           },
         },
         host: {
@@ -72,6 +73,8 @@ export async function GET(
         platformFee: booking.platformFee,
         scheduledDate: booking.scheduledDate,
         createdAt: booking.createdAt,
+        collaborationIdea: booking.collaborationIdea,
+        introductionNotes: booking.introductionNotes,
         package: booking.package,
         buyer: booking.buyer,
         host: {

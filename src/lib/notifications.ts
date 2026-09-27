@@ -257,6 +257,47 @@ export async function notifyBookingConfirmed(bookingId: string) {
   })
 }
 
+export async function notifyBookingRequested(bookingId: string) {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: { host: { include: { user: true } }, buyer: true, package: true },
+  })
+  if (!booking) return
+
+  await createNotification({
+    userId: booking.host.userId,
+    type: "BOOKING_CONFIRMED",
+    title: "New booking request",
+    message: `${booking.buyer.name || "A creator"} requested your ${booking.package.name} offer`,
+    link: "/dashboard/host/bookings",
+    bookingId,
+  })
+  await createNotification({
+    userId: booking.buyerId,
+    type: "BOOKING_CONFIRMED",
+    title: "Request sent",
+    message: `${booking.host.channelName} will review your booking request`,
+    link: `/booking/${bookingId}`,
+    bookingId,
+  })
+}
+
+export async function notifyBookingAccepted(bookingId: string) {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: { host: true, package: true },
+  })
+  if (!booking) return
+  await createNotification({
+    userId: booking.buyerId,
+    type: "BOOKING_CONFIRMED",
+    title: "Booking accepted",
+    message: `${booking.host.channelName} accepted your ${booking.package.name} booking. Chat is now open.`,
+    link: `/booking/${bookingId}`,
+    bookingId,
+  })
+}
+
 export async function notifyBookingStarted(bookingId: string) {
   const booking = await prisma.booking.findUnique({
     where: { id: bookingId },
