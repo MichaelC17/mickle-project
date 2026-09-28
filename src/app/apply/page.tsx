@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatNumber } from "@/lib/utils"
 import { useToast } from "@/context/ToastContext"
+import FormatSelect from "@/components/FormatSelect"
 import {
   Youtube,
   ChevronRight,
@@ -53,7 +54,7 @@ const DEFAULT_PACKAGE: PackageInput = {
   price: "",
   description: "",
   includes: [""],
-  format: "Livestream feature",
+  format: "Join a livestream",
   durationMinutes: "30",
   bookingMode: "APPROVAL",
   bufferMinutes: "15",
@@ -62,40 +63,37 @@ const DEFAULT_PACKAGE: PackageInput = {
 
 const PACKAGE_TEMPLATES: PackageInput[] = [
   {
-    name: "Basic Guest Spot",
+    name: "Livestream Guest",
     price: "200",
-    description: "A brief appearance on the channel with cross-promotion",
+    description: "Join a livestream and take part in the content with the host",
     includes: [
-      "5-minute feature segment",
-      "Channel mention in description",
-      "Social media shoutout",
+      "Join the host live for 30 minutes",
+      "Introduction to the host's audience",
+      "Channel link in the stream description",
     ],
-    format: "Video feature", durationMinutes: "15", bookingMode: "APPROVAL", bufferMinutes: "15", leadTimeHours: "24",
+    format: "Join a livestream", durationMinutes: "30", bookingMode: "APPROVAL", bufferMinutes: "15", leadTimeHours: "24",
   },
   {
-    name: "Featured Spot",
+    name: "Recorded Video Guest",
     price: "500",
-    description: "A dedicated collaboration with full promotion",
+    description: "Record a video with the host as a participating guest",
     includes: [
-      "Full collaboration video",
-      "Channel promotion in video & description",
-      "Pinned comment feature",
-      "Social media cross-promotion",
+      "Take part in the video recording",
+      "Introduction during the video",
+      "Channel link in the description",
     ],
-    format: "Video collaboration", durationMinutes: "45", bookingMode: "APPROVAL", bufferMinutes: "30", leadTimeHours: "48",
+    format: "Join a recorded video", durationMinutes: "45", bookingMode: "APPROVAL", bufferMinutes: "30", leadTimeHours: "48",
   },
   {
-    name: "Premium Package",
+    name: "Extended Collaboration",
     price: "1000",
-    description: "Full collab video plus promotion across all your platforms",
+    description: "A longer recording built around both creators taking part",
     includes: [
-      "Dedicated collaboration video",
-      "Multi-platform promotion",
-      "Custom thumbnail feature",
-      "Priority scheduling",
-      "Post-video analytics report",
+      "Plan the recording with the host",
+      "Participate throughout the content",
+      "Introduction and channel link",
     ],
-    format: "Dedicated video", durationMinutes: "90", bookingMode: "APPROVAL", bufferMinutes: "30", leadTimeHours: "72",
+    format: "Remote co-recording", durationMinutes: "90", bookingMode: "APPROVAL", bufferMinutes: "30", leadTimeHours: "72",
   },
 ]
 
@@ -578,7 +576,7 @@ export default function ApplyPage() {
                       </h2>
                     </div>
                     <p className="text-text-muted text-sm mb-4">
-                      Define what you offer to guests. Set your own prices and perks.
+                      Define how a creator can join your content. Set the format, time, and price.
                     </p>
 
                     {packages.length === 1 && !packages[0].name && (
@@ -659,11 +657,9 @@ export default function ApplyPage() {
                           </div>
 
                           <div className="grid sm:grid-cols-2 gap-3 mb-3">
-                            <label className="block text-xs font-medium text-text-secondary">Format
-                              <select value={pkg.format} onChange={(e) => updatePackage(pkgIndex, "format", e.target.value)} className="mt-1 w-full bg-background border border-border px-3 h-10 text-text-primary">
-                                <option>Livestream feature</option><option>Video feature</option><option>Remote recording</option><option>Gameplay session</option><option>Interview</option><option>Dedicated video</option>
-                              </select>
-                            </label>
+                            <div className="block text-xs font-medium text-text-secondary">Format
+                              <FormatSelect value={pkg.format} onChange={(format) => updatePackage(pkgIndex, "format", format)} />
+                            </div>
                             <label className="block text-xs font-medium text-text-secondary">Host approval
                               <select value={pkg.bookingMode} onChange={(e) => updatePackage(pkgIndex, "bookingMode", e.target.value as "INSTANT" | "APPROVAL")} className="mt-1 w-full bg-background border border-border px-3 h-10 text-text-primary">
                                 <option value="APPROVAL">Quick approval required</option><option value="INSTANT">Instant booking</option>
@@ -699,7 +695,7 @@ export default function ApplyPage() {
                                     onChange={(e) =>
                                       updateInclude(pkgIndex, incIndex, e.target.value)
                                     }
-                                    placeholder="e.g., 5 min feature"
+                                    placeholder="e.g., Join the full recording"
                                     className="flex-1 bg-background border-border rounded-lg h-9 text-sm"
                                   />
                                   {pkg.includes.length > 1 && (

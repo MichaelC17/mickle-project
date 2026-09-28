@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
+import FormatSelect from "@/components/FormatSelect"
 import {
   Dialog,
   DialogContent,
@@ -293,7 +294,7 @@ export default function HostDashboard() {
   }
 
   const addPackage = () => {
-    setPackages([...packages, { name: "", price: "", description: "", includes: [""], format: "Livestream feature", durationMinutes: "30", bookingMode: "APPROVAL", bufferMinutes: "15", leadTimeHours: "24" }])
+    setPackages([...packages, { name: "", price: "", description: "", includes: [""], format: "Join a livestream", durationMinutes: "30", bookingMode: "APPROVAL", bufferMinutes: "15", leadTimeHours: "24" }])
   }
 
   const removePackage = (index: number) => {
@@ -699,11 +700,9 @@ export default function HostDashboard() {
                     />
 
                     <div className="grid sm:grid-cols-2 gap-3 mb-4">
-                      <label className="text-xs text-text-muted">Format
-                        <select value={pkg.format} onChange={(e) => updatePackage(pkgIndex, "format", e.target.value)} className="mt-1 w-full px-3 py-2.5 bg-surface border border-border text-text-primary text-sm">
-                          <option>Livestream feature</option><option>Video feature</option><option>Remote recording</option><option>Gameplay session</option><option>Interview</option><option>Dedicated video</option>
-                        </select>
-                      </label>
+                      <div className="text-xs text-text-muted">Format
+                        <FormatSelect value={pkg.format} onChange={(format) => updatePackage(pkgIndex, "format", format)} />
+                      </div>
                       <label className="text-xs text-text-muted">Booking mode
                         <select value={pkg.bookingMode} onChange={(e) => updatePackage(pkgIndex, "bookingMode", e.target.value as "INSTANT" | "APPROVAL")} className="mt-1 w-full px-3 py-2.5 bg-surface border border-border text-text-primary text-sm">
                           <option value="APPROVAL">Quick approval</option><option value="INSTANT">Instant booking</option>
@@ -736,7 +735,7 @@ export default function HostDashboard() {
                               onChange={(e) =>
                                 updateInclude(pkgIndex, incIndex, e.target.value)
                               }
-                              placeholder="e.g., 5 min feature"
+                              placeholder="e.g., Join the full recording"
                               className="flex-1 px-3 py-2 bg-surface border border-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all text-sm"
                             />
                             {pkg.includes.length > 1 && (
