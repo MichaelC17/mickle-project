@@ -8,6 +8,7 @@ import Footer from "@/components/Footer"
 import { Skeleton } from "@/components/ui/skeleton"
 import { PlatformBadgeSolid } from "@/components/shared/PlatformBadge"
 import { AnimatedSection } from "@/components/shared/AnimatedSection"
+import { StyledSelect } from "@/components/FormatSelect"
 import { formatNumber } from "@/lib/utils"
 import { useToast } from "@/context/ToastContext"
 import {
@@ -133,8 +134,6 @@ export default function HostProfilePage() {
   const [slots, setSlots] = useState<string[]>([])
   const [slotsLoading, setSlotsLoading] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState("")
-  const [collaborationIdea, setCollaborationIdea] = useState("")
-  const [introductionNotes, setIntroductionNotes] = useState("")
   const [profileComplete, setProfileComplete] = useState<boolean | null>(null)
 
   useEffect(() => {
@@ -234,8 +233,8 @@ export default function HostProfilePage() {
       window.location.href = `/dashboard/profile`
       return
     }
-    if (!selectedSlot || !collaborationIdea.trim()) {
-      showToast({ type: "error", title: "Add the booking details", message: "Choose a time and briefly explain what you’d like to do." })
+    if (!selectedSlot) {
+      showToast({ type: "error", title: "Choose a time", message: "Select one of the host's available times." })
       return
     }
     setIsCheckoutLoading(true)
@@ -250,8 +249,6 @@ export default function HostProfilePage() {
           packageName: currentPackage.name,
           price: currentPackage.price,
           scheduledDate: selectedSlot,
-          collaborationIdea,
-          introductionNotes,
         }),
       })
       const data = await response.json()
@@ -588,19 +585,14 @@ export default function HostProfilePage() {
 
                   <div className="border-t border-border pt-4 mb-5">
                     <div className="flex items-center gap-2 mb-3"><CalendarDays className="w-4 h-4 text-accent" /><p className="text-sm font-semibold text-text-primary">Choose an available time</p></div>
-                    {slotsLoading ? <p className="text-sm text-text-muted">Checking availability…</p> : slots.length ? <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)} className="w-full bg-background border border-border px-3 py-3 text-sm text-text-primary"><option value="">Select a date and time</option>{slots.map((slot) => <option key={slot} value={slot}>{new Date(slot).toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" })}</option>)}</select> : <p className="text-sm text-text-muted">This host hasn’t opened any booking times yet.</p>}
-                  </div>
-
-                  <div className="border-t border-border pt-4 mb-5 space-y-4">
-                    <label className="block"><span className="block text-sm font-semibold text-text-primary mb-2">What would you like to do? *</span><textarea value={collaborationIdea} onChange={(e) => setCollaborationIdea(e.target.value)} rows={3} maxLength={800} className="w-full bg-background border border-border px-3 py-3 text-sm text-text-primary" placeholder="Give the host a clear idea they can quickly review." /></label>
-                    <label className="block"><span className="block text-sm font-semibold text-text-primary mb-2">How should they introduce you?</span><textarea value={introductionNotes} onChange={(e) => setIntroductionNotes(e.target.value)} rows={2} maxLength={400} className="w-full bg-background border border-border px-3 py-3 text-sm text-text-primary" placeholder="Channel name, topic, or link you want mentioned." /></label>
+                    {slotsLoading ? <p className="text-sm text-text-muted">Checking availability…</p> : slots.length ? <StyledSelect value={selectedSlot} onChange={setSelectedSlot} placeholder="Select a date and time" options={slots.map((slot) => ({ value: slot, label: new Date(slot).toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" }) }))} /> : <p className="text-sm text-text-muted">This host hasn’t opened any booking times yet.</p>}
                   </div>
 
                   {profileComplete === false && <Link href="/dashboard/profile" className="block mb-4 border border-accent/40 bg-accent/5 px-4 py-3 text-sm text-accent">Complete your creator profile before booking →</Link>}
 
                   <button
                     onClick={handleCheckout}
-                    disabled={isCheckoutLoading || !selectedSlot || !collaborationIdea.trim() || slots.length === 0}
+                    disabled={isCheckoutLoading || !selectedSlot || slots.length === 0}
                     className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-background font-semibold py-3.5 text-base transition-colors flex items-center justify-center gap-2"
                   >
                     {isCheckoutLoading ? (

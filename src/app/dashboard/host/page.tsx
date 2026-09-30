@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
-import FormatSelect from "@/components/FormatSelect"
+import FormatSelect, { StyledSelect } from "@/components/FormatSelect"
 import {
   Dialog,
   DialogContent,
@@ -111,20 +111,6 @@ interface PackageInput {
   bufferMinutes: string
   leadTimeHours: string
 }
-
-const NICHES = [
-  "Gaming",
-  "Tech",
-  "Lifestyle",
-  "Education",
-  "Entertainment",
-  "Music",
-  "Fitness & Health",
-  "Food & Cooking",
-  "Travel",
-  "Business & Finance",
-  "Other",
-]
 
 export default function HostDashboard() {
   const { data: session, status } = useSession()
@@ -590,18 +576,13 @@ export default function HostDashboard() {
               <div className="space-y-5">
                 <div>
                   <label className="block text-sm font-medium text-text-primary mb-2">Niche</label>
-                  <select
+                  <input
+                    type="text"
                     value={niche}
                     onChange={(e) => setNiche(e.target.value)}
                     className="w-full px-4 py-2.5 bg-background border border-border rounded-xl text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
-                  >
-                    <option value="">Select your niche</option>
-                    {NICHES.map((n) => (
-                      <option key={n} value={n}>
-                        {n}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="e.g., Minecraft challenges, video essays, personal finance"
+                  />
                 </div>
 
                 <div>
@@ -703,11 +684,9 @@ export default function HostDashboard() {
                       <div className="text-xs text-text-muted">Format
                         <FormatSelect value={pkg.format} onChange={(format) => updatePackage(pkgIndex, "format", format)} />
                       </div>
-                      <label className="text-xs text-text-muted">Booking mode
-                        <select value={pkg.bookingMode} onChange={(e) => updatePackage(pkgIndex, "bookingMode", e.target.value as "INSTANT" | "APPROVAL")} className="mt-1 w-full px-3 py-2.5 bg-surface border border-border text-text-primary text-sm">
-                          <option value="APPROVAL">Quick approval</option><option value="INSTANT">Instant booking</option>
-                        </select>
-                      </label>
+                      <div className="text-xs text-text-muted">Booking mode
+                        <StyledSelect value={pkg.bookingMode} onChange={(mode) => updatePackage(pkgIndex, "bookingMode", mode as "INSTANT" | "APPROVAL")} options={[{ value: "APPROVAL", label: "Quick approval" }, { value: "INSTANT", label: "Instant booking" }]} />
+                      </div>
                       <label className="text-xs text-text-muted">Length in minutes
                         <input type="number" min="5" value={pkg.durationMinutes} onChange={(e) => updatePackage(pkgIndex, "durationMinutes", e.target.value)} className="mt-1 w-full px-3 py-2.5 bg-surface border border-border text-text-primary text-sm" />
                       </label>

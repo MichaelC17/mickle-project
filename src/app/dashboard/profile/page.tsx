@@ -8,8 +8,6 @@ import Footer from "@/components/Footer"
 import { useToast } from "@/context/ToastContext"
 import { Check, Youtube } from "lucide-react"
 
-const NICHES = ["Gaming", "Tech", "Lifestyle", "Education", "Entertainment", "Music", "Fitness & Health", "Food & Cooking", "Travel", "Business & Finance", "Other"]
-
 type FormState = {
   youtubeChannelId: string
   channelName: string
@@ -97,7 +95,7 @@ export default function CreatorProfilePage() {
   return <><Header /><main className="min-h-screen pt-28 pb-20 px-6"><form onSubmit={save} className="max-w-3xl mx-auto"><div className="mb-8"><p className="text-xs uppercase tracking-widest text-accent mb-2">Creator profile</p><h1 className="text-3xl font-semibold text-text-primary mb-3">About your channel</h1><p className="text-text-secondary max-w-2xl">Fill this out once. COMARI attaches it to future bookings so you don’t have to introduce your channel from scratch each time.</p></div>
   <div className="border border-border bg-surface p-6 mb-5 flex items-center gap-4">{form.channelThumbnail && <img src={form.channelThumbnail} alt="" className="w-16 h-16 object-cover" />}<div><p className="font-semibold text-text-primary">{form.channelName}</p><p className="text-sm text-text-muted">{form.subscriberCount.toLocaleString()} subscribers · YouTube verified</p></div><Check className="w-5 h-5 text-emerald-500 ml-auto" /></div>
   <div className="border border-border bg-surface p-6 space-y-5">
-    <label className="block"><span className="block text-sm font-medium text-text-primary mb-2">Main niche *</span><select required value={form.niche} onChange={(e) => update("niche", e.target.value)} className="w-full bg-background border border-border px-4 py-3 text-text-primary"><option value="">Choose one</option>{NICHES.map((niche) => <option key={niche}>{niche}</option>)}</select></label>
+    <label className="block"><span className="block text-sm font-medium text-text-primary mb-2">Main niche *</span><input required value={form.niche} onChange={(e) => update("niche", e.target.value)} className="w-full bg-background border border-border px-4 py-3 text-text-primary" placeholder="e.g., Minecraft challenges, video essays, personal finance" /></label>
     <label className="block"><span className="block text-sm font-medium text-text-primary mb-2">About your channel *</span><textarea required rows={4} value={form.about} onChange={(e) => update("about", e.target.value)} className="w-full bg-background border border-border px-4 py-3 text-text-primary" placeholder="What do you make, and what should a host know about you?" /></label>
     <label className="block"><span className="block text-sm font-medium text-text-primary mb-2">Your audience *</span><textarea required rows={3} value={form.audience} onChange={(e) => update("audience", e.target.value)} className="w-full bg-background border border-border px-4 py-3 text-text-primary" placeholder="Who watches your channel? Include interests, typical age range, and location if relevant." /></label>
     <label className="block"><span className="block text-sm font-medium text-text-primary mb-2">Content style and personality *</span><textarea required rows={3} value={form.contentStyle} onChange={(e) => update("contentStyle", e.target.value)} className="w-full bg-background border border-border px-4 py-3 text-text-primary" placeholder="For example: relaxed gaming commentary, competitive play, fast-paced edits…" /></label>

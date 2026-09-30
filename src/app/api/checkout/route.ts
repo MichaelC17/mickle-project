@@ -20,9 +20,9 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { hostId, packageId, scheduledDate, collaborationIdea, introductionNotes } = body;
+    const { hostId, packageId, scheduledDate } = body;
 
-    if (!hostId || !packageId || !scheduledDate || !collaborationIdea?.trim()) {
+    if (!hostId || !packageId || !scheduledDate) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -96,8 +96,6 @@ export async function POST(request: Request) {
         amount: price.toString(),
         platformFee: (platformFee / 100).toString(),
         scheduledDate: requestedDate.toISOString(),
-        collaborationIdea: collaborationIdea.trim().slice(0, 500),
-        introductionNotes: String(introductionNotes || "").trim().slice(0, 300),
         bookingMode: selectedPackage.bookingMode,
       },
     };

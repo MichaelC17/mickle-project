@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatNumber } from "@/lib/utils"
 import { useToast } from "@/context/ToastContext"
-import FormatSelect from "@/components/FormatSelect"
+import FormatSelect, { StyledSelect } from "@/components/FormatSelect"
 import {
   Youtube,
   ChevronRight,
@@ -82,7 +82,7 @@ const PACKAGE_TEMPLATES: PackageInput[] = [
       "Introduction during the video",
       "Channel link in the description",
     ],
-    format: "Join a recorded video", durationMinutes: "45", bookingMode: "APPROVAL", bufferMinutes: "30", leadTimeHours: "48",
+    format: "Join a long-form video recording", durationMinutes: "45", bookingMode: "APPROVAL", bufferMinutes: "30", leadTimeHours: "48",
   },
   {
     name: "Extended Collaboration",
@@ -93,7 +93,7 @@ const PACKAGE_TEMPLATES: PackageInput[] = [
       "Participate throughout the content",
       "Introduction and channel link",
     ],
-    format: "Remote co-recording", durationMinutes: "90", bookingMode: "APPROVAL", bufferMinutes: "30", leadTimeHours: "72",
+    format: "Join a livestream → long-form video", durationMinutes: "90", bookingMode: "APPROVAL", bufferMinutes: "30", leadTimeHours: "72",
   },
 ]
 
@@ -101,20 +101,6 @@ const STEPS = [
   { label: "Connect YouTube", icon: Youtube },
   { label: "Profile Setup", icon: Users },
   { label: "Create Packages", icon: Plus },
-]
-
-const NICHES = [
-  "Gaming",
-  "Tech",
-  "Lifestyle",
-  "Education",
-  "Entertainment",
-  "Music",
-  "Fitness & Health",
-  "Food & Cooking",
-  "Travel",
-  "Business & Finance",
-  "Other",
 ]
 
 function StepIndicator({ currentStep }: { currentStep: number }) {
@@ -480,19 +466,13 @@ export default function ApplyPage() {
                       >
                         Content Niche
                       </label>
-                      <select
+                      <Input
                         id="niche"
                         value={niche}
                         onChange={(e) => setNiche(e.target.value)}
-                        className="w-full px-4 py-2.5 bg-background border border-border rounded-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent transition-all"
-                      >
-                        <option value="">Select your niche</option>
-                        {NICHES.map((n) => (
-                          <option key={n} value={n}>
-                            {n}
-                          </option>
-                        ))}
-                      </select>
+                        placeholder="e.g., Minecraft challenges, video essays, personal finance"
+                        className="w-full px-4 py-2.5 bg-background border-border rounded-sm text-text-primary"
+                      />
                     </div>
 
                     <div>
@@ -524,7 +504,7 @@ export default function ApplyPage() {
                     type="button"
                     onClick={() => {
                       if (!niche) {
-                        setError("Please select your content niche")
+                        setError("Please enter your content niche")
                         return
                       }
                       setError("")
@@ -660,11 +640,9 @@ export default function ApplyPage() {
                             <div className="block text-xs font-medium text-text-secondary">Format
                               <FormatSelect value={pkg.format} onChange={(format) => updatePackage(pkgIndex, "format", format)} />
                             </div>
-                            <label className="block text-xs font-medium text-text-secondary">Host approval
-                              <select value={pkg.bookingMode} onChange={(e) => updatePackage(pkgIndex, "bookingMode", e.target.value as "INSTANT" | "APPROVAL")} className="mt-1 w-full bg-background border border-border px-3 h-10 text-text-primary">
-                                <option value="APPROVAL">Quick approval required</option><option value="INSTANT">Instant booking</option>
-                              </select>
-                            </label>
+                            <div className="block text-xs font-medium text-text-secondary">Host approval
+                              <StyledSelect value={pkg.bookingMode} onChange={(mode) => updatePackage(pkgIndex, "bookingMode", mode as "INSTANT" | "APPROVAL")} options={[{ value: "APPROVAL", label: "Quick approval required" }, { value: "INSTANT", label: "Instant booking" }]} />
+                            </div>
                             <label className="block text-xs font-medium text-text-secondary">Feature length (minutes)
                               <Input type="number" min="5" value={pkg.durationMinutes} onChange={(e) => updatePackage(pkgIndex, "durationMinutes", e.target.value)} className="mt-1 bg-background border-border rounded-lg h-10" />
                             </label>
