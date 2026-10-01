@@ -67,9 +67,10 @@ export default function PrivacyPage() {
                   <strong className="text-text-primary">
                     Google Calendar availability.
                   </strong>{" "}
-                  If a host connects Google Calendar, we use read-only access to
-                  check whether a proposed booking time conflicts with a busy
-                  period. Buyers only see whether a time is available. COMARI
+                  If a host connects Google Calendar, we request access only to
+                  free/busy availability so we can check whether a proposed
+                  booking time conflicts with a busy period. Buyers only see
+                  whether a time is available. COMARI
                   does not display or store calendar event names, descriptions,
                   attendees, locations, or other event details.
                 </li>
@@ -150,7 +151,7 @@ export default function PrivacyPage() {
                 <li className="border-l-2 border-border pl-4">
                   We only request the Google scopes needed for the feature you
                   choose: YouTube read-only access for channel verification and
-                  profile data, and Calendar read-only access for availability.
+                  profile data, and Calendar free/busy access for availability.
                 </li>
                 <li className="border-l-2 border-border pl-4">
                   We do not sell, lease, or share YouTube data with third
