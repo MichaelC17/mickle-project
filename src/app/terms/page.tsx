@@ -164,8 +164,9 @@ export default function TermsPage() {
                 YouTube API
               </h2>
               <p className="mb-3">
-                Parts of COMARI use the YouTube Data API to verify channels and
-                display host information. By connecting your YouTube channel, you
+                Parts of COMARI use Google APIs to verify YouTube channels,
+                display channel information, and check connected hosts&apos;
+                Calendar availability. By connecting your YouTube channel, you
                 also agree to{" "}
                 <a
                   href="https://www.youtube.com/t/terms"

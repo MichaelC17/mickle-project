@@ -20,7 +20,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="text-sm text-text-muted mb-12">
-            Last updated: August 27, 2026
+            Last updated: October 1, 2026
           </p>
 
           <div className="space-y-8 text-text-secondary leading-relaxed text-[0.94rem]">
@@ -64,6 +64,24 @@ export default function PrivacyPage() {
                   is publicly available through the API.
                 </li>
                 <li className="border-l-2 border-border pl-4">
+                  <strong className="text-text-primary">
+                    Google Calendar availability.
+                  </strong>{" "}
+                  If a host connects Google Calendar, we use read-only access to
+                  check whether a proposed booking time conflicts with a busy
+                  period. Buyers only see whether a time is available. COMARI
+                  does not display or store calendar event names, descriptions,
+                  attendees, locations, or other event details.
+                </li>
+                <li className="border-l-2 border-border pl-4">
+                  <strong className="text-text-primary">
+                    Google authorization credentials.
+                  </strong>{" "}
+                  We store the access and refresh tokens Google provides so the
+                  connected features can continue working after you leave the
+                  site. We never receive or store your Google password.
+                </li>
+                <li className="border-l-2 border-border pl-4">
                   <strong className="text-text-primary">Payment info.</strong>{" "}
                   Payments are processed through Stripe. We do not store your
                   credit card number or bank details. Stripe handles that
@@ -103,6 +121,10 @@ export default function PrivacyPage() {
                   To track growth metrics after guest spots (subscriber/view
                   changes), when you&apos;ve connected your YouTube channel
                 </li>
+                <li className="border-l-2 border-border pl-4">
+                  To exclude busy periods from the booking times shown for a
+                  host who has connected Google Calendar
+                </li>
               </ul>
             </section>
 
@@ -126,8 +148,9 @@ export default function PrivacyPage() {
               <p className="mb-3">Specifically:</p>
               <ul className="space-y-2 list-none">
                 <li className="border-l-2 border-border pl-4">
-                  We only request the YouTube scopes necessary for the features
-                  you use (channel verification and profile display).
+                  We only request the Google scopes needed for the feature you
+                  choose: YouTube read-only access for channel verification and
+                  profile data, and Calendar read-only access for availability.
                 </li>
                 <li className="border-l-2 border-border pl-4">
                   We do not sell, lease, or share YouTube data with third
@@ -150,6 +173,11 @@ export default function PrivacyPage() {
                   </a>
                   .
                 </li>
+                <li className="border-l-2 border-border pl-4">
+                  Google user data is used only for the COMARI features
+                  described in this policy. It is not used to train advertising
+                  or artificial intelligence models.
+                </li>
               </ul>
             </section>
 
@@ -159,11 +187,11 @@ export default function PrivacyPage() {
               </h2>
               <p>
                 Your data is stored in a PostgreSQL database hosted on Supabase
-                (AWS infrastructure). Connections are encrypted. Passwords (for
-                email/password accounts) are not currently implemented in
-                production; authentication is handled through Google OAuth.
-                Payment data is handled entirely by Stripe and never touches our
-                servers.
+                (AWS infrastructure). Data is encrypted in transit, and access
+                to production systems is restricted. Email/password accounts
+                are not implemented; authentication is handled through Google
+                OAuth. Payment card and bank details are handled by Stripe and
+                do not pass through COMARI&apos;s servers.
               </p>
             </section>
 
@@ -200,6 +228,35 @@ export default function PrivacyPage() {
               <p className="mt-3">
                 We do not sell your data to anyone. We do not share data with
                 advertisers.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                Data retention and deletion
+              </h2>
+              <p className="mb-3">
+                We keep account, profile, booking, and message data while your
+                account is active and as needed to operate the platform or meet
+                legal and payment-record obligations. YouTube API data is
+                refreshed or deleted in line with YouTube&apos;s data retention
+                requirements.
+              </p>
+              <p>
+                You may request deletion of your COMARI account and associated
+                Google user data by emailing{" "}
+                <a
+                  href="mailto:hello@comari.app?subject=COMARI%20data%20deletion%20request"
+                  className="text-accent hover:text-accent-hover underline"
+                >
+                  hello@comari.app
+                </a>
+                . We will verify the request and delete the applicable data
+                within 30 days, except records we must retain for legal,
+                security, fraud-prevention, or payment purposes. Revoking access
+                in Google stops future API access but does not by itself delete
+                your COMARI account; email us if you also want stored data
+                deleted.
               </p>
             </section>
 
