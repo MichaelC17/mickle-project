@@ -118,7 +118,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ received: true });
       }
 
-      const platformFee = Math.round(parseInt(amount) * 0.15);
+      const platformFee = Number(session.metadata?.platformFee) || Math.round(parseInt(amount) * 0.15);
 
       console.log("Creating booking with:", { buyerId, hostId, packageId, amount: parseInt(amount), platformFee });
 

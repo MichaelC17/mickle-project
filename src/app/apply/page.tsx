@@ -341,17 +341,16 @@ export default function ApplyPage() {
               Become a Host
             </h1>
             <p className="text-text-secondary max-w-md mx-auto">
-              Fill out your profile so you&apos;re ready when we launch
+              Create your profile for the private beta
             </p>
           </div>
 
           <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 px-4 py-3.5 mb-8">
             <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
             <p className="text-sm text-amber-200/90 leading-relaxed">
-              <span className="font-semibold text-amber-400">Early preview.</span>{" "}
-              COMARI. is not yet a registered business. Host profiles created now are for
-              demonstration purposes only — you will not receive bookings or payments until
-              the platform officially launches.
+              <span className="font-semibold text-amber-400">Private beta.</span>{" "}
+              Host access is currently limited to invited creators while we test listings,
+              scheduling, bookings, and payouts.
               However, if you want to see the full process in depth,{" "}
               <a href="/how-it-works" className="text-amber-400 underline hover:text-amber-300 transition-colors">
                 click here

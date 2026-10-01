@@ -1,13 +1,12 @@
 "use client"
 
 import { signIn } from "next-auth/react"
-import { useState, Suspense } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { Input } from "@/components/ui/input"
 import { useTheme } from "@/context/ThemeContext"
 import { motion } from "framer-motion"
-import { ArrowRight, AlertTriangle } from "lucide-react"
+import { AlertTriangle } from "lucide-react"
 
 const stagger = {
   hidden: {},
@@ -20,41 +19,9 @@ const fadeUp = {
 }
 
 function LoginContent() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
   const { theme } = useTheme()
-
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [mode, setMode] = useState<"signin" | "create">("signin")
-
-  const handleCredentialsLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
-
-    try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      })
-
-      if (result?.error) {
-        setError("Invalid email or password.")
-      } else {
-        router.push(callbackUrl)
-        router.refresh()
-      }
-    } catch {
-      setError("Something went wrong. Please try again.")
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleGoogleLogin = () => {
     signIn("google", { callbackUrl })
@@ -127,12 +94,10 @@ function LoginContent() {
           {/* Heading */}
           <motion.div variants={fadeUp} className="mb-8">
             <h2 className="text-2xl font-semibold text-text-primary tracking-tight">
-              {mode === "signin" ? "Welcome back" : "Create your account"}
+              Sign in to COMARI
             </h2>
             <p className="mt-2 text-text-secondary text-[0.94rem]">
-              {mode === "signin"
-                ? "Sign in to continue to your dashboard"
-                : "Sign up to create your profile"}
+              Use your Google account to continue or create a profile.
             </p>
           </motion.div>
 
@@ -143,10 +108,9 @@ function LoginContent() {
           >
             <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
             <p className="text-sm text-amber-200/90 leading-relaxed">
-              <span className="font-semibold text-amber-400">Early preview.</span>{" "}
-              COMARI. is not yet a registered business. Accounts created now are for
-              demonstration purposes only — bookings and payments are not active.
-              However, if you want to see the full process in depth,{" "}
+              <span className="font-semibold text-amber-400">Private beta.</span>{" "}
+              Access is limited to invited creators while we test profiles,
+              scheduling, and bookings. To see how the process works,{" "}
               <Link href="/how-it-works" className="text-amber-400 underline hover:text-amber-300 transition-colors">
                 click here
               </Link>.
@@ -176,110 +140,10 @@ function LoginContent() {
               Continue with Google
             </button>
 
-            {/* Divider */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border" />
-              </div>
-              <div className="relative flex justify-center text-xs">
-                <span className="px-3 bg-surface text-text-muted">
-                  or continue with email
-                </span>
-              </div>
-            </div>
-
-            {/* Credentials form */}
-            <form onSubmit={handleCredentialsLogin} className="space-y-4">
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 text-sm"
-                >
-                  {error}
-                </motion.div>
-              )}
-
-              <div className="space-y-1.5">
-                <label htmlFor="email" className="block text-sm font-medium text-text-secondary">
-                  Email
-                </label>
-                <Input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 bg-background border-border text-text-primary placeholder:text-text-muted focus-visible:ring-accent/50"
-                  placeholder="you@example.com"
-                  required
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="password" className="block text-sm font-medium text-text-secondary">
-                  Password
-                </label>
-                <Input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="h-11 bg-background border-border text-text-primary placeholder:text-text-muted focus-visible:ring-accent/50"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="group w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-background font-medium h-11 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <div className="h-4 w-4 border-2 border-background/30 border-t-background rounded-full animate-spin" />
-                ) : (
-                  <>
-                    {mode === "signin" ? "Sign in" : "Create account"}
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                  </>
-                )}
-              </button>
-            </form>
-
-            {process.env.NODE_ENV === "development" && (
-              <p className="text-center text-xs text-text-muted">
-                Dev: use any email with password{" "}
-                <code className="bg-surface-raised px-1.5 py-0.5 rounded text-text-secondary">
-                  demo123
-                </code>
-              </p>
-            )}
+            <p className="text-center text-xs text-text-muted leading-relaxed">
+              Google sign-in keeps each creator profile tied to a verified account.
+            </p>
           </motion.div>
-
-          {/* Toggle sign-in / create-account */}
-          <motion.p variants={fadeUp} className="mt-6 text-center text-sm text-text-secondary">
-            {mode === "signin" ? (
-              <>
-                Don&apos;t have an account?{" "}
-                <button
-                  onClick={() => { setMode("create"); setError("") }}
-                  className="text-accent hover:underline font-medium"
-                >
-                  Create account
-                </button>
-              </>
-            ) : (
-              <>
-                Already have an account?{" "}
-                <button
-                  onClick={() => { setMode("signin"); setError("") }}
-                  className="text-accent hover:underline font-medium"
-                >
-                  Sign in
-                </button>
-              </>
-            )}
-          </motion.p>
 
           {/* Legal */}
           <motion.p variants={fadeUp} className="mt-4 text-center text-xs text-text-muted leading-relaxed">

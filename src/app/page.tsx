@@ -35,7 +35,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <AnimatedSection>
             <p className="text-xs font-bold uppercase tracking-widest text-accent mb-6">
-              Early Access
+              Private Beta
             </p>
           </AnimatedSection>
 
@@ -410,7 +410,7 @@ export default function Home() {
           <AnimatedStagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
             {[
               { icon: <CheckCircle className="w-4 h-4" />, title: "Verified hosts", desc: "Hosts connect their YouTube channel to verify ownership. We check that the channel is real and active." },
-              { icon: <CreditCard className="w-4 h-4" />, title: "Held payments", desc: "When you book, your payment is held. The host can see it's there but doesn't get paid until the guest spot happens." },
+              { icon: <CreditCard className="w-4 h-4" />, title: "Completion-based payouts", desc: "Payment is collected when you book. The host payout is sent after both creators confirm the guest spot happened." },
               { icon: <MessageSquare className="w-4 h-4" />, title: "Clear expectations", desc: "Each listing says what's included: format, length, and timeline. You know what you're paying for before checkout." },
               { icon: <Star className="w-4 h-4" />, title: "Reviews", desc: "Both the guest and host leave reviews after a booking. You can read past reviews before you book anyone." },
               { icon: <TrendingUp className="w-4 h-4" />, title: "Growth data", desc: "When available, you can see how past guests' subscriber counts changed after their guest spot." },
@@ -448,11 +448,11 @@ export default function Home() {
               {[
                 { value: "what", q: "What exactly is a guest spot?", a: "It's when you appear on another creator's channel. Could be a collab video, a live stream appearance, a podcast episode, or a shoutout. The host features you in front of their audience." },
                 { value: "agency", q: "How is this different from an agency?", a: "Agencies take a cut of everything you earn and usually want exclusivity. We only take 15% of bookings made through COMARI, and there are no contracts. We don't touch your other income." },
-                { value: "payments", q: "How do payments work?", a: "When you book, your payment is held by COMARI. The host can see the payment is secured. Once you both confirm the guest spot happened, the host gets paid through Stripe." },
+                { value: "payments", q: "How do payments work?", a: "Payment is collected through Stripe when you book. After both creators confirm the guest spot happened, COMARI sends the host payout minus the 15% platform fee." },
                 { value: "both", q: "Can I buy guest spots and host them?", a: "Yes. A lot of mid-size creators do both. You might buy spots on channels bigger than yours while also hosting smaller creators on your own channel." },
                 { value: "host-req", q: "What do I need to become a host?", a: "A YouTube channel. You connect it during signup so we can verify it's real. We look at whether the channel is active and has genuine content." },
                 { value: "refund", q: "What if the host doesn't follow through?", a: "You get a full refund. If a host repeatedly cancels or doesn't deliver, we remove them from the platform." },
-                { value: "launch", q: "Is COMARI live yet?", a: "We're still building. The platform is functional but we're in early access, talking to creators and getting feedback before a wider launch." },
+                { value: "launch", q: "Is COMARI live yet?", a: "COMARI is in private beta. Access is limited to invited creators while we test profiles, scheduling, bookings, and payments before a wider launch." },
               ].map((faq) => (
                 <AccordionItem key={faq.value} value={faq.value} className="border-border">
                   <AccordionTrigger className="text-text-primary hover:no-underline text-sm font-medium py-5">
@@ -476,8 +476,8 @@ export default function Home() {
               Want to try it?
             </h2>
             <p className="text-text-secondary mb-10">
-              COMARI is in early access. You can look around, or reach out if you&apos;re
-              interested in being one of the first hosts or guests.
+              COMARI is in private beta. Invited creators can test the booking flow and
+              help us improve it before a wider launch.
             </p>
           </AnimatedSection>
 

@@ -40,7 +40,7 @@ const steps = [
     icon: MessageSquare,
     title: "Request a booking",
     story: `You pick a host and send a booking request. The host gets notified and can check out your channel before deciding whether to accept.`,
-    detail: `If they accept, you pay through the platform. Your payment is held by Stripe until the guest spot is completed — neither side is taking a risk.`,
+    detail: `If they accept, you pay through Stripe. COMARI sends the host payout only after both creators confirm the guest spot was completed.`,
     options: null,
   },
   {

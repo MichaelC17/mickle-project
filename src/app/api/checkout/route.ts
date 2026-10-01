@@ -41,6 +41,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!host.stripeAccountId || !host.stripeChargesEnabled || !host.stripePayoutsEnabled) {
+      return NextResponse.json(
+        { error: "This host has not finished payout setup yet" },
+        { status: 400 }
+      );
+    }
+
     if (!creatorProfile?.isComplete) {
       return NextResponse.json({ error: "Complete your creator profile before booking" }, { status: 400 });
     }
@@ -66,7 +73,7 @@ export async function POST(request: Request) {
 
     const price = selectedPackage.price;
     const amountInCents = price * 100;
-    const platformFee = Math.round(amountInCents * (PLATFORM_FEE_PERCENT / 100));
+    const platformFee = Math.round(price * (PLATFORM_FEE_PERCENT / 100));
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
@@ -94,20 +101,11 @@ export async function POST(request: Request) {
         packageId,
         packageName: selectedPackage.name,
         amount: price.toString(),
-        platformFee: (platformFee / 100).toString(),
+        platformFee: platformFee.toString(),
         scheduledDate: requestedDate.toISOString(),
         bookingMode: selectedPackage.bookingMode,
       },
     };
-
-    if (host.stripeAccountId && host.stripeChargesEnabled) {
-      sessionParams.payment_intent_data = {
-        application_fee_amount: platformFee,
-        transfer_data: {
-          destination: host.stripeAccountId,
-        },
-      };
-    }
 
     const checkoutSession = await getStripe().checkout.sessions.create(sessionParams);
 

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { releaseHostPayout } from "@/lib/stripe-payouts"
 
 export async function POST(
   request: Request,
@@ -31,6 +32,16 @@ export async function POST(
 
     if (!isHost && !isBuyer) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+    }
+
+    if (booking.status === "COMPLETED" && !booking.stripeTransferId) {
+      try {
+        const transferId = await releaseHostPayout(booking)
+        return NextResponse.json({ booking: { ...booking, stripeTransferId: transferId }, bothConfirmed: true })
+      } catch (error) {
+        console.error("Error retrying host payout:", error)
+        return NextResponse.json({ error: "Completion is recorded, but the host payout is still pending" }, { status: 502 })
+      }
     }
 
     if (booking.status !== "IN_PROGRESS") {
@@ -71,6 +82,12 @@ export async function POST(
     })
 
     if (updatedBooking.status === "COMPLETED") {
+      try {
+        const stripeTransferId = await releaseHostPayout(updatedBooking)
+        updatedBooking.stripeTransferId = stripeTransferId
+      } catch (error) {
+        console.error("Error releasing host payout:", error)
+      }
       await initializeGrowthTracking(updatedBooking)
     }
 

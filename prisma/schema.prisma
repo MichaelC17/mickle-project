@@ -215,6 +215,7 @@ model Booking {
 
   stripeSessionId String? @unique
   stripePaymentId String?
+  stripeTransferId String? @unique
 
   notes             String?
   collaborationIdea String?

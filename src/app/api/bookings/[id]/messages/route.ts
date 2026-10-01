@@ -7,8 +7,9 @@ export const dynamic = "force-dynamic"
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await auth()
   
   if (!session?.user?.id) {
@@ -17,7 +18,7 @@ export async function GET(
 
   try {
     const booking = await prisma.booking.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         host: { select: { userId: true } },
       },
@@ -33,7 +34,7 @@ export async function GET(
     }
 
     const messages = await prisma.message.findMany({
-      where: { bookingId: params.id },
+      where: { bookingId: id },
       orderBy: { createdAt: "asc" },
     })
 
@@ -46,8 +47,9 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await auth()
   
   if (!session?.user?.id) {
@@ -56,7 +58,7 @@ export async function POST(
 
   try {
     const booking = await prisma.booking.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         host: { select: { userId: true } },
       },
@@ -87,7 +89,7 @@ export async function POST(
 
     const message = await prisma.message.create({
       data: {
-        bookingId: params.id,
+        bookingId: id,
         senderId: session.user.id,
         content: content.trim(),
       },
@@ -98,7 +100,7 @@ export async function POST(
       select: { name: true },
     })
 
-    await notifyNewMessage(params.id, session.user.id, sender?.name || "Someone")
+    await notifyNewMessage(id, session.user.id, sender?.name || "Someone")
 
     return NextResponse.json({ message })
   } catch (error) {

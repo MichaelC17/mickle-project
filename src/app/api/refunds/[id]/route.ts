@@ -2,14 +2,15 @@ import { NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { notifyRefundResponse } from "@/lib/notifications"
-import { getStripe } from "@/lib/stripe"
+import { refundBookingPayment } from "@/lib/stripe-payouts"
 
 export const dynamic = "force-dynamic"
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await auth()
 
   if (!session?.user?.id) {
@@ -25,7 +26,7 @@ export async function PATCH(
     }
 
     const refundRequest = await prisma.refundRequest.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         booking: {
           include: {
@@ -61,9 +62,10 @@ export async function PATCH(
 
       if (refundRequest.booking.stripePaymentId) {
         try {
-          const stripe = getStripe()
-          const refund = await stripe.refunds.create({
-            payment_intent: refundRequest.booking.stripePaymentId,
+          const refund = await refundBookingPayment({
+            bookingId: refundRequest.bookingId,
+            paymentIntentId: refundRequest.booking.stripePaymentId,
+            transferId: refundRequest.booking.stripeTransferId,
             amount: refundRequest.refundAmount,
           })
           stripeRefundId = refund.id
@@ -78,7 +80,7 @@ export async function PATCH(
 
       await prisma.$transaction([
         prisma.refundRequest.update({
-          where: { id: params.id },
+          where: { id },
           data: {
             status: "PROCESSED",
             respondedById: session.user.id,
@@ -101,7 +103,7 @@ export async function PATCH(
       })
     } else {
       await prisma.refundRequest.update({
-        where: { id: params.id },
+        where: { id },
         data: {
           status: "DENIED",
           respondedById: session.user.id,

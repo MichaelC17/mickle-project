@@ -7,8 +7,9 @@ export const dynamic = "force-dynamic"
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await auth()
   
   if (!session?.user?.id) {
@@ -17,7 +18,7 @@ export async function GET(
 
   try {
     const booking = await prisma.booking.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         buyer: {
           select: {

@@ -37,10 +37,10 @@ export default function TermsPage() {
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                Early access notice
+                Private beta notice
               </h2>
               <p>
-                COMARI is currently in early access. Features may change, and
+                COMARI is currently in private beta. Features may change, and
                 the platform is still being developed. We&apos;re building this
                 with creator feedback and things may not work perfectly yet.
               </p>
@@ -78,8 +78,8 @@ export default function TermsPage() {
                 <li className="border-l-2 border-border pl-4">
                   <strong className="text-text-primary">Buyers</strong> browse
                   host profiles, select a package, and pay through Stripe.
-                  Payment is held until the guest spot is completed and both
-                  parties confirm.
+                  The host payout is sent after both parties confirm the guest
+                  spot was completed.
                 </li>
                 <li className="border-l-2 border-border pl-4">
                   <strong className="text-text-primary">Hosts</strong> set their

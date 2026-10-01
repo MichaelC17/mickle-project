@@ -5,12 +5,13 @@ import { getZonedDay, zonedDateTimeToUtc } from "@/lib/availability"
 
 export const dynamic = "force-dynamic"
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const packageId = new URL(request.url).searchParams.get("packageId")
   if (!packageId) return NextResponse.json({ error: "Package is required" }, { status: 400 })
 
   const host = await prisma.host.findUnique({
-    where: { id: params.id, isActive: true },
+    where: { id, isActive: true },
     include: {
       availability: { where: { enabled: true } },
       packages: { where: { id: packageId } },

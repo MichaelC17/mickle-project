@@ -7,8 +7,9 @@ export const dynamic = "force-dynamic"
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await auth()
   
   if (!session?.user?.id) {
@@ -17,7 +18,7 @@ export async function GET(
 
   try {
     const booking = await prisma.booking.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         host: { select: { userId: true } },
       },
@@ -33,7 +34,7 @@ export async function GET(
     }
 
     const proposals = await prisma.scheduleProposal.findMany({
-      where: { bookingId: params.id },
+      where: { bookingId: id },
       orderBy: { createdAt: "desc" },
     })
 
@@ -49,8 +50,9 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await auth()
   
   if (!session?.user?.id) {
@@ -59,7 +61,7 @@ export async function POST(
 
   try {
     const booking = await prisma.booking.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         host: { select: { userId: true } },
       },
@@ -90,7 +92,7 @@ export async function POST(
 
     const proposal = await prisma.scheduleProposal.create({
       data: {
-        bookingId: params.id,
+        bookingId: id,
         proposedById: session.user.id,
         proposedDate: new Date(proposedDate),
         purpose: purpose || null,
@@ -103,7 +105,7 @@ export async function POST(
     })
 
     await notifyScheduleProposal(
-      params.id,
+      id,
       session.user.id,
       proposer?.name || "Someone",
       new Date(proposedDate),
@@ -119,8 +121,9 @@ export async function POST(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await auth()
   
   if (!session?.user?.id) {
@@ -172,13 +175,13 @@ export async function PATCH(
 
     if (action === "accept") {
       await prisma.booking.update({
-        where: { id: params.id },
+        where: { id },
         data: { scheduledDate: proposal.proposedDate },
       })
 
       await prisma.scheduleProposal.updateMany({
         where: {
-          bookingId: params.id,
+          bookingId: id,
           id: { not: proposalId },
           status: "PENDING",
         },
@@ -192,7 +195,7 @@ export async function PATCH(
     })
 
     await notifyScheduleResponse(
-      params.id,
+      id,
       session.user.id,
       responder?.name || "Someone",
       action === "accept",
